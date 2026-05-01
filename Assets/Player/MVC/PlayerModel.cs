@@ -8,14 +8,14 @@ public class PlayerModel : IObservable<PlayerEvent>
     public PlayerModel(Player user)
     {
         _rb = user.GetComponent<Rigidbody>();
-        _currentLife = FlyWeightPointer.flyWeight.maxLife;
+        _currentLife = FlyWeightPointer.Entity.maxLife;
         _myobservers = new List<IObserver<PlayerEvent>>();
     }
     public void Move(Vector3 direction)
     {
         bool isMoving = direction.sqrMagnitude > 0.001f;
         direction.Normalize();
-        _rb.MovePosition(_rb.position + direction * FlyWeightPointer.flyWeight.speed * Time.fixedDeltaTime);
+        _rb.MovePosition(_rb.position + direction * FlyWeightPointer.Entity.speed * Time.fixedDeltaTime);
         NotifyObservers(isMoving ? PlayerEvent.Move : PlayerEvent.Idle);
     }
     public void Rotate(Vector3 direction)
@@ -24,7 +24,7 @@ public class PlayerModel : IObservable<PlayerEvent>
         if (_dirRot.sqrMagnitude > 0.001f)
         {
             Quaternion _rotDir = Quaternion.LookRotation(_dirRot);
-            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, _rotDir, FlyWeightPointer.flyWeight.rotateSpeed * Time.fixedDeltaTime));
+            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, _rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.fixedDeltaTime));
         }
     }
     public void Shoot()
