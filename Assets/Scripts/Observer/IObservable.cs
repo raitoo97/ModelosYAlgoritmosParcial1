@@ -1,7 +1,7 @@
 using System;
-public interface IObservable <in T> where T : Enum
+public interface IObservable<T> where T : Enum
 {
-    void Subscribe(IObserver observer);
-    void Unsubscribe(IObserver observer);
+    void Subscribe(IObserver<T> observer);
+    void Unsubscribe(IObserver<T> observer);
     void NotifyObservers(T action);
 }

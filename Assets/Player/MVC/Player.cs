@@ -2,6 +2,7 @@ using UnityEngine;
 public enum PlayerEvent
 {
     Move,
+    Idle,
     Death
 }
 [RequireComponent(typeof(Rigidbody))]
@@ -15,7 +16,7 @@ public class Player : MonoBehaviour
         _model = new PlayerModel(this);
         _controler = new PlayerController(_model);
         _view = new PlayerView(this);
-        _model.onMovement += _view.MoveAnimation;
+        _model.Subscribe(_view);
     }
     private void Update()
     {
@@ -25,5 +26,9 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         _controler.FixedUpdateInputs();
+    }
+    private void OnDisable()
+    {
+        _model.Unsubscribe(_view);
     }
 }

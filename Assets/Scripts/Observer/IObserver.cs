@@ -1,5 +1,5 @@
 using System;
-public interface IObserver
+public interface IObserver<in T> where T : Enum
 {
-    void Notifiy(Enum Actions);
+    void Notify(T Actions);
 }
