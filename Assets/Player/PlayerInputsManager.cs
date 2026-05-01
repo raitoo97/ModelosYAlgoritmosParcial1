@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class PlayerInputs : MonoBehaviour
+public class PlayerInputsManager : MonoBehaviour
 {
     private PlayerInputsMap _playerMap;
-    public static PlayerInputs instance;
+    public static PlayerInputsManager instance;
     private void Awake()
     {
         if (instance == null)

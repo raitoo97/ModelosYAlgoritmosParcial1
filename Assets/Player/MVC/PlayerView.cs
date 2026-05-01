@@ -1,16 +1,13 @@
 using UnityEngine;
-
-public class PlayerView : MonoBehaviour
+public class PlayerView
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private Animator _animator;
+    public PlayerView(Player user)
     {
-        
+        _animator = user.GetComponent<Animator>();
     }
-
-    // Update is called once per frame
-    void Update()
+    public void MoveAnimation(bool isRunning)
     {
-        
+        _animator.SetBool("IsRunning", isRunning);
     }
 }

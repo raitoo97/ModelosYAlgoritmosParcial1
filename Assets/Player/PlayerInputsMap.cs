@@ -89,7 +89,7 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
     ""name"": ""PlayerInputsMap"",
     ""maps"": [
         {
-            ""name"": ""PlayerInputs"",
+            ""name"": ""PlayerInputsManager"",
             ""id"": ""b9ac3f85-a12b-4e75-b229-ee3ccbe861d7"",
             ""actions"": [
                 {
@@ -183,15 +183,15 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
-        // PlayerInputs
-        m_PlayerInputs = asset.FindActionMap("PlayerInputs", throwIfNotFound: true);
+        // PlayerInputsManager
+        m_PlayerInputs = asset.FindActionMap("PlayerInputsManager", throwIfNotFound: true);
         m_PlayerInputs_Move = m_PlayerInputs.FindAction("Move", throwIfNotFound: true);
         m_PlayerInputs_Shoot = m_PlayerInputs.FindAction("Shoot", throwIfNotFound: true);
     }
 
     ~@PlayerInputsMap()
     {
-        UnityEngine.Debug.Assert(!m_PlayerInputs.enabled, "This will cause a leak and performance issues, PlayerInputsMap.PlayerInputs.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_PlayerInputs.enabled, "This will cause a leak and performance issues, PlayerInputsMap.PlayerInputsManager.Disable() has not been called.");
     }
 
     /// <summary>
@@ -264,13 +264,13 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         return asset.FindBinding(bindingMask, out action);
     }
 
-    // PlayerInputs
+    // PlayerInputsManager
     private readonly InputActionMap m_PlayerInputs;
     private List<IPlayerInputsActions> m_PlayerInputsActionsCallbackInterfaces = new List<IPlayerInputsActions>();
     private readonly InputAction m_PlayerInputs_Move;
     private readonly InputAction m_PlayerInputs_Shoot;
     /// <summary>
-    /// Provides access to input actions defined in input action map "PlayerInputs".
+    /// Provides access to input actions defined in input action map "PlayerInputsManager".
     /// </summary>
     public struct PlayerInputsActions
     {
@@ -281,11 +281,11 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         /// </summary>
         public PlayerInputsActions(@PlayerInputsMap wrapper) { m_Wrapper = wrapper; }
         /// <summary>
-        /// Provides access to the underlying input action "PlayerInputs/Move".
+        /// Provides access to the underlying input action "PlayerInputsManager/Move".
         /// </summary>
         public InputAction @Move => m_Wrapper.m_PlayerInputs_Move;
         /// <summary>
-        /// Provides access to the underlying input action "PlayerInputs/Shoot".
+        /// Provides access to the underlying input action "PlayerInputsManager/Shoot".
         /// </summary>
         public InputAction @Shoot => m_Wrapper.m_PlayerInputs_Shoot;
         /// <summary>
@@ -371,7 +371,7 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
     /// </summary>
     public PlayerInputsActions @PlayerInputs => new PlayerInputsActions(this);
     /// <summary>
-    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerInputs" which allows adding and removing callbacks.
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerInputsManager" which allows adding and removing callbacks.
     /// </summary>
     /// <seealso cref="PlayerInputsActions.AddCallbacks(IPlayerInputsActions)" />
     /// <seealso cref="PlayerInputsActions.RemoveCallbacks(IPlayerInputsActions)" />
