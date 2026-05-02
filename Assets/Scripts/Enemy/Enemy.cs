@@ -18,17 +18,22 @@ public class Enemy : MonoBehaviour , IDamageable
     {
         _agent = GetComponent<NavMeshAgent>();
         _rb = GetComponent<Rigidbody>();
-        _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
-    }
-    private void OnEnable()
-    {
         _fsm = new FSM();
-        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform,_agent,this,_fsm));
+        _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
+        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm));
         _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm));
+        _fsm.ChangeState(FSM.StateID.Chase);
+    }
+    public void ResetEnemy()
+    {
+        _currentLife = FlyWeightPointer.Entity.maxLife;
+        _agent.isStopped = false;
+        _agent.ResetPath();
         _fsm.ChangeState(FSM.StateID.Chase);
     }
     void Update()
     {
+        if (!enabled) return;
         _fsm.onUpdateState();
     }
     public void Rotate(Vector3 direction)
@@ -59,11 +64,11 @@ public class Enemy : MonoBehaviour , IDamageable
     }
     public void TakeDamage(float dmg)
     {
-        throw new NotImplementedException();
-    }
-    public void ResetEnemy()
-    {
-        _currentLife = FlyWeightPointer.Entity.maxLife;
+        _currentLife -= dmg;
+        if (_currentLife <= 0) 
+        {
+            Die();
+        }
     }
     private void OnDrawGizmos()
     {
