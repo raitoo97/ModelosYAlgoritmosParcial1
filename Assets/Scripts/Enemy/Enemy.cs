@@ -3,22 +3,22 @@ using UnityEngine;
 using UnityEngine.AI;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour , IDamageable
 {
     private FSM _fsm;
     private NavMeshAgent _agent;
     private Rigidbody _rb;
     [SerializeField] private Bullet _bulletPrefab;
     private BulletService _bulletService;
-    [SerializeField]private Transform _projectilesParent;// poner al game manager
     [SerializeField]private Transform _gunSight;
     private int _initPoolSize = 50;
     private Action<Enemy> _returnToPoolCallBack;
+    private float _currentLife;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _rb = GetComponent<Rigidbody>();
-        _bulletService = new BulletService(_bulletPrefab, _projectilesParent, _initPoolSize);
+        _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
     }
     private void OnEnable()
     {
@@ -57,10 +57,13 @@ public class Enemy : MonoBehaviour
     {
         _returnToPoolCallBack?.Invoke(this);
     }
+    public void TakeDamage(float dmg)
+    {
+        throw new NotImplementedException();
+    }
     public void ResetEnemy()
     {
-        //_life = FlyWeightPointer.Entity.maxLife;
-        // o reiniciar estado inicial
+        _currentLife = FlyWeightPointer.Entity.maxLife;
     }
     private void OnDrawGizmos()
     {
