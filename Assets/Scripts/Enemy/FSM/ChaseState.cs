@@ -15,6 +15,7 @@ public class ChaseState : Istate
     }
     public void OnEnter()
     {
+        _agent.isStopped = false;
     }
     public void OnExit()
     {

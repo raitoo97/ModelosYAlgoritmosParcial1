@@ -21,6 +21,11 @@ public class BulletBuilder
         _bullet.SetColor(color);
         return this;
     }
+    public BulletBuilder SetOwnerBullet(BulletOwner owner)
+    {
+        _bullet.SetOwner(owner);
+        return this;
+    }
     public Bullet Build()
     {
         return _bullet;

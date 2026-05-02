@@ -2,7 +2,8 @@ using System.Collections.Generic;
 public enum EventType
 {
     PlayerDeath,
-    PlayerDamage
+    PlayerDamage,
+    EnemyKilled
 }
 public static class EventManager
 {

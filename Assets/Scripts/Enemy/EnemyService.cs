@@ -14,16 +14,15 @@ public class EnemyService
         enemy.SetReturnToPoolCallBack(ReturnToPool);
         return enemy;
     }
-    public Enemy Spawn(Vector3 position, Quaternion rot)
+    public Enemy Spawn(Vector3 position)
     {
         Enemy enemy = _pool.GetObject();
-        enemy.transform.position = position;
-        enemy.transform.rotation = rot;
+        enemy.WarpToPosition(position);
+        enemy.ResetEnemy();
         return enemy;
     }
     private void TurnOn(Enemy enemy)
     {
-        enemy.ResetEnemy();
         enemy.gameObject.SetActive(true);
     }
     private void TurnOff(Enemy enemy)

@@ -14,10 +14,12 @@ public class Enemy : MonoBehaviour , IDamageable
     private int _initPoolSize = 50;
     private Action<Enemy> _returnToPoolCallBack;
     private float _currentLife;
+    private bool _isDead;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _rb = GetComponent<Rigidbody>();
+        _isDead = false;
         _fsm = new FSM();
         _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
         _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm));
@@ -27,8 +29,9 @@ public class Enemy : MonoBehaviour , IDamageable
     public void ResetEnemy()
     {
         _currentLife = FlyWeightPointer.Entity.maxLife;
-        _agent.isStopped = false;
-        _agent.ResetPath();
+        _isDead = false;
+        if(_agent.hasPath)
+            _agent.ResetPath();
         _fsm.ChangeState(FSM.StateID.Chase);
     }
     void Update()
@@ -56,6 +59,7 @@ public class Enemy : MonoBehaviour , IDamageable
             .SetSpeed(FlyWeightPointer.Projectile.speed)
             .SetDamage(FlyWeightPointer.Projectile._damage)
             .SetColorMaterial(Color.red)
+            .SetOwnerBullet(BulletOwner.Enemy)
             .Build();
     }
     public void Die()
@@ -64,11 +68,18 @@ public class Enemy : MonoBehaviour , IDamageable
     }
     public void TakeDamage(float dmg)
     {
+        if (_isDead) return;
         _currentLife -= dmg;
         if (_currentLife <= 0) 
         {
+            _isDead = true;
+            EventManager.TriggerEvent(EventType.EnemyKilled, 1);
             Die();
         }
+    }
+    public void WarpToPosition(Vector3 position)
+    {
+        _agent.Warp(position);
     }
     private void OnDrawGizmos()
     {

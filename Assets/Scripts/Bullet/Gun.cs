@@ -5,13 +5,12 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
 {
     [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private Transform _gunSight;
-    [SerializeField] private Transform _projectilesParent;
     private BulletService _bulletService;
     private Dictionary<PlayerEvent, Action> _actions;
     private int _initPoolSize = 50;
     private void Start()
     {
-        _bulletService = new BulletService(_bulletPrefab,_projectilesParent,_initPoolSize);
+        _bulletService = new BulletService(_bulletPrefab,GameManager.instance._projectilesParent,_initPoolSize);
         FillDictionary();
     }
     private void FillDictionary()
@@ -22,7 +21,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private void Shoot()
     {
         Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
-        new BulletBuilder(bullet).SetSpeed(FlyWeightPointer.Projectile.speed).SetDamage(FlyWeightPointer.Projectile._damage).SetColorMaterial(Color.blue).Build();
+        new BulletBuilder(bullet).SetSpeed(FlyWeightPointer.Projectile.speed).SetDamage(FlyWeightPointer.Projectile._damage * 3).SetColorMaterial(Color.blue).SetOwnerBullet(BulletOwner.Player).Build();
     }
     public void Notify(PlayerEvent Actions)
     {

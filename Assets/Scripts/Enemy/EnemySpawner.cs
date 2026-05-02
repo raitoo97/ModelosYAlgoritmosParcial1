@@ -2,7 +2,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private Enemy _enemyPrefab;
-    private float _spawnRate = 2f;
+    private float _spawnRate = 5f;
     private float _radius = 20f;
     private int _poolSize = 20;
     private EnemyService _enemyService;
@@ -23,7 +23,7 @@ public class EnemySpawner : MonoBehaviour
     private void SpawnEnemy()
     {
         Vector3 randomPos = transform.position + Random.insideUnitSphere * _radius;
-        randomPos.y = 0;
-        _enemyService.Spawn(randomPos,Quaternion.identity);
+        randomPos.y = 1.5f;
+        _enemyService.Spawn(randomPos);
     }
 }
