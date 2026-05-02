@@ -14,11 +14,12 @@ public class BulletService
         bullet.SetReturnToPoolCallBack(ReturnToPool);
         return bullet;
     }
-    public void Shoot(Vector3 pos, Quaternion rot)
+    public Bullet Shoot(Vector3 pos, Quaternion rot)
     {
         Bullet bullet = _pool.GetObject();
         bullet.transform.position = pos;
         bullet.transform.rotation = rot;
+        return bullet;
     }
     private void TurnOn(Bullet bullet)
     {

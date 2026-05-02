@@ -17,11 +17,12 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private void FillDictionary()
     {
         _actions = new Dictionary<PlayerEvent, Action>();
-        _actions.Add(PlayerEvent.Shoot, Shoot);      
+        _actions.Add(PlayerEvent.Shoot, Shoot);
     }
     private void Shoot()
     {
-        _bulletService.Shoot(_gunSight.position,_gunSight.rotation);
+        Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
+        new BulletBuilder(bullet).SetSpeed(FlyWeightPointer.Projectile.speed).SetDamage(FlyWeightPointer.Projectile._damage).SetColorMaterial(Color.blue).Build();
     }
     public void Notify(PlayerEvent Actions)
     {
