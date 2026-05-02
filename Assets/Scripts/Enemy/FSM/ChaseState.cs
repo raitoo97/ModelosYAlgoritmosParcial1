@@ -1,31 +1,36 @@
 using UnityEngine;
-
+using UnityEngine.AI;
 public class ChaseState : Istate
 {
+    private NavMeshAgent _agent;
+    private Transform _transform;
+    private FSM _fsm;
+    private Enemy _enemy;
+    public ChaseState(Transform transform, NavMeshAgent agent, Enemy enemy, FSM fsm)
+    {
+        _transform = transform;
+        _agent = agent;
+        _enemy = enemy;
+        _fsm = fsm;
+    }
     public void OnEnter()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Enter Chase state");
     }
-
     public void OnExit()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Exit Chase state");
     }
-
     public void OnUpdate()
     {
-        throw new System.NotImplementedException();
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        var dir = GameManager.instance.player.transform.position - _transform.position;
+        var distance = dir.magnitude;
+        if (distance < FlyWeightPointer.Entity.maxDistance)
+        {
+            _fsm.ChangeState(FSM.StateID.Attack);
+            return;
+        }
+        _agent.SetDestination(GameManager.instance.player.transform.position);
+        _enemy.Rotate(dir);
     }
 }
