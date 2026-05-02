@@ -37,12 +37,14 @@ public class PlayerModel : IObservable<PlayerEvent>
     {
         if (_isDead) return;
         _currentLife -= dmg;
+        float normalizedLife = _currentLife / FlyWeightPointer.Entity.maxLife;
+        EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
         if (_currentLife <= 0)
         {
             _currentLife = 0;
             _isDead = true;
-            EventManager.TriggerEvent(EventType.PlayerDeath);
             NotifyObservers(PlayerEvent.Death);
+            EventManager.TriggerEvent(EventType.PlayerDeath);
         }
     }
     public void NotifyObservers(PlayerEvent action)

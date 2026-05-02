@@ -15,11 +15,9 @@ public class ChaseState : Istate
     }
     public void OnEnter()
     {
-        Debug.Log("Enter Chase state");
     }
     public void OnExit()
     {
-        Debug.Log("Exit Chase state");
     }
     public void OnUpdate()
     {

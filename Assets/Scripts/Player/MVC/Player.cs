@@ -4,10 +4,10 @@ public enum PlayerEvent
     Move,
     Idle,
     Shoot,
-    Death
+    Death,
 }
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour , IDamageable
 {
     private PlayerModel _model;
     private IController _controler;
@@ -34,6 +34,10 @@ public class Player : MonoBehaviour
     private void OnDeath(params object[] parameters)
     {
         this.enabled = false;
+    }
+    public void TakeDamage(float dmg)
+    {
+        _model.TakeDamage(dmg);
     }
     private void OnDisable()
     {
