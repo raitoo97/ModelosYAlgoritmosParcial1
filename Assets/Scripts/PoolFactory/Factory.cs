@@ -1,16 +1,10 @@
 using UnityEngine;
-
-public class Factory : MonoBehaviour
+public class Factory <T> where T : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected T _prefab = null;
+    protected Transform _parent = null;
+    public virtual T CreateObject() 
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return Object.Instantiate(_prefab,_parent);
     }
 }

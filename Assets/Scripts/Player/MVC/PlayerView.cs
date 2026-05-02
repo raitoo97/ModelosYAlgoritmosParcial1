@@ -14,11 +14,16 @@ public class PlayerView : IObserver<PlayerEvent>
     {
         _animator.SetBool("IsRunning", isRunning);
     }
+    public void OnPlayerDeath()
+    {
+        _animator.SetTrigger("OnDeath");
+    }
     private void FillDictionary()
     {
         _actions = new Dictionary<PlayerEvent, Action>();
         _actions.Add(PlayerEvent.Move, () => MoveAnimation(true));
         _actions.Add(PlayerEvent.Idle, () => MoveAnimation(false));
+        _actions.Add(PlayerEvent.Death, OnPlayerDeath);
     }
     public void Notify(PlayerEvent Actions)
     {

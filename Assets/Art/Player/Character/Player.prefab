@@ -468,6 +468,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 663101406966615874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1153342729071540972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6739243654744398407}
+  m_Layer: 0
+  m_Name: GunSight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6739243654744398407
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153342729071540972}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.033, y: 0.169, z: 2.07}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5438226258481038875}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1354224018618404511
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,9 +2611,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5245177176829504959, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6739243654744398407}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2010531234007859668, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6040573054041989}
   m_SourcePrefab: {fileID: 100100000, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
+--- !u!1 &1753095026847754864 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2010531234007859668, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
+  m_PrefabInstance: {fileID: 266531661013740452}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6040573054041989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1753095026847754864}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd3e22294313c694ab1e9fd285fd298c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
+  _gunSight: {fileID: 6739243654744398407}
 --- !u!4 &5438226258481038875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5245177176829504959, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}

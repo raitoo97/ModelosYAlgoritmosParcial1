@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PlayerInputsManager : MonoBehaviour
 {
     private PlayerInputsMap _playerMap;
@@ -22,7 +21,7 @@ public class PlayerInputsManager : MonoBehaviour
     }
     public bool ShootAction()
     {
-        return _playerMap.PlayerInputs.Shoot.IsPressed();
+        return _playerMap.PlayerInputs.Shoot.triggered;
     }
     private void OnDisable()
     {
