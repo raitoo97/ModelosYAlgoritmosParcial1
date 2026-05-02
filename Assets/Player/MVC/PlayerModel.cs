@@ -38,6 +38,7 @@ public class PlayerModel : IObservable<PlayerEvent>
         {
             _currentLife = 0;
             EventManager.TriggerEvent(EventType.PlayerDeath);
+            NotifyObservers(PlayerEvent.Death);
         }
     }
     public void NotifyObservers(PlayerEvent action)

@@ -4,6 +4,7 @@ public enum PlayerEvent
     Move,
     Idle,
     Shoot,
+    Death
 }
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
@@ -19,8 +20,8 @@ public class Player : MonoBehaviour
         _view = new PlayerView(this);
         _model.Subscribe(_view);
         _gun = GetComponentInChildren<Gun>();
-        if (_gun != null)
-            _model.Subscribe(_gun);
+        if (_gun != null) _model.Subscribe(_gun);
+        EventManager.SubscribeToEvent(EventType.PlayerDeath, OnDeath);
     }
     private void Update()
     {
@@ -29,6 +30,10 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         _controler.FixedUpdateInputs();
+    }
+    private void OnDeath(params object[] parameters)
+    {
+        this.enabled = false;
     }
     private void OnDisable()
     {

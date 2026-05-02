@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class PlayerInputsManager : MonoBehaviour
 {
     private PlayerInputsMap _playerMap;

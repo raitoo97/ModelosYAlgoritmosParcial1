@@ -5,10 +5,10 @@ public class Pool <T>
     private Func<T> _factoryMethod;
     private Action<T> _turnOnCallBack;
     private Action<T> _turnOffCallBack;
-    private List<T> _currentStack;
+    private Stack<T> _currentStack;
     public Pool(Func<T> factoryMethod, Action<T> turnOnCallBack, Action<T> turnOffCallBack,int initSize)
     {
-        _currentStack = new List<T>();
+        _currentStack = new Stack<T>();
         _factoryMethod = factoryMethod;
         _turnOnCallBack = turnOnCallBack;
         _turnOffCallBack = turnOffCallBack;
@@ -16,7 +16,7 @@ public class Pool <T>
         {
             T obj = _factoryMethod();
             _turnOffCallBack(obj);
-            _currentStack.Add(obj);
+            _currentStack.Push(obj);
         }
     }
     public T GetObject()
@@ -28,8 +28,7 @@ public class Pool <T>
         }
         else
         {
-            result = _currentStack[0];
-            _currentStack.RemoveAt(0);
+            result = _currentStack.Pop();
         }
         _turnOnCallBack(result);
         return result;
@@ -37,6 +36,6 @@ public class Pool <T>
     public void ReturnObject(T obj)
     {
         _turnOffCallBack(obj);
-        _currentStack.Add(obj);
+        _currentStack.Push(obj);
     }
 }
