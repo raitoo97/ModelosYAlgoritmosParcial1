@@ -5,9 +5,11 @@ public class PlayerModel : IObservable<PlayerEvent>
     private Rigidbody _rb;
     private float _currentLife;
     private List<IObserver<PlayerEvent>> _myobservers;
+    private bool _isDead;
     public PlayerModel(Player user)
     {
         _rb = user.GetComponent<Rigidbody>();
+        _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _myobservers = new List<IObserver<PlayerEvent>>();
     }
@@ -33,10 +35,12 @@ public class PlayerModel : IObservable<PlayerEvent>
     }
     public void TakeDamage(float dmg)
     {
+        if (_isDead) return;
         _currentLife -= dmg;
         if (_currentLife <= 0)
         {
             _currentLife = 0;
+            _isDead = true;
             EventManager.TriggerEvent(EventType.PlayerDeath);
             NotifyObservers(PlayerEvent.Death);
         }

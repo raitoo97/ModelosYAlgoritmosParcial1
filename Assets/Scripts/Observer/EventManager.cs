@@ -12,7 +12,8 @@ public static class EventManager
         if (_events == null) _events = new Dictionary<EventType, MethodToSuscribe>();
         if(!_events.ContainsKey(eventType))
             _events.Add(eventType, method);
-        _events[eventType] += method;
+        else
+            _events[eventType] += method;
     }
     public static void UnsubscribeToEvent(EventType eventType, MethodToSuscribe method)
     {
