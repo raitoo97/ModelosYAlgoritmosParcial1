@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 [RequireComponent(typeof(Rigidbody))]
@@ -9,9 +10,10 @@ public class Enemy : MonoBehaviour
     private Rigidbody _rb;
     [SerializeField] private Bullet _bulletPrefab;
     private BulletService _bulletService;
-    [SerializeField]private Transform _projectilesParent;
+    [SerializeField]private Transform _projectilesParent;// poner al game manager
     [SerializeField]private Transform _gunSight;
     private int _initPoolSize = 50;
+    private Action<Enemy> _returnToPoolCallBack;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -38,6 +40,10 @@ public class Enemy : MonoBehaviour
             _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, _rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime));
         }
     }
+    public void SetReturnToPoolCallBack(Action<Enemy> returnToPoolCallBack)
+    {
+        _returnToPoolCallBack = returnToPoolCallBack;
+    }
     public void Shoot()
     {
         Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
@@ -46,6 +52,15 @@ public class Enemy : MonoBehaviour
             .SetDamage(FlyWeightPointer.Projectile._damage)
             .SetColorMaterial(Color.red)
             .Build();
+    }
+    public void Die()
+    {
+        _returnToPoolCallBack?.Invoke(this);
+    }
+    public void ResetEnemy()
+    {
+        //_life = FlyWeightPointer.Entity.maxLife;
+        // o reiniciar estado inicial
     }
     private void OnDrawGizmos()
     {
