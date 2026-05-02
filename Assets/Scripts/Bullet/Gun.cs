@@ -21,7 +21,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private void Shoot()
     {
         Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
-        new BulletBuilder(bullet).SetSpeed(FlyWeightPointer.Projectile.speed).SetDamage(FlyWeightPointer.Projectile._damage * 3).SetColorMaterial(Color.blue).SetOwnerBullet(BulletOwner.Player).Build();
+        new BulletBuilder(bullet).SetSpeed(FlyWeightPointer.Projectile.speed).SetDamage(FlyWeightPointer.Projectile._damage * 4).SetColorMaterial(Color.blue).SetOwnerBullet(BulletOwner.Player).Build();
     }
     public void Notify(PlayerEvent Actions)
     {
