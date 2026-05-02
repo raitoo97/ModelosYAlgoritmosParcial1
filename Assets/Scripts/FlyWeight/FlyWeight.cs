@@ -5,4 +5,5 @@ public class FlyWeight
     public float rotateSpeed;
     public float maxDistance;
     public float coolDown;
+    public float _damage;
 }

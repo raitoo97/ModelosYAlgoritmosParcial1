@@ -3,10 +3,17 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     private float _currentDistance;
+    private float _speed;
+    private float _damage;
+    private Renderer _renderer;
     private Action<Bullet> _returnToPoolCallBack;
+    private void Awake()
+    {
+        _renderer = GetComponentInChildren<Renderer>();
+    }
     void Update()
     {
-        float distanceToTravel = FlyWeightPointer.Projectile.speed * Time.deltaTime;
+        float distanceToTravel = _speed * Time.deltaTime;
         transform.position += transform.forward * distanceToTravel;
         _currentDistance += distanceToTravel;
         if(_currentDistance >= FlyWeightPointer.Projectile.maxLife)
@@ -19,5 +26,18 @@ public class Bullet : MonoBehaviour
     public void ResetBullet()
     {
         _currentDistance = 0;
+    }
+    public void SetSpeed(float speed)
+    {
+        _speed = speed;
+    }
+    public void SetDamage(float damage)
+    {
+        _damage = damage;
+    }
+    public void SetColor(Color color)
+    {
+        if (_renderer != null)
+            _renderer.material.SetColor("_BulletColor", color);
     }
 }
