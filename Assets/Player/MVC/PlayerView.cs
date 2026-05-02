@@ -8,15 +8,16 @@ public class PlayerView : IObserver<PlayerEvent>
     public PlayerView(Player user)
     {
         _animator = user.GetComponent<Animator>();
+        EventManager.SubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
         FillDictionary();
     }
     public void MoveAnimation(bool isRunning)
     {
         _animator.SetBool("IsRunning", isRunning);
     }
-    public void DeathAnimation()
+    public void OnPlayerDeath(params object[] parameters)
     {
-        _animator.SetTrigger("Death");
+        _animator.SetTrigger("OnDeath");
     }
     private void FillDictionary()
     {
