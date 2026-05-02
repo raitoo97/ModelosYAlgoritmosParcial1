@@ -29,7 +29,7 @@ public class PlayerModel : IObservable<PlayerEvent>
     }
     public void Shoot()
     {
-        Debug.Log("Shoot");
+        NotifyObservers(PlayerEvent.Shoot);
     }
     public void TakeDamage(float dmg)
     {
@@ -37,6 +37,7 @@ public class PlayerModel : IObservable<PlayerEvent>
         if (_currentLife <= 0)
         {
             _currentLife = 0;
+            EventManager.TriggerEvent(EventType.PlayerDeath);
         }
     }
     public void NotifyObservers(PlayerEvent action)

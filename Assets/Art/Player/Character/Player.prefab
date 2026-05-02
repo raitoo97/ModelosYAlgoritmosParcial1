@@ -2638,6 +2638,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
+  _gunSight: {fileID: 6739243654744398407}
 --- !u!4 &5438226258481038875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5245177176829504959, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
