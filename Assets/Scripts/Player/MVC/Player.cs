@@ -39,5 +39,6 @@ public class Player : MonoBehaviour
     {
         _model.Unsubscribe(_view);
         _model.Unsubscribe(_gun);
+        EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnDeath);
     }
 }

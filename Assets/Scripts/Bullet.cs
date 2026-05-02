@@ -6,10 +6,10 @@ public class Bullet : MonoBehaviour
     private Action<Bullet> _returnToPoolCallBack;
     void Update()
     {
-        float distanceToTravel = FlyWeightPointer.Proyectile.speed * Time.deltaTime;
+        float distanceToTravel = FlyWeightPointer.Projectile.speed * Time.deltaTime;
         transform.position += transform.forward * distanceToTravel;
         _currentDistance += distanceToTravel;
-        if(_currentDistance >= FlyWeightPointer.Proyectile.maxLife)
+        if(_currentDistance >= FlyWeightPointer.Projectile.maxLife)
             _returnToPoolCallBack?.Invoke(this);
     }
     public void SetReturnToPoolCallBack(Action<Bullet> returnToPoolCallBack)
