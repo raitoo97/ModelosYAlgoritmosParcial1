@@ -26,7 +26,7 @@ public class PlayerModel : IObservable<PlayerEvent>
         if (_dirRot.sqrMagnitude > 0.001f)
         {
             Quaternion _rotDir = Quaternion.LookRotation(_dirRot);
-            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, _rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.fixedDeltaTime));
+            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, _rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.fixedDeltaTime));
         }
     }
     public void Shoot()
