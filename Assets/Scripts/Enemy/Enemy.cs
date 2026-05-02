@@ -7,10 +7,16 @@ public class Enemy : MonoBehaviour
     private FSM _fsm;
     private NavMeshAgent _agent;
     private Rigidbody _rb;
+    [SerializeField] private Bullet _bulletPrefab;
+    private BulletService _bulletService;
+    [SerializeField]private Transform _projectilesParent;
+    [SerializeField]private Transform _gunSight;
+    private int _initPoolSize = 50;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _rb = GetComponent<Rigidbody>();
+        _bulletService = new BulletService(_bulletPrefab, _projectilesParent, _initPoolSize);
     }
     private void OnEnable()
     {
@@ -31,6 +37,15 @@ public class Enemy : MonoBehaviour
             Quaternion _rotDir = Quaternion.LookRotation(_dirRot);
             _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, _rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime));
         }
+    }
+    public void Shoot()
+    {
+        Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
+        new BulletBuilder(bullet)
+            .SetSpeed(FlyWeightPointer.Projectile.speed)
+            .SetDamage(FlyWeightPointer.Projectile._damage)
+            .SetColorMaterial(Color.red)
+            .Build();
     }
     private void OnDrawGizmos()
     {

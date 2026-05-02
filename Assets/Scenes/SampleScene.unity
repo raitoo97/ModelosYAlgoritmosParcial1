@@ -808,13 +808,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7619148864791334906, guid: 5c2ff6d89b2b38940bf1d7be8e692993, type: 3}
+      propertyPath: _projectilesParent
+      value: 
+      objectReference: {fileID: 953963703}
     - target: {fileID: 8235735210639115665, guid: 5c2ff6d89b2b38940bf1d7be8e692993, type: 3}
       propertyPath: m_Name
       value: Enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8235735210639115665, guid: 5c2ff6d89b2b38940bf1d7be8e692993, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

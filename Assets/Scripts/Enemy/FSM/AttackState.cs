@@ -37,7 +37,7 @@ public class AttackState : Istate
         if (_timer >= FlyWeightPointer.Entity.coolDown)
         {
             _timer = 0;
-            Debug.Log("Shoot real");
+            _enemy.Shoot();
         }
     }
 }
