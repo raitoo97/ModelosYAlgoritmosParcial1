@@ -19,6 +19,14 @@ public class Bullet : MonoBehaviour
         if(_currentDistance >= FlyWeightPointer.Projectile.maxLife)
             _returnToPoolCallBack?.Invoke(this);
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.TryGetComponent<IDamageable>(out var entity))
+        {
+            entity.TakeDamage(_damage);
+            _returnToPoolCallBack?.Invoke(this);
+        }
+    }
     public void SetReturnToPoolCallBack(Action<Bullet> returnToPoolCallBack)
     {
         _returnToPoolCallBack = returnToPoolCallBack;
