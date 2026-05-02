@@ -1,5 +1,10 @@
 using System;
 using UnityEngine;
+public enum BulletOwner
+{
+    Player,
+    Enemy
+}
 public class Bullet : MonoBehaviour
 {
     private float _currentDistance;
@@ -7,6 +12,7 @@ public class Bullet : MonoBehaviour
     private float _damage;
     private Renderer _renderer;
     private Action<Bullet> _returnToPoolCallBack;
+    private BulletOwner _owner;
     private void Awake()
     {
         _renderer = GetComponentInChildren<Renderer>();
@@ -23,9 +29,20 @@ public class Bullet : MonoBehaviour
     {
         if(other.TryGetComponent<IDamageable>(out var entity))
         {
-            entity.TakeDamage(_damage);
+            if (ShouldHit(other))
+            {
+                entity.TakeDamage(_damage);
+            }
             _returnToPoolCallBack?.Invoke(this);
         }
+    }
+    private bool ShouldHit(Collider other)
+    {
+        if (_owner == BulletOwner.Player && other.CompareTag("Player"))
+            return false;
+        if (_owner == BulletOwner.Enemy && other.CompareTag("Enemy"))
+            return false;
+        return true;
     }
     public void SetReturnToPoolCallBack(Action<Bullet> returnToPoolCallBack)
     {
@@ -42,6 +59,10 @@ public class Bullet : MonoBehaviour
     public void SetDamage(float damage)
     {
         _damage = damage;
+    }
+    public void SetOwner(BulletOwner owner)
+    {
+        _owner = owner;
     }
     public void SetColor(Color color)
     {

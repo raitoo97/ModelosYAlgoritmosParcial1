@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 1547624374755554794}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -218,7 +218,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
-  _projectilesParent: {fileID: 0}
   _gunSight: {fileID: 1728746407436192983}
 --- !u!195 &1547624374755554794
 NavMeshAgent:
