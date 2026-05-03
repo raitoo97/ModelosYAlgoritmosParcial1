@@ -31,7 +31,7 @@ public class ChaseState : IState
             _fsm.ChangeState(FSM.StateID.Attack);
             return;
         }
-        _agent.SetDestination(GameManager.instance.player.transform.position);
+        _agent.SetDestination(_playerTransform.position);
         _enemy.Rotate(dir);
     }
 }
