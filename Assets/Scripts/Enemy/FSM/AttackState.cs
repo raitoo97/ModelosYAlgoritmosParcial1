@@ -1,18 +1,20 @@
 using UnityEngine;
 using UnityEngine.AI;
-public class AttackState : Istate
+public class AttackState : IState
 {
     private Transform _transform;
     private FSM _fsm;
     private Enemy _enemy;
     private NavMeshAgent _agent;
+    private Transform _playerTransform;
     private float _timer;
-    public AttackState(Transform transform, NavMeshAgent agent, Enemy enemy, FSM fsm)
+    public AttackState(Transform transform, NavMeshAgent agent, Enemy enemy, FSM fsm, Transform playerTransform)
     {
         _transform = transform;
         _agent = agent;
         _enemy = enemy;
         _fsm = fsm;
+        _playerTransform = playerTransform;
     }
     public void OnEnter()
     {
@@ -26,7 +28,7 @@ public class AttackState : Istate
     public void OnUpdate()
     {
         _timer += Time.deltaTime;
-        var dir = GameManager.instance.player.transform.position - _transform.position;
+        var dir = _playerTransform.position - _transform.position;
         var distance = dir.magnitude;
         if (distance > FlyWeightPointer.Entity.maxDistance)
         {

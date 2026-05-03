@@ -1,5 +1,11 @@
 public static class FlyWeightPointer
 {
-   public static readonly FlyWeight Entity = new FlyWeight() { speed = 5, rotateSpeed = 260, maxLife = 100,maxDistance = 8,coolDown = 1f};
-   public static readonly FlyWeight Projectile = new FlyWeight() { speed = 50, rotateSpeed = 0, maxLife = 200,_damage = 25 };
+    /// <summary>
+    /// Entity valores : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
+    /// </summary>
+    public static readonly FlyWeight Entity = new FlyWeight(5, 100, 260, 8, 1f, 25);
+    /// <summary>
+    /// Projectile valores : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
+    /// </summary>
+    public static readonly FlyWeight Projectile = new FlyWeight(50, 200, 0, 0, 0, 25);
 }

@@ -1,4 +1,4 @@
-public interface Istate
+public interface IState
 {
     public void OnEnter();
     public void OnUpdate();
