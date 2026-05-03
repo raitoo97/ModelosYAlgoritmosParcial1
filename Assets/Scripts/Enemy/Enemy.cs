@@ -57,7 +57,7 @@ public class Enemy : MonoBehaviour , IDamageable
         Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
         new BulletBuilder(bullet)
             .SetSpeed(FlyWeightPointer.Projectile.speed)
-            .SetDamage(FlyWeightPointer.Projectile._damage)
+            .SetDamage(FlyWeightPointer.Projectile.damage)
             .SetColorMaterial(Color.red)
             .SetOwnerBullet(BulletOwner.Enemy)
             .Build();
