@@ -6,9 +6,9 @@ public class FSM
         Chase,
         Attack,
     }
-    private Dictionary<StateID, Istate> _allStates = new Dictionary<StateID, Istate>();
-    private Istate _currentState;
-    public void AddState(StateID key, Istate value)
+    private Dictionary<StateID, IState> _allStates = new Dictionary<StateID, IState>();
+    private IState _currentState;
+    public void AddState(StateID key, IState value)
     {
         if (_allStates.ContainsKey(key)) return;
         _allStates.Add(key, value);

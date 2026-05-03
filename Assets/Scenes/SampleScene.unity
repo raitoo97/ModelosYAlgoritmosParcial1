@@ -119,6 +119,41 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &109295118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 109295119}
+  m_Layer: 0
+  m_Name: Walls
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &109295119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109295118}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14, y: 2.0161824, z: -18.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1046339370}
+  - {fileID: 1186505538}
+  - {fileID: 1609140796}
+  - {fileID: 599421409}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &145314491
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,7 +659,7 @@ GameObject:
   - component: {fileID: 599421409}
   - component: {fileID: 599421408}
   m_Layer: 0
-  m_Name: Wallks (3)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -660,11 +695,11 @@ Transform:
   m_GameObject: {fileID: 599421407}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 14, y: 2.0161824, z: -18.6}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 69.439, z: 268.8981}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 109295119}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!114 &605306566 stripped
 MonoBehaviour:
@@ -930,7 +965,7 @@ GameObject:
   - component: {fileID: 1046339368}
   - component: {fileID: 1046339367}
   m_Layer: 0
-  m_Name: Wallks
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1018,12 +1053,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046339366}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -27.14, y: 2.0161824, z: -0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -41.14, y: 0, z: 18.6}
   m_LocalScale: {x: 1, y: 69.439, z: 42.708}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 109295119}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1112344754
 GameObject:
@@ -1162,7 +1197,7 @@ GameObject:
   - component: {fileID: 1186505536}
   - component: {fileID: 1186505535}
   m_Layer: 0
-  m_Name: Wallks (1)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1250,12 +1285,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1186505534}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 27.4, y: 2.0161824, z: -0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.4, y: 0, z: 18.6}
   m_LocalScale: {x: 1, y: 69.439, z: 42.708}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 109295119}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1252171979 stripped
 Transform:
@@ -1445,7 +1480,7 @@ GameObject:
   - component: {fileID: 1609140794}
   - component: {fileID: 1609140793}
   m_Layer: 0
-  m_Name: Wallks (2)
+  m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1534,11 +1569,11 @@ Transform:
   m_GameObject: {fileID: 1609140792}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 14, y: 2.0161824, z: 20.3}
+  m_LocalPosition: {x: 0, y: 0, z: 38.9}
   m_LocalScale: {x: 1, y: 69.439, z: 268.8981}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 109295119}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &1714021984
 GameObject:
@@ -1849,7 +1884,4 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 1373455852}
   - {fileID: 1155634307}
-  - {fileID: 1046339370}
-  - {fileID: 1186505538}
-  - {fileID: 1609140796}
-  - {fileID: 599421409}
+  - {fileID: 109295119}

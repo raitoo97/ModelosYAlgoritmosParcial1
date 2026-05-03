@@ -22,8 +22,9 @@ public class Enemy : MonoBehaviour , IDamageable
         _isDead = false;
         _fsm = new FSM();
         _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
-        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm));
-        _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm));
+        Transform playerTransform = GameManager.instance.player.transform;
+        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, playerTransform));
+        _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
     }
     public void ResetEnemy()
