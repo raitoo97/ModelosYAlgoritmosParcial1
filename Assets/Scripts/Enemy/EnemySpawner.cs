@@ -1,15 +1,22 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
-public class EnemySpawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent>
 {
     [SerializeField] private Enemy _enemyPrefab;
     private float _spawnRate = 5f;
-    private float _radius = 20f;
+    private float _radius = 10f;
     private int _poolSize = 20;
     private EnemyService _enemyService;
     private float _timer;
+    private Dictionary<EnemyEvent, Action> _actions;
+    private int _enemyKills;
+    private int _killsPerDifficultyIncrease = 5;
+    private float _minSpawnRate = 1f;
     private void Start()
     {
-        _enemyService = new EnemyService(_enemyPrefab, this.transform, _poolSize);
+        _enemyService = new EnemyService(_enemyPrefab, this.transform, _poolSize,this);
+        FillDictionary();
     }
     private void Update()
     {
@@ -20,10 +27,31 @@ public class EnemySpawner : MonoBehaviour
             SpawnEnemy();
         }
     }
+    private void FillDictionary()
+    {
+        _actions = new Dictionary<EnemyEvent, Action>();
+        _actions.Add(EnemyEvent.Died, IncreaseEnemyKilled);
+    }
+    private void IncreaseEnemyKilled()
+    {
+        _enemyKills++;
+        if (_enemyKills % _killsPerDifficultyIncrease == 0)
+        {
+            _spawnRate -= 0.5f;
+            _spawnRate = Mathf.Max(_minSpawnRate, _spawnRate);
+        }
+    }
     private void SpawnEnemy()
     {
-        Vector3 randomPos = transform.position + Random.insideUnitSphere * _radius;
+        Vector3 randomPos = transform.position + UnityEngine.Random.insideUnitSphere * _radius;
         randomPos.y = 1.5f;
         _enemyService.Spawn(randomPos);
+    }
+    public void Notify(EnemyEvent Actions)
+    {
+        if (_actions.ContainsKey(Actions))
+        {
+            _actions[Actions].Invoke();
+        }
     }
 }

@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+public enum EnemyEvent
+{
+    Died
+}
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour , IDamageable
+public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
 {
     private FSM _fsm;
     private NavMeshAgent _agent;
@@ -15,6 +20,7 @@ public class Enemy : MonoBehaviour , IDamageable
     private Action<Enemy> _returnToPoolCallBack;
     private float _currentLife;
     private bool _isDead;
+    private List<IObserver<EnemyEvent>> _myObservers;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -26,6 +32,7 @@ public class Enemy : MonoBehaviour , IDamageable
         _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, playerTransform));
         _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
+        _myObservers = new List<IObserver<EnemyEvent>>();
     }
     public void ResetEnemy()
     {
@@ -75,6 +82,7 @@ public class Enemy : MonoBehaviour , IDamageable
         {
             _isDead = true;
             EventManager.TriggerEvent(EventType.EnemyKilled, 1);
+            NotifyObservers(EnemyEvent.Died);
             Die();
         }
     }
@@ -86,5 +94,22 @@ public class Enemy : MonoBehaviour , IDamageable
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(this.transform.position, FlyWeightPointer.Entity.maxDistance);
+    }
+    public void Subscribe(IObserver<EnemyEvent> observer)
+    {
+        if(!_myObservers.Contains(observer))
+            _myObservers.Add(observer);
+    }
+    public void Unsubscribe(IObserver<EnemyEvent> observer)
+    {
+        if (_myObservers.Contains(observer))
+            _myObservers.Remove(observer);
+    }
+    public void NotifyObservers(EnemyEvent action)
+    {
+        for (int i = _myObservers.Count - 1; i >= 0; i--)
+        {
+            _myObservers[i].Notify(action);
+        }
     }
 }
