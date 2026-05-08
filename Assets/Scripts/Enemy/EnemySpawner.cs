@@ -54,4 +54,9 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent>
             _actions[Actions].Invoke();
         }
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(this.transform.position, 10f);
+    }
 }

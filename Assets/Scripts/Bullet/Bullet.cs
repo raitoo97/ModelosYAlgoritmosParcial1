@@ -8,8 +8,7 @@ public enum BulletOwner
 public class Bullet : MonoBehaviour
 {
     private float _currentDistance;
-    private float _speed;
-    private float _damage;
+    private float _damageMultiplier = 1f;
     private Renderer _renderer;
     private Action<Bullet> _returnToPoolCallBack;
     private BulletOwner _owner;
@@ -19,7 +18,7 @@ public class Bullet : MonoBehaviour
     }
     void Update()
     {
-        float distanceToTravel = _speed * Time.deltaTime;
+        float distanceToTravel = FlyWeightPointer.Projectile.speed * Time.deltaTime;
         transform.position += transform.forward * distanceToTravel;
         _currentDistance += distanceToTravel;
         if(_currentDistance >= FlyWeightPointer.Projectile.maxLife)
@@ -31,7 +30,7 @@ public class Bullet : MonoBehaviour
         {
             if (ShouldHit(other))
             {
-                entity.TakeDamage(_damage);
+                entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
             }
             _returnToPoolCallBack?.Invoke(this);
         }
@@ -50,15 +49,12 @@ public class Bullet : MonoBehaviour
     }
     public void ResetBullet()
     {
+        _damageMultiplier = 1f;
         _currentDistance = 0;
     }
-    public void SetSpeed(float speed)
+    public void SetDamageMultiplier(float damage)
     {
-        _speed = speed;
-    }
-    public void SetDamage(float damage)
-    {
-        _damage = damage;
+        _damageMultiplier = damage;
     }
     public void SetOwner(BulletOwner owner)
     {
