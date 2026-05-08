@@ -1,9 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+public enum EnemyEvent
+{
+    EnemyDie
+}
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour , IDamageable
+public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
 {
     private FSM _fsm;
     private NavMeshAgent _agent;
@@ -15,6 +20,7 @@ public class Enemy : MonoBehaviour , IDamageable
     private Action<Enemy> _returnToPoolCallBack;
     private float _currentLife;
     private bool _isDead;
+    private List<IObserver<EnemyEvent>> _myObservers = new List<IObserver<EnemyEvent>>();
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -57,14 +63,13 @@ public class Enemy : MonoBehaviour , IDamageable
     {
         Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
         new BulletBuilder(bullet)
-            .SetSpeed(FlyWeightPointer.Projectile.speed)
-            .SetDamage(FlyWeightPointer.Projectile.damage)
             .SetColorMaterial(Color.red)
             .SetOwnerBullet(BulletOwner.Enemy)
             .Build();
     }
     public void Die()
     {
+        NotifyObservers(EnemyEvent.EnemyDie);
         _returnToPoolCallBack?.Invoke(this);
     }
     public void TakeDamage(float dmg)
@@ -86,5 +91,22 @@ public class Enemy : MonoBehaviour , IDamageable
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(this.transform.position, FlyWeightPointer.Entity.maxDistance);
+    }
+    public void Subscribe(IObserver<EnemyEvent> observer)
+    {
+        if (!_myObservers.Contains(observer))
+            _myObservers.Add(observer);
+    }
+    public void Unsubscribe(IObserver<EnemyEvent> observer)
+    {
+        if (_myObservers.Contains(observer))
+            _myObservers.Remove(observer);
+    }
+    public void NotifyObservers(EnemyEvent action)
+    {
+        for (int i = _myObservers.Count - 1; i >= 0; i--)
+        {
+            _myObservers[i].Notify(action);
+        }
     }
 }

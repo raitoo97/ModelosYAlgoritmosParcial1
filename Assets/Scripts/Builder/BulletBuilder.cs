@@ -6,14 +6,9 @@ public class BulletBuilder
     {
         _bullet = bullet;
     }
-    public BulletBuilder SetSpeed(float speed)
+    public BulletBuilder SetDamageMultiplierBullet(float multiplier)
     {
-        _bullet.SetSpeed(speed);
-        return this;
-    }
-    public BulletBuilder SetDamage(float damage)
-    {
-        _bullet.SetDamage(damage);
+        _bullet.SetDamageMultiplier(multiplier);
         return this;
     }
     public BulletBuilder SetColorMaterial(Color color)

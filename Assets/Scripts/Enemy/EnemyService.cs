@@ -3,15 +3,18 @@ public class EnemyService
 {
     private Pool<Enemy> _pool;
     private EnemyFactory _factory;
-    public EnemyService(Enemy prefab, Transform parent, int size)
+    private IObserver<EnemyEvent> _observer;
+    public EnemyService(Enemy prefab, Transform parent, int size , IObserver<EnemyEvent> observer)
     {
         _factory = new EnemyFactory(prefab, parent);
+        _observer = observer;
         _pool = new Pool<Enemy>(CreateEnemy, TurnOn, TurnOff, size);
     }
     private Enemy CreateEnemy()
     {
         Enemy enemy = _factory.CreateObject();
         enemy.SetReturnToPoolCallBack(ReturnToPool);
+        enemy.Subscribe(_observer);
         return enemy;
     }
     public Enemy Spawn(Vector3 position)
