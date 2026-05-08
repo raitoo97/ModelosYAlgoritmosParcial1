@@ -7,8 +7,8 @@ public class EnemyService
     public EnemyService(Enemy prefab, Transform parent, int size , IObserver<EnemyEvent> observer)
     {
         _factory = new EnemyFactory(prefab, parent);
-        _pool = new Pool<Enemy>(CreateEnemy, TurnOn, TurnOff, size);
         _observer = observer;
+        _pool = new Pool<Enemy>(CreateEnemy, TurnOn, TurnOff, size);
     }
     private Enemy CreateEnemy()
     {

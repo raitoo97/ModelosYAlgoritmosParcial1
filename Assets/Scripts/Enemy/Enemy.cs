@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public enum EnemyEvent
 {
-    Died
+    EnemyDie
 }
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
     private Action<Enemy> _returnToPoolCallBack;
     private float _currentLife;
     private bool _isDead;
-    private List<IObserver<EnemyEvent>> _myObservers;
+    private List<IObserver<EnemyEvent>> _myObservers = new List<IObserver<EnemyEvent>>();
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -32,7 +32,6 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
         _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, playerTransform));
         _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
-        _myObservers = new List<IObserver<EnemyEvent>>();
     }
     public void ResetEnemy()
     {
@@ -70,6 +69,7 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
     }
     public void Die()
     {
+        NotifyObservers(EnemyEvent.EnemyDie);
         _returnToPoolCallBack?.Invoke(this);
     }
     public void TakeDamage(float dmg)
@@ -80,7 +80,6 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
         {
             _isDead = true;
             EventManager.TriggerEvent(EventType.EnemyKilled, 1);
-            NotifyObservers(EnemyEvent.Died);
             Die();
         }
     }
@@ -95,7 +94,7 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
     }
     public void Subscribe(IObserver<EnemyEvent> observer)
     {
-        if(!_myObservers.Contains(observer))
+        if (!_myObservers.Contains(observer))
             _myObservers.Add(observer);
     }
     public void Unsubscribe(IObserver<EnemyEvent> observer)

@@ -30,14 +30,14 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent>
     private void FillDictionary()
     {
         _actions = new Dictionary<EnemyEvent, Action>();
-        _actions.Add(EnemyEvent.Died, IncreaseEnemyKilled);
+        _actions.Add(EnemyEvent.EnemyDie, IncreaseEnemyKilled);
     }
     private void IncreaseEnemyKilled()
     {
         _enemyKills++;
         if (_enemyKills % _killsPerDifficultyIncrease == 0)
         {
-            _spawnRate -= 0.5f;
+            _spawnRate -= 1f;
             _spawnRate = Mathf.Max(_minSpawnRate, _spawnRate);
         }
     }
