@@ -74,9 +74,7 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
         }
         for (int i = 0; i < memory.Count; i++)
         {
-            var enemy = _allEnemies[i];
-            enemy.gameObject.SetActive(true);
-            enemy.LoadState(memory[i]);
+            _allEnemies[i].LoadState(memory[i]);
         }
     }
     public void TryLoadStates()
