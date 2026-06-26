@@ -9,6 +9,8 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>
 {
     private List<IObserver<SaveEvent>> _myobservers = new List<IObserver<SaveEvent>>();
     public static SaveManager instance;
+    private int savesCount;
+    private int loadCounts;
     private void Awake()
     {
         if (instance == null)
@@ -19,13 +21,23 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>
         {
             Destroy(gameObject);
         }
+        savesCount = 3;
+        loadCounts = 0;
     }
     private void Update()
     {
-        if (PlayerInputsManager.instance.SaveAction())
+        if (PlayerInputsManager.instance.SaveAction() && savesCount > 0)
+        {
+            savesCount--;
+            loadCounts++;
+            EventManager.TriggerEvent(EventType.UpdateSaves, savesCount);
             Save();
-        if (PlayerInputsManager.instance.LoadAction())
+        }
+        if (PlayerInputsManager.instance.LoadAction() && loadCounts > 0)
+        {
+            loadCounts--;
             Load();
+        }
     }
     public void Save()
     {

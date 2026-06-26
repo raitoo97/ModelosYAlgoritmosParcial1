@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 public enum PlayerEvent
 {
@@ -22,7 +23,7 @@ public class Player : MonoBehaviour , IDamageable
         _gun = GetComponentInChildren<Gun>();
         if (_gun != null) _model.Subscribe(_gun);
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnDeath);
-        SaveManager.instance.Subscribe(_model);
+        StartCoroutine(LateAwake());
     }
     private void Update()
     {
@@ -39,6 +40,11 @@ public class Player : MonoBehaviour , IDamageable
     public void TakeDamage(float dmg)
     {
         _model.TakeDamage(dmg);
+    }
+    IEnumerator LateAwake()
+    {
+        yield return null;
+        SaveManager.instance.Subscribe(_model);
     }
     private void OnDisable()
     {
