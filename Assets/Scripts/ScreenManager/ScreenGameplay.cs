@@ -11,7 +11,6 @@ public class ScreenGameplay : IScreen
     }
     public void Deactivate()
     {
-        GameState.Pause();
         _pauseables.Clear();
         foreach (MonoBehaviour behaviour in _root.GetComponentsInChildren<MonoBehaviour>())
         {
@@ -27,7 +26,6 @@ public class ScreenGameplay : IScreen
     }
     public void Activate()
     {
-        GameState.Resume();
         foreach (var pauseable in _pauseables)
         {
             pauseable?.Resume();

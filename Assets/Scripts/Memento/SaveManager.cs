@@ -26,7 +26,6 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
     }
     private void Update()
     {
-        if (GameState.IsPaused) return;
         if (PlayerInputsManager.instance.SaveAction() && savesCount > 0)
         {
             savesCount--;
