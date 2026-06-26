@@ -103,6 +103,9 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         _rb.rotation = memory.rotation;
         _currentLife = memory.life;
         _isDead = memory.isDead;
+        float normalizedLife = _currentLife / FlyWeightPointer.Entity.maxLife;
+        EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+        NotifyObservers(_isDead ? PlayerEvent.Death : PlayerEvent.Idle);
     }
     public void TryLoadStates()
     {

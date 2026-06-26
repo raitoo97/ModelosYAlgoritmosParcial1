@@ -54,7 +54,6 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
     {
         if (_actions.ContainsKey(Actions))
         {
-            Debug.Log(Actions +"Enemy");
             _actions[Actions].Invoke();
         }
     }
@@ -69,9 +68,15 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
     }
     public void LoadState(List<EnemyMemento> memory)
     {
-        for (int i = 0; i < memory.Count && i < _allEnemies.Count; i++)
+        foreach (var enemy in _allEnemies)
         {
-            _allEnemies[i].LoadState(memory[i]);
+            enemy.gameObject.SetActive(false);
+        }
+        for (int i = 0; i < memory.Count; i++)
+        {
+            var enemy = _allEnemies[i];
+            enemy.gameObject.SetActive(true);
+            enemy.LoadState(memory[i]);
         }
     }
     public void TryLoadStates()

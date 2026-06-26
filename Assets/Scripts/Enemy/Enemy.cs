@@ -123,18 +123,12 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
     }
     public void LoadState(EnemyMemento memory)
     {
+        gameObject.SetActive(memory.isActive);
+        if (!memory.isActive) return;
         _currentLife = memory.life;
         _isDead = memory.isDead;
-        transform.rotation = memory.rotation;
         _agent.Warp(memory.position);
-        if (memory.isActive)
-        {
-            gameObject.SetActive(true);
-            _fsm.ChangeState(memory.currentState);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        transform.rotation = memory.rotation;
+        _fsm.ChangeState(memory.currentState);
     }
 }
