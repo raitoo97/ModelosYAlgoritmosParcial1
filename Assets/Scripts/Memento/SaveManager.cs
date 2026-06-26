@@ -20,12 +20,21 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>
             Destroy(gameObject);
         }
     }
+    private void Update()
+    {
+        if (PlayerInputsManager.instance.SaveAction())
+            Save();
+        if (PlayerInputsManager.instance.LoadAction())
+            Load();
+    }
     public void Save()
     {
+        Debug.Log("Guardo");
         NotifyObservers(SaveEvent.Save);
     }
     public void Load()
     {
+        Debug.Log("Cargo");
         NotifyObservers(SaveEvent.Load);
     }
     public void Subscribe(IObserver<SaveEvent> observer)
