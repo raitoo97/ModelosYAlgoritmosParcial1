@@ -23,7 +23,6 @@ public static class LenguageSplit
                         try
                         {
                             langColumn[i] = (SystemLanguage)System.Enum.Parse(typeof(SystemLanguage), cells[i]);
-                            Debug.Log($"{langColumn[i]}, {i}");
                             //para ese indice de la iteracion de la celda se guarda el valor del idioma parseado en el diccionario langColumn
                             //en mi caso Spanish[1] = SystemLanguage.Spanish, English[2] = SystemLanguage.English
                         }
@@ -44,7 +43,6 @@ public static class LenguageSplit
                     else
                     {
                         idColumn = i; // se guarda el índice donde se encontró la columna ID (en mi CSV es 0)
-                        Debug.Log($"ID column found at index {idColumn}");
                     }
                 }
                 continue;
@@ -73,7 +71,6 @@ public static class LenguageSplit
                 // guarda:
                 // idioma -> (ID -> texto traducido)
                 codex[lang][id] = textValue;
-                Debug.Log($"Added translation: {lang} - {id} : {textValue}");
             }
         }
         return codex;
