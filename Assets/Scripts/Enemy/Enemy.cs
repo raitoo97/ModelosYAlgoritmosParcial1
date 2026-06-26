@@ -8,7 +8,7 @@ public enum EnemyEvent
 }
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
+public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPauseable
 {
     private FSM _fsm;
     private NavMeshAgent _agent;
@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
     }
     void Update()
     {
-        if (!enabled) return;
+        if (GameState.IsPaused) return;
         _fsm.onUpdateState();
     }
     public void Rotate(Vector3 direction)
@@ -108,5 +108,35 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
         {
             _myObservers[i].Notify(action);
         }
+    }
+    public EnemyMemento CaptureState()
+    {
+        return new EnemyMemento
+        {
+            life = _currentLife,
+            isDead = _isDead,
+            isActive = gameObject.activeSelf,
+            position = transform.position,
+            rotation = transform.rotation,
+            currentState = _fsm.currentStateID,
+        };
+    }
+    public void LoadState(EnemyMemento memory)
+    {
+        gameObject.SetActive(memory.isActive);
+        if (!memory.isActive) return;
+        _currentLife = memory.life;
+        _isDead = memory.isDead;
+        _agent.Warp(memory.position);
+        transform.rotation = memory.rotation;
+        _fsm.ChangeState(memory.currentState);
+    }
+    public void Pause()
+    {
+        _agent.enabled = false;
+    }
+    public void Resume()
+    {
+        _agent.enabled = true;
     }
 }

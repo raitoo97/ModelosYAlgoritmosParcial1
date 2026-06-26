@@ -179,6 +179,82 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""LoadAndSaveInputs"",
+            ""id"": ""60a907f2-3dd1-4ed6-9085-b03c68413d2e"",
+            ""actions"": [
+                {
+                    ""name"": ""Save"",
+                    ""type"": ""Button"",
+                    ""id"": ""35064f63-15fc-498b-9337-39cb1db46b83"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Load"",
+                    ""type"": ""Button"",
+                    ""id"": ""cf72060b-728e-4dcc-a331-f954349d8a22"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""281cc0a9-259d-4f75-b33a-934c119077cd"",
+                    ""path"": ""<Keyboard>/f5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Save"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26d0c0c2-aa81-497e-83af-e08d46619ff0"",
+                    ""path"": ""<Keyboard>/f9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Load"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""UIInputs"",
+            ""id"": ""83bec254-2ca8-4c3b-a510-7b69fc04cc52"",
+            ""actions"": [
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""dbb62e1d-2fe0-4848-9d47-b104569eb3c1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""d71e41dd-d07f-4cbf-9030-f9a464cf5a19"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -187,11 +263,20 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         m_PlayerInputs = asset.FindActionMap("PlayerInputs", throwIfNotFound: true);
         m_PlayerInputs_Move = m_PlayerInputs.FindAction("Move", throwIfNotFound: true);
         m_PlayerInputs_Shoot = m_PlayerInputs.FindAction("Shoot", throwIfNotFound: true);
+        // LoadAndSaveInputs
+        m_LoadAndSaveInputs = asset.FindActionMap("LoadAndSaveInputs", throwIfNotFound: true);
+        m_LoadAndSaveInputs_Save = m_LoadAndSaveInputs.FindAction("Save", throwIfNotFound: true);
+        m_LoadAndSaveInputs_Load = m_LoadAndSaveInputs.FindAction("Load", throwIfNotFound: true);
+        // UIInputs
+        m_UIInputs = asset.FindActionMap("UIInputs", throwIfNotFound: true);
+        m_UIInputs_Pause = m_UIInputs.FindAction("Pause", throwIfNotFound: true);
     }
 
     ~@PlayerInputsMap()
     {
         UnityEngine.Debug.Assert(!m_PlayerInputs.enabled, "This will cause a leak and performance issues, PlayerInputsMap.PlayerInputs.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_LoadAndSaveInputs.enabled, "This will cause a leak and performance issues, PlayerInputsMap.LoadAndSaveInputs.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_UIInputs.enabled, "This will cause a leak and performance issues, PlayerInputsMap.UIInputs.Disable() has not been called.");
     }
 
     /// <summary>
@@ -370,6 +455,209 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerInputsActions" /> instance referencing this action map.
     /// </summary>
     public PlayerInputsActions @PlayerInputs => new PlayerInputsActions(this);
+
+    // LoadAndSaveInputs
+    private readonly InputActionMap m_LoadAndSaveInputs;
+    private List<ILoadAndSaveInputsActions> m_LoadAndSaveInputsActionsCallbackInterfaces = new List<ILoadAndSaveInputsActions>();
+    private readonly InputAction m_LoadAndSaveInputs_Save;
+    private readonly InputAction m_LoadAndSaveInputs_Load;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "LoadAndSaveInputs".
+    /// </summary>
+    public struct LoadAndSaveInputsActions
+    {
+        private @PlayerInputsMap m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public LoadAndSaveInputsActions(@PlayerInputsMap wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "LoadAndSaveInputs/Save".
+        /// </summary>
+        public InputAction @Save => m_Wrapper.m_LoadAndSaveInputs_Save;
+        /// <summary>
+        /// Provides access to the underlying input action "LoadAndSaveInputs/Load".
+        /// </summary>
+        public InputAction @Load => m_Wrapper.m_LoadAndSaveInputs_Load;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_LoadAndSaveInputs; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="LoadAndSaveInputsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(LoadAndSaveInputsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="LoadAndSaveInputsActions" />
+        public void AddCallbacks(ILoadAndSaveInputsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_LoadAndSaveInputsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_LoadAndSaveInputsActionsCallbackInterfaces.Add(instance);
+            @Save.started += instance.OnSave;
+            @Save.performed += instance.OnSave;
+            @Save.canceled += instance.OnSave;
+            @Load.started += instance.OnLoad;
+            @Load.performed += instance.OnLoad;
+            @Load.canceled += instance.OnLoad;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="LoadAndSaveInputsActions" />
+        private void UnregisterCallbacks(ILoadAndSaveInputsActions instance)
+        {
+            @Save.started -= instance.OnSave;
+            @Save.performed -= instance.OnSave;
+            @Save.canceled -= instance.OnSave;
+            @Load.started -= instance.OnLoad;
+            @Load.performed -= instance.OnLoad;
+            @Load.canceled -= instance.OnLoad;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="LoadAndSaveInputsActions.UnregisterCallbacks(ILoadAndSaveInputsActions)" />.
+        /// </summary>
+        /// <seealso cref="LoadAndSaveInputsActions.UnregisterCallbacks(ILoadAndSaveInputsActions)" />
+        public void RemoveCallbacks(ILoadAndSaveInputsActions instance)
+        {
+            if (m_Wrapper.m_LoadAndSaveInputsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="LoadAndSaveInputsActions.AddCallbacks(ILoadAndSaveInputsActions)" />
+        /// <seealso cref="LoadAndSaveInputsActions.RemoveCallbacks(ILoadAndSaveInputsActions)" />
+        /// <seealso cref="LoadAndSaveInputsActions.UnregisterCallbacks(ILoadAndSaveInputsActions)" />
+        public void SetCallbacks(ILoadAndSaveInputsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_LoadAndSaveInputsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_LoadAndSaveInputsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="LoadAndSaveInputsActions" /> instance referencing this action map.
+    /// </summary>
+    public LoadAndSaveInputsActions @LoadAndSaveInputs => new LoadAndSaveInputsActions(this);
+
+    // UIInputs
+    private readonly InputActionMap m_UIInputs;
+    private List<IUIInputsActions> m_UIInputsActionsCallbackInterfaces = new List<IUIInputsActions>();
+    private readonly InputAction m_UIInputs_Pause;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "UIInputs".
+    /// </summary>
+    public struct UIInputsActions
+    {
+        private @PlayerInputsMap m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public UIInputsActions(@PlayerInputsMap wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "UIInputs/Pause".
+        /// </summary>
+        public InputAction @Pause => m_Wrapper.m_UIInputs_Pause;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_UIInputs; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="UIInputsActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(UIInputsActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="UIInputsActions" />
+        public void AddCallbacks(IUIInputsActions instance)
+        {
+            if (instance == null || m_Wrapper.m_UIInputsActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_UIInputsActionsCallbackInterfaces.Add(instance);
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="UIInputsActions" />
+        private void UnregisterCallbacks(IUIInputsActions instance)
+        {
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="UIInputsActions.UnregisterCallbacks(IUIInputsActions)" />.
+        /// </summary>
+        /// <seealso cref="UIInputsActions.UnregisterCallbacks(IUIInputsActions)" />
+        public void RemoveCallbacks(IUIInputsActions instance)
+        {
+            if (m_Wrapper.m_UIInputsActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="UIInputsActions.AddCallbacks(IUIInputsActions)" />
+        /// <seealso cref="UIInputsActions.RemoveCallbacks(IUIInputsActions)" />
+        /// <seealso cref="UIInputsActions.UnregisterCallbacks(IUIInputsActions)" />
+        public void SetCallbacks(IUIInputsActions instance)
+        {
+            foreach (var item in m_Wrapper.m_UIInputsActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_UIInputsActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="UIInputsActions" /> instance referencing this action map.
+    /// </summary>
+    public UIInputsActions @UIInputs => new UIInputsActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerInputs" which allows adding and removing callbacks.
     /// </summary>
@@ -391,5 +679,42 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnShoot(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "LoadAndSaveInputs" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="LoadAndSaveInputsActions.AddCallbacks(ILoadAndSaveInputsActions)" />
+    /// <seealso cref="LoadAndSaveInputsActions.RemoveCallbacks(ILoadAndSaveInputsActions)" />
+    public interface ILoadAndSaveInputsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Save" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSave(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Load" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLoad(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UIInputs" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="UIInputsActions.AddCallbacks(IUIInputsActions)" />
+    /// <seealso cref="UIInputsActions.RemoveCallbacks(IUIInputsActions)" />
+    public interface IUIInputsActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Pause" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPause(InputAction.CallbackContext context);
     }
 }
