@@ -1,17 +1,22 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class PlayerModel : IObservable<PlayerEvent>
+public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMementoEntity<PlayerMemento>
 {
     private Rigidbody _rb;
     private float _currentLife;
     private List<IObserver<PlayerEvent>> _myobservers;
     private bool _isDead;
+    private Dictionary<SaveEvent, Action> _actions;
+    private MementoState<PlayerMemento> _playerMemento;
     public PlayerModel(Player user)
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _myobservers = new List<IObserver<PlayerEvent>>();
+        _playerMemento = new MementoState<PlayerMemento>();
+        FillDictionary();
     }
     public void Move(Vector3 direction)
     {
@@ -68,4 +73,48 @@ public class PlayerModel : IObservable<PlayerEvent>
             _myobservers.Remove(observer);
         }
     }
+    public void Notify(SaveEvent Actions)
+    {
+        if (_actions.ContainsKey(Actions))
+        {
+            _actions[Actions].Invoke();
+        }
+    }
+    private void FillDictionary()
+    {
+        _actions = new Dictionary<SaveEvent, Action>();
+        _actions.Add(SaveEvent.Save, SaveState);
+        _actions.Add(SaveEvent.Load, TryLoadStates);
+    }
+    public void SaveState()
+    {
+        _playerMemento.SaveMemory(
+            new PlayerMemento
+            {
+                position = _rb.position,
+                rotation = _rb.rotation,
+                life = _currentLife,
+                isDead = _isDead,
+            });
+    }
+    public void LoadState(PlayerMemento memory)
+    {
+        _rb.position = memory.position;
+        _rb.rotation = memory.rotation;
+        _currentLife = memory.life;
+        _isDead = memory.isDead;
+    }
+    public void TryLoadStates()
+    {
+        if (_playerMemento.memoriesAmount == 0) return;
+        var lastMemory = _playerMemento.LoadMemory();
+        LoadState(lastMemory);
+    }
+}
+public struct PlayerMemento
+{
+    public float life;
+    public Vector3 position;
+    public Quaternion rotation;
+    public bool isDead;
 }

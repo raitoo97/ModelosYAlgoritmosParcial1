@@ -22,6 +22,7 @@ public class Player : MonoBehaviour , IDamageable
         _gun = GetComponentInChildren<Gun>();
         if (_gun != null) _model.Subscribe(_gun);
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnDeath);
+        SaveManager.instance.Subscribe(_model);
     }
     private void Update()
     {
@@ -44,5 +45,6 @@ public class Player : MonoBehaviour , IDamageable
         _model.Unsubscribe(_view);
         _model.Unsubscribe(_gun);
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnDeath);
+        SaveManager.instance.Unsubscribe(_model);
     }
 }
