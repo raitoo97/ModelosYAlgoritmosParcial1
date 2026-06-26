@@ -6,7 +6,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]private Image _lifebar;
     [SerializeField]private Text _gameOver;
     [SerializeField]private Text _score;
-    [SerializeField] private TextMeshProUGUI _saves;
+    [SerializeField]private TextMeshProUGUI _saves;
+    [SerializeField]private Transform mainGame;
+    [SerializeField]private string _pauseScreen;
     private int _currentScore;
     private void Awake()
     {
@@ -14,12 +16,31 @@ public class UIManager : MonoBehaviour
         _currentScore = 0;
         _saves.color = Color.green;
     }
+    private void Start()
+    {
+        var mainScreen = new ScreenGameplay(mainGame);
+        ScreenManager.Instance.Push(mainScreen);
+    }
     private void OnEnable()
     {
         EventManager.SubscribeToEvent(EventType.PlayerDamage, OnPlayerDamage);
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
         EventManager.SubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
         EventManager.SubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            if (!ScreenManager.Instance.StackContainsType<ScreenPause>())
+            {
+                ScreenManager.Instance.Push(_pauseScreen);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ScreenManager.Instance.Pop();
+        }
     }
     public void UpdateLifeBar(float amount)
     {

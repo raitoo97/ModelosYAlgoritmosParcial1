@@ -32,4 +32,5 @@ public class PlayerView : IObserver<PlayerEvent>
             _actions[Actions].Invoke();
         }
     }
+    public Animator GetAnimator => _animator;
 }

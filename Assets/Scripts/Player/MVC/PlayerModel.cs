@@ -113,4 +113,9 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         var lastMemory = _playerMemento.LoadMemory();
         LoadState(lastMemory);
     }
+    public void Pause()
+    {
+        NotifyObservers(PlayerEvent.Idle);
+    }
+    public Rigidbody GetRb => _rb;
 }

@@ -8,7 +8,7 @@ public enum EnemyEvent
 }
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
+public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPauseable
 {
     private FSM _fsm;
     private NavMeshAgent _agent;
@@ -130,5 +130,15 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
         _agent.Warp(memory.position);
         transform.rotation = memory.rotation;
         _fsm.ChangeState(memory.currentState);
+    }
+    public void Pause()
+    {
+        enabled = false;
+        _agent.enabled = false;
+    }
+    public void Resume()
+    {
+        enabled = true;
+        _agent.enabled = true;
     }
 }

@@ -120,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4390515606758458249}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1117126033134120685}
+        m_TargetAssemblyTypeName: ScreenLanguage, Assembly-CSharp
+        m_MethodName: BTN_Back
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2912401302599304954
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,7 +615,7 @@ GameObject:
   - component: {fileID: 7201757933166324668}
   - component: {fileID: 5539039037338886672}
   - component: {fileID: 2648731467604481811}
-  - component: {fileID: 5721027947477736645}
+  - component: {fileID: 1117126033134120685}
   m_Layer: 5
   m_Name: ScreenLanguage
   m_TagString: Untagged
@@ -696,7 +708,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5721027947477736645
+--- !u!114 &1117126033134120685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -705,7 +717,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7768683642652947310}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b6f8bf7eb270b4aa62b1711835117a, type: 3}
+  m_Script: {fileID: 11500000, guid: 5563251d22cc67c4b9bd9e375b3b110c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8038286716054058675

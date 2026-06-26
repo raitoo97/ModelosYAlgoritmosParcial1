@@ -120,7 +120,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4390515606758458249}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 846915730060457735}
+        m_TargetAssemblyTypeName: ScreenPause, Assembly-CSharp
+        m_MethodName: BTN_Back
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2912401302599304954
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +315,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1929868556204355520}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 846915730060457735}
+        m_TargetAssemblyTypeName: ScreenPause, Assembly-CSharp
+        m_MethodName: BTN_Screen
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ScreenLanguage
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5389558120142276035
 GameObject:
   m_ObjectHideFlags: 0
@@ -603,7 +627,7 @@ GameObject:
   - component: {fileID: 7201757933166324668}
   - component: {fileID: 5539039037338886672}
   - component: {fileID: 2648731467604481811}
-  - component: {fileID: 5721027947477736645}
+  - component: {fileID: 846915730060457735}
   m_Layer: 5
   m_Name: ScreenPause
   m_TagString: Untagged
@@ -696,7 +720,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5721027947477736645
+--- !u!114 &846915730060457735
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -705,7 +729,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7768683642652947310}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58b6f8bf7eb270b4aa62b1711835117a, type: 3}
+  m_Script: {fileID: 11500000, guid: b90f223682bee1e41b36d051642e3213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8038286716054058675
@@ -773,7 +797,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Language
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -909,7 +933,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Main Menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

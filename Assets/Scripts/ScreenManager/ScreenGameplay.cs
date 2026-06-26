@@ -1,16 +1,36 @@
+using System.Collections.Generic;
 using UnityEngine;
-
-public class ScreenGameplay : MonoBehaviour
+public class ScreenGameplay : IScreen
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField]private Transform _root;
+    private List<IPauseable> _pauseables;
+    public ScreenGameplay(Transform root)
     {
-        
+        _root = root;
+        _pauseables = new List<IPauseable>();
     }
-
-    // Update is called once per frame
-    void Update()
+    public void Deactivate()
     {
-        
+        foreach (Behaviour behaviour in _root.GetComponentsInChildren<Behaviour>())
+        {
+            if (behaviour is IPauseable pauseable)
+            {
+                _pauseables.Add(pauseable);
+                pauseable.Pause();
+            }
+        }
+    }
+    public void Activate()
+    {
+        foreach (var pauseable in _pauseables)
+        {
+            pauseable.Resume();
+        }
+        _pauseables.Clear();
+    }
+    public void Release()
+    {
+        _pauseables.Clear();
+        GameObject.Destroy(_root.gameObject);
     }
 }

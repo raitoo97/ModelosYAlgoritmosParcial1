@@ -23,10 +23,6 @@ public class ScreenManager : MonoBehaviour
         var Screen = Instantiate(Resources.Load<ScreenBase>(resource));
         Push(Screen);
     }
-    private void Update()
-    {
-        Debug.Log(screenStack.Count);
-    }
     public void Push(IScreen screen)
     {
         if (screenStack.Count > 0)
