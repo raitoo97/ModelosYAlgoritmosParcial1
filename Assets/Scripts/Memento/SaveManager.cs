@@ -5,7 +5,7 @@ public enum SaveEvent
     Save,
     Load
 }
-public class SaveManager : MonoBehaviour , IObservable<SaveEvent>
+public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
 {
     private List<IObserver<SaveEvent>> _myobservers = new List<IObserver<SaveEvent>>();
     public static SaveManager instance;
@@ -26,6 +26,7 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>
     }
     private void Update()
     {
+        if (GameState.IsPaused) return;
         if (PlayerInputsManager.instance.SaveAction() && savesCount > 0)
         {
             savesCount--;
@@ -69,5 +70,13 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>
         {
             _myobservers[i].Notify(action);
         }
+    }
+    public void Pause()
+    {
+        enabled = false;
+    }
+    public void Resume()
+    {
+        enabled = true;
     }
 }

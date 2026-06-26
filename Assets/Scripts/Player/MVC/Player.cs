@@ -15,7 +15,6 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     private PlayerView _view;
     private Gun _gun;
     private Vector3 _velocity;
-    private bool _isPaused;
     private void Awake()
     {
         _model = new PlayerModel(this);
@@ -25,17 +24,16 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
         _gun = GetComponentInChildren<Gun>();
         if (_gun != null) _model.Subscribe(_gun);
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnDeath);
-        _isPaused = false;
         StartCoroutine(LateAwake());
     }
     private void Update()
     {
-        if (_isPaused) return;
+        if (GameState.IsPaused) return;
         _controler.UpdateInputs();
     }
     private void FixedUpdate()
     {
-        if (_isPaused) return;
+        if (GameState.IsPaused) return;
         _controler.FixedUpdateInputs();
     }
     private void OnDeath(params object[] parameters)
@@ -60,16 +58,16 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     }
     public void Pause()
     {
-        _isPaused = true;
         _model.Pause();
         _view.GetAnimator.speed = 0;
         _velocity = _model.GetRb.linearVelocity;
         _model.GetRb.linearVelocity = Vector3.zero;
+        _model.GetRb.useGravity = false;
     }
     public void Resume()
     {
-        _isPaused = false;
         _view.GetAnimator.speed = 1;
         _model.GetRb.linearVelocity = _velocity;
+        _model.GetRb.useGravity = true;
     }
 }

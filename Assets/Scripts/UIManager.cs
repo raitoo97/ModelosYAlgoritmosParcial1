@@ -30,16 +30,16 @@ public class UIManager : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (PlayerInputsManager.instance.PauseAction())
         {
-            if (!ScreenManager.Instance.StackContainsType<ScreenPause>())
+            if (ScreenManager.Instance.StackContainsType<ScreenPause>())
+            {
+                ScreenManager.Instance.Pop();
+            }
+            else
             {
                 ScreenManager.Instance.Push(_pauseScreen);
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ScreenManager.Instance.Pop();
         }
     }
     public void UpdateLifeBar(float amount)

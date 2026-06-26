@@ -21,6 +21,7 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     }
     private void Update()
     {
+        if (GameState.IsPaused) return;
         _timer += Time.deltaTime;
         if (_timer >= _spawnRate)
         {

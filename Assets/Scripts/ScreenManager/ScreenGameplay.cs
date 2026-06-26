@@ -11,20 +11,26 @@ public class ScreenGameplay : IScreen
     }
     public void Deactivate()
     {
-        foreach (Behaviour behaviour in _root.GetComponentsInChildren<Behaviour>())
+        GameState.Pause();
+        _pauseables.Clear();
+        foreach (MonoBehaviour behaviour in _root.GetComponentsInChildren<MonoBehaviour>())
         {
-            if (behaviour is IPauseable pauseable)
+            if(behaviour.TryGetComponent<IPauseable>(out var pauseable))
             {
-                _pauseables.Add(pauseable);
-                pauseable.Pause();
+                if (!_pauseables.Contains(pauseable))
+                {
+                    _pauseables.Add(pauseable);
+                    pauseable.Pause();
+                }
             }
         }
     }
     public void Activate()
     {
+        GameState.Resume();
         foreach (var pauseable in _pauseables)
         {
-            pauseable.Resume();
+            pauseable?.Resume();
         }
         _pauseables.Clear();
     }

@@ -31,6 +31,10 @@ public class PlayerInputsManager : MonoBehaviour
     {
         return _playerMap.LoadAndSaveInputs.Load.triggered;
     }
+    public bool PauseAction()
+    {
+        return _playerMap.UIInputs.Pause.triggered;
+    }
     private void OnDisable()
     {
         _playerMap.Disable();
