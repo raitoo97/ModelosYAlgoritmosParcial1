@@ -43,7 +43,6 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     }
     void Update()
     {
-        if (GameState.IsPaused) return;
         _fsm.onUpdateState();
     }
     public void Rotate(Vector3 direction)
@@ -133,10 +132,12 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     }
     public void Pause()
     {
+        enabled = false;
         _agent.enabled = false;
     }
     public void Resume()
     {
+        enabled = true;
         _agent.enabled = true;
     }
 }

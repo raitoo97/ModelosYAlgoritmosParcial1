@@ -28,12 +28,10 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     }
     private void Update()
     {
-        if (GameState.IsPaused) return;
         _controler.UpdateInputs();
     }
     private void FixedUpdate()
     {
-        if (GameState.IsPaused) return;
         _controler.FixedUpdateInputs();
     }
     private void OnDeath(params object[] parameters)
@@ -49,7 +47,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
         yield return null;
         SaveManager.instance.Subscribe(_model);
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         _model.Unsubscribe(_view);
         _model.Unsubscribe(_gun);
@@ -63,9 +61,11 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
         _velocity = _model.GetRb.linearVelocity;
         _model.GetRb.linearVelocity = Vector3.zero;
         _model.GetRb.useGravity = false;
+        enabled = false;
     }
     public void Resume()
     {
+         enabled = true;
         _view.GetAnimator.speed = 1;
         _model.GetRb.linearVelocity = _velocity;
         _model.GetRb.useGravity = true;
