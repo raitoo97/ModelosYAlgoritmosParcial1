@@ -16,6 +16,7 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent>
     private void Start()
     {
         _enemyService = new EnemyService(_enemyPrefab, this.transform, _poolSize,this);
+        SaveManager.instance.Subscribe(_enemyService);
         FillDictionary();
     }
     private void Update()
@@ -53,6 +54,10 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent>
         {
             _actions[Actions].Invoke();
         }
+    }
+    private void OnDestroy()
+    {
+        SaveManager.instance.Unsubscribe(_enemyService);
     }
     private void OnDrawGizmos()
     {

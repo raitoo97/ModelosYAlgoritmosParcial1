@@ -111,10 +111,3 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         LoadState(lastMemory);
     }
 }
-public struct PlayerMemento
-{
-    public float life;
-    public Vector3 position;
-    public Quaternion rotation;
-    public bool isDead;
-}

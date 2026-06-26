@@ -109,4 +109,32 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent>
             _myObservers[i].Notify(action);
         }
     }
+    public EnemyMemento CaptureState()
+    {
+        return new EnemyMemento
+        {
+            life = _currentLife,
+            isDead = _isDead,
+            isActive = gameObject.activeSelf,
+            position = transform.position,
+            rotation = transform.rotation,
+            currentState = _fsm.currentStateID,
+        };
+    }
+    public void LoadState(EnemyMemento memory)
+    {
+        _currentLife = memory.life;
+        _isDead = memory.isDead;
+        transform.rotation = memory.rotation;
+        _agent.Warp(memory.position);
+        if (memory.isActive)
+        {
+            gameObject.SetActive(true);
+            _fsm.ChangeState(memory.currentState);
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }

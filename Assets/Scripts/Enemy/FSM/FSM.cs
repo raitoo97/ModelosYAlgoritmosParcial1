@@ -8,6 +8,7 @@ public class FSM
     }
     private Dictionary<StateID, IState> _allStates = new Dictionary<StateID, IState>();
     private IState _currentState;
+    public StateID currentStateID { get; private set; }
     public void AddState(StateID key, IState value)
     {
         if (_allStates.ContainsKey(key)) return;
@@ -22,6 +23,7 @@ public class FSM
     {
         if (!_allStates.ContainsKey(key)) return;
         _currentState?.OnExit();
+        currentStateID = key;
         _currentState = _allStates[key];
         _currentState?.OnEnter();
     }
