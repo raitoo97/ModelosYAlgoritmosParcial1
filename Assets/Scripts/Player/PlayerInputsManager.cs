@@ -19,6 +19,10 @@ public class PlayerInputsManager : MonoBehaviour
     {
         return _playerMap.PlayerInputs.Move.ReadValue<Vector2>();
     }
+    public Vector2 GetCameraLook()
+    {
+        return _playerMap.Camera.Look.ReadValue<Vector2>();
+    }
     public bool ShootAction()
     {
         return _playerMap.PlayerInputs.Shoot.triggered;

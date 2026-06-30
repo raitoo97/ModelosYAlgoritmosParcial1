@@ -9,30 +9,42 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private bool _isDead;
     private Dictionary<SaveEvent, Action> _actions;
     private MementoState<PlayerMemento> _playerMemento;
-    public PlayerModel(Player user)
+    private Transform _cameraReference;
+    public PlayerModel(Player user, Transform cameraReference)
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _myobservers = new List<IObserver<PlayerEvent>>();
         _playerMemento = new MementoState<PlayerMemento>();
+        _cameraReference = cameraReference;
         FillDictionary();
     }
     public void Move(Vector3 direction)
     {
         bool isMoving = direction.sqrMagnitude > 0.001f;
-        direction.Normalize();
-        _rb.MovePosition(_rb.position + direction * FlyWeightPointer.Entity.speed * Time.fixedDeltaTime);
+        if (isMoving)
+        {
+            float targetRotation = GetTargetRotation(direction);
+            Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
+            Vector3 moveVelocity = targetDirection * FlyWeightPointer.Entity.speed;
+            _rb.MovePosition(_rb.position + moveVelocity * Time.fixedDeltaTime);
+        }
         NotifyObservers(isMoving ? PlayerEvent.Move : PlayerEvent.Idle);
     }
     public void Rotate(Vector3 direction)
     {
-        Vector3 _dirRot = new Vector3(direction.x, 0, direction.z).normalized;
-        if (_dirRot.sqrMagnitude > 0.001f)
+        if (direction.sqrMagnitude > 0.001f)
         {
-            Quaternion _rotDir = Quaternion.LookRotation(_dirRot);
-            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, _rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.fixedDeltaTime));
+            float targetRotation = GetTargetRotation(direction);
+            Quaternion finalRotation = Quaternion.Euler(0, targetRotation, 0);
+            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, finalRotation, 200f * Time.fixedDeltaTime));
         }
+    }
+    private float GetTargetRotation(Vector3 inputDir)
+    {
+        Vector3 input = new Vector3(inputDir.x, 0, inputDir.z);
+        return Quaternion.LookRotation(input).eulerAngles.y + _cameraReference.eulerAngles.y;
     }
     public void Shoot()
     {
