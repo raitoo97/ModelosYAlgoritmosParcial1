@@ -38,7 +38,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         {
             float targetRotation = GetTargetRotation(direction);
             Quaternion finalRotation = Quaternion.Euler(0, targetRotation, 0);
-            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, finalRotation, 20f * Time.fixedDeltaTime * 100f));
+            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, finalRotation, 200f * Time.fixedDeltaTime));
         }
     }
     private float GetTargetRotation(Vector3 inputDir)
