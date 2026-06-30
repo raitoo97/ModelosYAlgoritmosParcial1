@@ -9,13 +9,15 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private bool _isDead;
     private Dictionary<SaveEvent, Action> _actions;
     private MementoState<PlayerMemento> _playerMemento;
-    public PlayerModel(Player user)
+    private Transform _cameraReference;
+    public PlayerModel(Player user, Transform cameraReference)
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _myobservers = new List<IObserver<PlayerEvent>>();
         _playerMemento = new MementoState<PlayerMemento>();
+        _cameraReference = cameraReference;
         FillDictionary();
     }
     public void Move(Vector3 direction)
@@ -42,7 +44,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private float GetTargetRotation(Vector3 inputDir)
     {
         Vector3 input = new Vector3(inputDir.x, 0, inputDir.z);
-        return Quaternion.LookRotation(input).eulerAngles.y + Camera.main.transform.eulerAngles.y;
+        return Quaternion.LookRotation(input).eulerAngles.y + _cameraReference.eulerAngles.y;
     }
     public void Shoot()
     {

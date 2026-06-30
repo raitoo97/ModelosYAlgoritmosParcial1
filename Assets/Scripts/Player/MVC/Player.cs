@@ -15,9 +15,10 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     private PlayerView _view;
     private Gun _gun;
     private Vector3 _velocity;
+    [SerializeField] private Transform _cameraReference;
     private void Awake()
     {
-        _model = new PlayerModel(this);
+        _model = new PlayerModel(this, _cameraReference);
         _controler = new PlayerController(_model);
         _view = new PlayerView(this);
         _model.Subscribe(_view);

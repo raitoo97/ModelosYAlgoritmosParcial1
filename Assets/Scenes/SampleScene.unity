@@ -2136,6 +2136,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CameraFollowTarget
       objectReference: {fileID: 0}
+    - target: {fileID: 8740020015889929888, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
+      propertyPath: _cameraReference
+      value: 
+      objectReference: {fileID: 145314493}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
