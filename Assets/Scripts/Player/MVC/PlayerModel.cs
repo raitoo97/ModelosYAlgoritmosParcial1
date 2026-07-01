@@ -29,8 +29,8 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         _rotationStrategies = new Dictionary<bool, IRotationStrategy>
         {
-            { false, new MovementRotationStrategy(_rb, _cameraReference, 260f) },
-            { true,  new AimRotationStrategy(_rb, _cameraReference, 260f) }
+            { false, new MovementRotationStrategy(_rb, _cameraReference) },
+            { true,  new AimRotationStrategy(_rb, _cameraReference) }
         };
         _currentRotation = _rotationStrategies[false];
     }
@@ -143,6 +143,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         _isAiming = isAiming;
         _currentRotation = _rotationStrategies[isAiming];
+        NotifyObservers(isAiming ? PlayerEvent.Aim : PlayerEvent.StopAim);
     }
     public Vector3 GetAimPoint()
     {

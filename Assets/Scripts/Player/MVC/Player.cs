@@ -6,6 +6,8 @@ public enum PlayerEvent
     Idle,
     Shoot,
     Death,
+    Aim,
+    StopAim
 }
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour , IDamageable ,IPauseable
@@ -57,6 +59,14 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
         _model.Unsubscribe(_gun);
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnDeath);
         SaveManager.instance.Unsubscribe(_model);
+    }
+    public void SubscribeObserver(IObserver<PlayerEvent> observer)
+    {
+        _model.Subscribe(observer);
+    }
+    public void UnsubscribeObserver(IObserver<PlayerEvent> observer)
+    {
+        _model.Unsubscribe(observer);
     }
     public void Pause()
     {
