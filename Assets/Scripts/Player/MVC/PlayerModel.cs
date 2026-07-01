@@ -5,20 +5,34 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
 {
     private Rigidbody _rb;
     private float _currentLife;
-    private List<IObserver<PlayerEvent>> _myobservers;
+    private ObserverList<PlayerEvent> _playerObservers = new ObserverList<PlayerEvent>();
     private bool _isDead;
-    private Dictionary<SaveEvent, Action> _actions;
+    private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
     private MementoState<PlayerMemento> _playerMemento;
+    private Vector3 _pausedVelocity;
     private Transform _cameraReference;
+    private bool _isAiming;
+    private float _aimDistance = 20f;
+    private Dictionary<bool, IRotationStrategy> _rotationStrategies;
+    private IRotationStrategy _currentRotation;
     public PlayerModel(Player user, Transform cameraReference)
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
-        _myobservers = new List<IObserver<PlayerEvent>>();
         _playerMemento = new MementoState<PlayerMemento>();
         _cameraReference = cameraReference;
+        FillRotationStrategies();
         FillDictionary();
+    }
+    private void FillRotationStrategies()
+    {
+        _rotationStrategies = new Dictionary<bool, IRotationStrategy>
+        {
+            { false, new MovementRotationStrategy(_rb, _cameraReference, 260f) },
+            { true,  new AimRotationStrategy(_rb, _cameraReference, 260f) }
+        };
+        _currentRotation = _rotationStrategies[false];
     }
     public void Move(Vector3 direction)
     {
@@ -34,12 +48,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     public void Rotate(Vector3 direction)
     {
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            float targetRotation = GetTargetRotation(direction);
-            Quaternion finalRotation = Quaternion.Euler(0, targetRotation, 0);
-            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, finalRotation, 200f * Time.fixedDeltaTime));
-        }
+        _currentRotation.Rotate(direction);
     }
     private float GetTargetRotation(Vector3 inputDir)
     {
@@ -64,26 +73,17 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
             EventManager.TriggerEvent(EventType.PlayerDeath);
         }
     }
-    public void NotifyObservers(PlayerEvent action)
-    {
-        for (int i = _myobservers.Count - 1; i >= 0; i--)
-        {
-            _myobservers[i].Notify(action);
-        }
+    public void NotifyObservers(PlayerEvent action) 
+    { 
+        _playerObservers.NotifyObservers(action); 
     }
-    public void Subscribe(IObserver<PlayerEvent> observer)
-    {
-        if (!_myobservers.Contains(observer))
-        {
-            _myobservers.Add(observer);
-        }
+    public void Subscribe(IObserver<PlayerEvent> observer) 
+    { 
+        _playerObservers.Subscribe(observer); 
     }
-    public void Unsubscribe(IObserver<PlayerEvent> observer)
+    public void Unsubscribe(IObserver<PlayerEvent> observer) 
     {
-        if (_myobservers.Contains(observer))
-        {
-            _myobservers.Remove(observer);
-        }
+        _playerObservers.Unsubscribe(observer);
     }
     public void Notify(SaveEvent Actions)
     {
@@ -94,7 +94,6 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     private void FillDictionary()
     {
-        _actions = new Dictionary<SaveEvent, Action>();
         _actions.Add(SaveEvent.Save, SaveState);
         _actions.Add(SaveEvent.Load, TryLoadStates);
     }
@@ -129,5 +128,25 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.Idle);
     }
-    public Rigidbody GetRb => _rb;
+    public void PausePhysics()
+    {
+        _pausedVelocity = _rb.linearVelocity;
+        _rb.linearVelocity = Vector3.zero;
+        _rb.useGravity = false;
+    }
+    public void ResumePhysics()
+    {
+        _rb.linearVelocity = _pausedVelocity;
+        _rb.useGravity = true;
+    }
+    public void SetAiming(bool isAiming)
+    {
+        _isAiming = isAiming;
+        _currentRotation = _rotationStrategies[isAiming];
+    }
+    public Vector3 GetAimPoint()
+    {
+        return _cameraReference.position + _cameraReference.forward * _aimDistance;
+    }
+    public bool GetAiming => _isAiming;
 }

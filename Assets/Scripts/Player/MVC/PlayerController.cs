@@ -1,5 +1,5 @@
 using UnityEngine;
-public class PlayerController : IController
+public class PlayerController : ICharacterController
 {
     private PlayerModel _model;
     private Vector3 _direction;
@@ -14,6 +14,7 @@ public class PlayerController : IController
         {
             _model.Shoot();
         }
+        _model.SetAiming(PlayerInputsManager.instance.AimAction());
     }
     public void FixedUpdateInputs()
     {

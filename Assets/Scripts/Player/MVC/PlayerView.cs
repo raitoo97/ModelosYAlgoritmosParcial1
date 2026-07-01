@@ -5,9 +5,11 @@ public class PlayerView : IObserver<PlayerEvent>
 {
     private Animator _animator;
     private Dictionary<PlayerEvent, Action> _actions;
+    private float _currentAimWeight;
     public PlayerView(Player user)
     {
         _animator = user.GetComponent<Animator>();
+        _actions = new Dictionary<PlayerEvent, Action>();
         FillDictionary();
     }
     public void MoveAnimation(bool isRunning)
@@ -18,9 +20,21 @@ public class PlayerView : IObserver<PlayerEvent>
     {
         _animator.SetTrigger("OnDeath");
     }
+    public void UpdateAimIK(bool isAiming, Vector3 aimPoint)
+    {
+        float targetWeight = isAiming ? 1f : 0f;
+        _currentAimWeight = Mathf.Lerp(_currentAimWeight, targetWeight, Time.deltaTime * 8f);
+        _animator.SetLookAtPosition(aimPoint);
+        _animator.SetLookAtWeight(
+            weight: _currentAimWeight,
+            bodyWeight: 0.6f,
+            headWeight: 0.4f,
+            eyesWeight: 0f,
+            clampWeight: 0.5f
+        );
+    }
     private void FillDictionary()
     {
-        _actions = new Dictionary<PlayerEvent, Action>();
         _actions.Add(PlayerEvent.Move, () => MoveAnimation(true));
         _actions.Add(PlayerEvent.Idle, () => MoveAnimation(false));
         _actions.Add(PlayerEvent.Death, OnPlayerDeath);

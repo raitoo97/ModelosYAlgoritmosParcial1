@@ -9,12 +9,14 @@ public class UIManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI _saves;
     [SerializeField]private Transform mainGame;
     [SerializeField]private string _pauseScreen;
+    private IController _controller;
     private int _currentScore;
     private void Awake()
     {
         _gameOver.gameObject.SetActive(false);
         _currentScore = 0;
         _saves.color = Color.green;
+        _controller = new UIController(_pauseScreen);
     }
     private void Start()
     {
@@ -30,17 +32,7 @@ public class UIManager : MonoBehaviour
     }
     private void Update()
     {
-        if (PlayerInputsManager.instance.PauseAction())
-        {
-            if (ScreenManager.Instance.StackContainsType<ScreenPause>())
-            {
-                ScreenManager.Instance.Pop();
-            }
-            else
-            {
-                ScreenManager.Instance.Push(_pauseScreen);
-            }
-        }
+        _controller.UpdateInputs();
     }
     public void UpdateLifeBar(float amount)
     {

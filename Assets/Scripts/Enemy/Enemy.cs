@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 public enum EnemyEvent
@@ -20,7 +19,7 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     private Action<Enemy> _returnToPoolCallBack;
     private float _currentLife;
     private bool _isDead;
-    private List<IObserver<EnemyEvent>> _myObservers = new List<IObserver<EnemyEvent>>();
+    private ObserverList<EnemyEvent> _enemyObservers = new ObserverList<EnemyEvent>();
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -93,20 +92,15 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     }
     public void Subscribe(IObserver<EnemyEvent> observer)
     {
-        if (!_myObservers.Contains(observer))
-            _myObservers.Add(observer);
+        _enemyObservers.Subscribe(observer);
     }
     public void Unsubscribe(IObserver<EnemyEvent> observer)
     {
-        if (_myObservers.Contains(observer))
-            _myObservers.Remove(observer);
+        _enemyObservers.Unsubscribe(observer);
     }
     public void NotifyObservers(EnemyEvent action)
     {
-        for (int i = _myObservers.Count - 1; i >= 0; i--)
-        {
-            _myObservers[i].Notify(action);
-        }
+        _enemyObservers.NotifyObservers(action);
     }
     public EnemyMemento CaptureState()
     {
