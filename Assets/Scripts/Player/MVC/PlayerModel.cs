@@ -12,6 +12,8 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private Transform _cameraReference;
     private bool _isAiming;
     private float _aimDistance = 20f;
+    private Dictionary<bool, IRotationStrategy> _rotationStrategies;
+    private IRotationStrategy _currentRotation;
     public PlayerModel(Player user, Transform cameraReference)
     {
         _rb = user.GetComponent<Rigidbody>();
@@ -20,7 +22,17 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         _myobservers = new List<IObserver<PlayerEvent>>();
         _playerMemento = new MementoState<PlayerMemento>();
         _cameraReference = cameraReference;
+        FillRotationStrategies();
         FillDictionary();
+    }
+    private void FillRotationStrategies()
+    {
+        _rotationStrategies = new Dictionary<bool, IRotationStrategy>
+        {
+            { false, new MovementRotationStrategy(_rb, _cameraReference, 260f) },
+            { true,  new AimRotationStrategy(_rb, _cameraReference, 260f) }
+        };
+        _currentRotation = _rotationStrategies[false];
     }
     public void Move(Vector3 direction)
     {
@@ -36,12 +48,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     public void Rotate(Vector3 direction)
     {
-        if (direction.sqrMagnitude > 0.001f)
-        {
-            float targetRotation = GetTargetRotation(direction);
-            Quaternion finalRotation = Quaternion.Euler(0, targetRotation, 0);
-            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, finalRotation, 260f * Time.fixedDeltaTime));
-        }
+        _currentRotation.Rotate(direction);
     }
     private float GetTargetRotation(Vector3 inputDir)
     {
@@ -134,6 +141,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     public void SetAiming(bool isAiming)
     {
         _isAiming = isAiming;
+        _currentRotation = _rotationStrategies[isAiming];
     }
     public Vector3 GetAimPoint()
     {

@@ -24,7 +24,6 @@ public class PlayerView : IObserver<PlayerEvent>
     {
         float targetWeight = isAiming ? 1f : 0f;
         _currentAimWeight = Mathf.Lerp(_currentAimWeight, targetWeight, Time.deltaTime * 8f);
-
         _animator.SetLookAtPosition(aimPoint);
         _animator.SetLookAtWeight(
             weight: _currentAimWeight,
@@ -34,7 +33,6 @@ public class PlayerView : IObserver<PlayerEvent>
             clampWeight: 0.5f
         );
     }
-
     private void FillDictionary()
     {
         _actions.Add(PlayerEvent.Move, () => MoveAnimation(true));
