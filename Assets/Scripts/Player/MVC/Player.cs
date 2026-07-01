@@ -43,6 +43,10 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     {
         _model.TakeDamage(dmg);
     }
+    private void OnAnimatorIK(int layerIndex)
+    {
+        _view.UpdateAimIK(_model.GetAiming, _model.GetAimPoint());
+    }
     IEnumerator LateAwake()
     {
         yield return null;

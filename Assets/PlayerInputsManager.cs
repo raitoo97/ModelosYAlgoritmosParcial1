@@ -27,6 +27,10 @@ public class PlayerInputsManager : MonoBehaviour
     {
         return _playerMap.PlayerInputs.Shoot.triggered;
     }
+    public bool AimAction()
+    {
+        return _playerMap.PlayerInputs.Aim.IsPressed();
+    }
     public bool SaveAction()
     {
         return _playerMap.LoadAndSaveInputs.Save.triggered;

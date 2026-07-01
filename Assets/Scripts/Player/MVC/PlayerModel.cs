@@ -10,6 +10,8 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private Dictionary<SaveEvent, Action> _actions;
     private MementoState<PlayerMemento> _playerMemento;
     private Transform _cameraReference;
+    private bool _isAiming;
+    private float _aimDistance = 20f;
     public PlayerModel(Player user, Transform cameraReference)
     {
         _rb = user.GetComponent<Rigidbody>();
@@ -129,5 +131,14 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.Idle);
     }
+    public void SetAiming(bool isAiming)
+    {
+        _isAiming = isAiming;
+    }
+    public Vector3 GetAimPoint()
+    {
+        return _cameraReference.position + _cameraReference.forward * _aimDistance;
+    }
+    public bool GetAiming => _isAiming;
     public Rigidbody GetRb => _rb;
 }

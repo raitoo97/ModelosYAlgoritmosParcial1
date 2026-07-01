@@ -14,6 +14,7 @@ public class PlayerController : IController
         {
             _model.Shoot();
         }
+        _model.SetAiming(PlayerInputsManager.instance.AimAction());
     }
     public void FixedUpdateInputs()
     {
