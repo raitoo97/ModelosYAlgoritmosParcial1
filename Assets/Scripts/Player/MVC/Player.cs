@@ -11,7 +11,7 @@ public enum PlayerEvent
 public class Player : MonoBehaviour , IDamageable ,IPauseable
 {
     private PlayerModel _model;
-    private IController _controler;
+    private ICharacterController _controler;
     private PlayerView _view;
     private Gun _gun;
     private Vector3 _velocity;

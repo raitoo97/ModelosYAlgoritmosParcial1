@@ -8,44 +8,33 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
 {
     private ObserverList<SaveEvent> _SaveObservers = new ObserverList<SaveEvent>();
     public static SaveManager instance;
-    private int savesCount;
-    private int loadCounts;
+    private int savesCount = 3;
+    private int loadCounts = 0;
+    public bool CanSave => savesCount > 0;
+    public bool CanLoad => loadCounts > 0;
+    private IController _controller;
     private void Awake()
     {
         if (instance == null)
-        {
             instance = this;
-        }
         else
-        {
             Destroy(gameObject);
-        }
-        savesCount = 3;
-        loadCounts = 0;
+        _controller = new SaveController();
     }
     private void Update()
     {
-        if (PlayerInputsManager.instance.SaveAction() && savesCount > 0)
-        {
-            savesCount--;
-            loadCounts++;
-            EventManager.TriggerEvent(EventType.UpdateSaves, savesCount);
-            Save();
-        }
-        if (PlayerInputsManager.instance.LoadAction() && loadCounts > 0)
-        {
-            loadCounts--;
-            Load();
-        }
+        _controller.UpdateInputs();
     }
     public void Save()
     {
-        Debug.Log("Guardo");
+        savesCount--;
+        loadCounts++;
+        EventManager.TriggerEvent(EventType.UpdateSaves, savesCount);
         NotifyObservers(SaveEvent.Save);
     }
     public void Load()
     {
-        Debug.Log("Cargo");
+        loadCounts--;
         NotifyObservers(SaveEvent.Load);
     }
     public void Subscribe(IObserver<SaveEvent> observer)

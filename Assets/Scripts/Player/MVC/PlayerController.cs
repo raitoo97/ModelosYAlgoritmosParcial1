@@ -1,5 +1,5 @@
 using UnityEngine;
-public class PlayerController : IController
+public class PlayerController : ICharacterController
 {
     private PlayerModel _model;
     private Vector3 _direction;
