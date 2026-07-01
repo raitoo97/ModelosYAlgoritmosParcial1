@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 public enum SaveEvent
 {
@@ -7,7 +6,7 @@ public enum SaveEvent
 }
 public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
 {
-    private List<IObserver<SaveEvent>> _myobservers = new List<IObserver<SaveEvent>>();
+    private ObserverList<SaveEvent> _SaveObservers = new ObserverList<SaveEvent>();
     public static SaveManager instance;
     private int savesCount;
     private int loadCounts;
@@ -51,24 +50,15 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
     }
     public void Subscribe(IObserver<SaveEvent> observer)
     {
-        if (!_myobservers.Contains(observer))
-        {
-            _myobservers.Add(observer);
-        }
+        _SaveObservers.Subscribe(observer);
     }
     public void Unsubscribe(IObserver<SaveEvent> observer)
     {
-        if (_myobservers.Contains(observer))
-        {
-            _myobservers.Remove(observer);
-        }
+        _SaveObservers.Unsubscribe(observer);
     }
     public void NotifyObservers(SaveEvent action)
     {
-        for (int i = _myobservers.Count - 1; i >= 0; i--)
-        {
-            _myobservers[i].Notify(action);
-        }
+        _SaveObservers.NotifyObservers(action);
     }
     public void Pause()
     {

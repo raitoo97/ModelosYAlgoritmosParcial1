@@ -5,9 +5,9 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
 {
     private Rigidbody _rb;
     private float _currentLife;
-    private List<IObserver<PlayerEvent>> _myobservers;
+    private ObserverList<PlayerEvent> _playerObservers = new ObserverList<PlayerEvent>();
     private bool _isDead;
-    private Dictionary<SaveEvent, Action> _actions;
+    private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
     private MementoState<PlayerMemento> _playerMemento;
     private Transform _cameraReference;
     private bool _isAiming;
@@ -19,7 +19,6 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
-        _myobservers = new List<IObserver<PlayerEvent>>();
         _playerMemento = new MementoState<PlayerMemento>();
         _cameraReference = cameraReference;
         FillRotationStrategies();
@@ -73,26 +72,17 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
             EventManager.TriggerEvent(EventType.PlayerDeath);
         }
     }
-    public void NotifyObservers(PlayerEvent action)
-    {
-        for (int i = _myobservers.Count - 1; i >= 0; i--)
-        {
-            _myobservers[i].Notify(action);
-        }
+    public void NotifyObservers(PlayerEvent action) 
+    { 
+        _playerObservers.NotifyObservers(action); 
     }
-    public void Subscribe(IObserver<PlayerEvent> observer)
-    {
-        if (!_myobservers.Contains(observer))
-        {
-            _myobservers.Add(observer);
-        }
+    public void Subscribe(IObserver<PlayerEvent> observer) 
+    { 
+        _playerObservers.Subscribe(observer); 
     }
-    public void Unsubscribe(IObserver<PlayerEvent> observer)
+    public void Unsubscribe(IObserver<PlayerEvent> observer) 
     {
-        if (_myobservers.Contains(observer))
-        {
-            _myobservers.Remove(observer);
-        }
+        _playerObservers.Unsubscribe(observer);
     }
     public void Notify(SaveEvent Actions)
     {
@@ -103,7 +93,6 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     private void FillDictionary()
     {
-        _actions = new Dictionary<SaveEvent, Action>();
         _actions.Add(SaveEvent.Save, SaveState);
         _actions.Add(SaveEvent.Load, TryLoadStates);
     }
