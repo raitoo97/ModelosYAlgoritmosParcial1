@@ -6,7 +6,7 @@ public enum SaveEvent
 }
 public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
 {
-    private ObserverList<SaveEvent> _SaveObservers = new ObserverList<SaveEvent>();
+    private ObserverList<SaveEvent> _saveObservers = new ObserverList<SaveEvent>();
     public static SaveManager instance;
     private int savesCount = 3;
     private int loadCounts = 0;
@@ -39,15 +39,15 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
     }
     public void Subscribe(IObserver<SaveEvent> observer)
     {
-        _SaveObservers.Subscribe(observer);
+        _saveObservers.Subscribe(observer);
     }
     public void Unsubscribe(IObserver<SaveEvent> observer)
     {
-        _SaveObservers.Unsubscribe(observer);
+        _saveObservers.Unsubscribe(observer);
     }
     public void NotifyObservers(SaveEvent action)
     {
-        _SaveObservers.NotifyObservers(action);
+        _saveObservers.NotifyObservers(action);
     }
     public void Pause()
     {

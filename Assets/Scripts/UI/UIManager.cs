@@ -9,7 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI _saves;
     [SerializeField]private Transform mainGame;
     [SerializeField]private string _pauseScreen;
-    [SerializeField]private IController _controller;
+    private IController _controller;
     private int _currentScore;
     private void Awake()
     {

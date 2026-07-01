@@ -9,6 +9,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private bool _isDead;
     private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
     private MementoState<PlayerMemento> _playerMemento;
+    private Vector3 _pausedVelocity;
     private Transform _cameraReference;
     private bool _isAiming;
     private float _aimDistance = 20f;
@@ -127,6 +128,17 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.Idle);
     }
+    public void PausePhysics()
+    {
+        _pausedVelocity = _rb.linearVelocity;
+        _rb.linearVelocity = Vector3.zero;
+        _rb.useGravity = false;
+    }
+    public void ResumePhysics()
+    {
+        _rb.linearVelocity = _pausedVelocity;
+        _rb.useGravity = true;
+    }
     public void SetAiming(bool isAiming)
     {
         _isAiming = isAiming;
@@ -137,5 +149,4 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         return _cameraReference.position + _cameraReference.forward * _aimDistance;
     }
     public bool GetAiming => _isAiming;
-    public Rigidbody GetRb => _rb;
 }

@@ -11,15 +11,14 @@ public enum PlayerEvent
 public class Player : MonoBehaviour , IDamageable ,IPauseable
 {
     private PlayerModel _model;
-    private ICharacterController _controler;
+    private ICharacterController _controller;
     private PlayerView _view;
     private Gun _gun;
-    private Vector3 _velocity;
     [SerializeField] private Transform _cameraReference;
     private void Awake()
     {
         _model = new PlayerModel(this, _cameraReference);
-        _controler = new PlayerController(_model);
+        _controller = new PlayerController(_model);
         _view = new PlayerView(this);
         _model.Subscribe(_view);
         _gun = GetComponentInChildren<Gun>();
@@ -29,11 +28,11 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     }
     private void Update()
     {
-        _controler.UpdateInputs();
+        _controller.UpdateInputs();
     }
     private void FixedUpdate()
     {
-        _controler.FixedUpdateInputs();
+        _controller.FixedUpdateInputs();
     }
     private void OnDeath(params object[] parameters)
     {
@@ -62,17 +61,14 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     public void Pause()
     {
         _model.Pause();
+        _model.PausePhysics();
         _view.GetAnimator.speed = 0;
-        _velocity = _model.GetRb.linearVelocity;
-        _model.GetRb.linearVelocity = Vector3.zero;
-        _model.GetRb.useGravity = false;
         enabled = false;
     }
     public void Resume()
     {
          enabled = true;
+        _model.ResumePhysics();
         _view.GetAnimator.speed = 1;
-        _model.GetRb.linearVelocity = _velocity;
-        _model.GetRb.useGravity = true;
     }
 }
