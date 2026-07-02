@@ -7,7 +7,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]private Text _gameOver;
     [SerializeField]private Text _score;
     [SerializeField]private TextMeshProUGUI _saves;
-    [SerializeField]private Transform mainGame;
     [SerializeField]private string _pauseScreen;
     private IController _controller;
     private int _currentScore;
@@ -17,11 +16,6 @@ public class UIManager : MonoBehaviour
         _currentScore = 0;
         _saves.color = Color.green;
         _controller = new UIController(_pauseScreen);
-    }
-    private void Start()
-    {
-        var mainScreen = new ScreenGameplay(mainGame);
-        ScreenManager.Instance.Push(mainScreen);
     }
     private void OnEnable()
     {
