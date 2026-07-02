@@ -12,6 +12,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private void Start()
     {
         _bulletService = new BulletService(_bulletPrefab,GameManager.instance._projectilesParent,_initPoolSize);
+        GameManager.instance.player.SubscribeObserver(this);
         FillDictionary();
     }
     private void LateUpdate()
@@ -43,5 +44,9 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
         {
             _actions[Actions].Invoke();
         }
+    }
+    private void OnDestroy()
+    {
+        GameManager.instance.player.UnsubscribeObserver(this);
     }
 }
