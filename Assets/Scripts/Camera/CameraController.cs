@@ -9,6 +9,8 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent>
     [SerializeField]private bool _invertY = false;
     [SerializeField]private CinemachineCamera _mainCamera;
     [SerializeField]private CinemachineCamera _aimCamera;
+    [SerializeField] private Vector3 _mainCameraOffset = new Vector3(0.8f, -0.4f, -2f);
+    [SerializeField] private Vector3 _aimCameraOffset = new Vector3(0.8f, -0.5f, -1.2f);
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
     private Transform _player;
     private float xRotation;
@@ -46,16 +48,25 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent>
     private void LateUpdate()
     {
         if (_player == null || followTarget == null) return;
+        UpdateFollowTarget();
+        UpdateCameraPositions();
+    }
+    private void UpdateFollowTarget()
+    {
         followTarget.position = _player.position + Vector3.up * 2;
         Vector2 look = PlayerInputsManager.instance.GetCameraLook() * _sensitivity;
         xRotation += (_invertY ? -1 : 1) * look.y;
         xRotation = Mathf.Clamp(xRotation, -30f, 70f);
         yRotation += look.x;
         followTarget.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-        Vector3 offset = followTarget.rotation * new Vector3(0.8f, -0.4f, -2f);
+    }
+    private void UpdateCameraPositions()
+    {
+        Vector3 offset = followTarget.rotation * _mainCameraOffset;
         _mainCamera.transform.position = followTarget.position + offset;
         _mainCamera.transform.rotation = followTarget.rotation;
-        Vector3 aimOffset = followTarget.rotation * new Vector3(0.8f, -0.5f, -1.2f);
+
+        Vector3 aimOffset = followTarget.rotation * _aimCameraOffset;
         _aimCamera.transform.position = followTarget.position + aimOffset;
         _aimCamera.transform.rotation = followTarget.rotation;
     }
