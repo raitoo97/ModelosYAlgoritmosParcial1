@@ -4,15 +4,15 @@ using Unity.Cinemachine;
 using UnityEngine;
 public class CameraController : MonoBehaviour , IObserver<PlayerEvent>
 {
-    [SerializeField] private Transform followTarget;
-    [SerializeField] private float _sensitivity;
-    [SerializeField] private bool _invertY = false;
-    [SerializeField] private CinemachineCamera _mainCamera;
-    [SerializeField] private CinemachineCamera _aimCamera;
+    [SerializeField]private Transform followTarget;
+    [SerializeField]private float _sensitivity;
+    [SerializeField]private bool _invertY = false;
+    [SerializeField]private CinemachineCamera _mainCamera;
+    [SerializeField]private CinemachineCamera _aimCamera;
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
     private Transform _player;
-    float xRotation;
-    float yRotation;
+    private float xRotation;
+    private float yRotation;
     private void Start()
     {
         _player = GameManager.instance.player.transform;
@@ -52,6 +52,12 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent>
         xRotation = Mathf.Clamp(xRotation, -30f, 70f);
         yRotation += look.x;
         followTarget.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        Vector3 offset = followTarget.rotation * new Vector3(0.8f, -0.4f, -2f);
+        _mainCamera.transform.position = followTarget.position + offset;
+        _mainCamera.transform.rotation = followTarget.rotation;
+        Vector3 aimOffset = followTarget.rotation * new Vector3(0.8f, -0.5f, -1.2f);
+        _aimCamera.transform.position = followTarget.position + aimOffset;
+        _aimCamera.transform.rotation = followTarget.rotation;
     }
     private void OnDestroy()
     {
