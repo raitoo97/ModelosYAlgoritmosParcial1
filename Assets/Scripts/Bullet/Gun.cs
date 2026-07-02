@@ -41,9 +41,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     public void Notify(PlayerEvent Actions)
     {
         if (_actions.ContainsKey(Actions))
-        {
             _actions[Actions].Invoke();
-        }
     }
     private void OnDestroy()
     {
