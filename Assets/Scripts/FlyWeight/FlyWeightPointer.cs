@@ -7,5 +7,5 @@ public static class FlyWeightPointer
     /// <summary>
     /// Projectile valores : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
     /// </summary>
-    public static readonly FlyWeight Projectile = new FlyWeight(50, 200, 0, 0, 0, 25);
+    public static readonly FlyWeight Projectile = new FlyWeight(50, 200, 2000, 0, 0, 25);
 }
