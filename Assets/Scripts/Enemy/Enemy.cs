@@ -7,24 +7,23 @@ public enum EnemyEvent
 }
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPauseable
+public class Enemy : MonoBehaviour , IDamageable , IPauseable
 {
     private FSM _fsm;
     private NavMeshAgent _agent;
-    private Rigidbody _rb;
+    private EnemyModel _model;
+    private EnemyView _view;
     [SerializeField] private Bullet _bulletPrefab;
     private BulletService _bulletService;
     [SerializeField]private Transform _gunSight;
     private int _initPoolSize = 50;
     private Action<Enemy> _returnToPoolCallBack;
-    private float _currentLife;
-    private bool _isDead;
-    private ObserverList<EnemyEvent> _enemyObservers = new ObserverList<EnemyEvent>();
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _rb = GetComponent<Rigidbody>();
-        _isDead = false;
+        _model = new EnemyModel(this);
+        _view = new EnemyView(this);
+        _model.Subscribe(_view);
         _fsm = new FSM();
         _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
         Transform playerTransform = GameManager.instance.player.transform;
@@ -34,9 +33,8 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     }
     public void ResetEnemy()
     {
-        _currentLife = FlyWeightPointer.Entity.maxLife;
-        _isDead = false;
-        if(_agent.hasPath)
+        _model.ResetLife();
+        if (_agent.hasPath)
             _agent.ResetPath();
         _fsm.ChangeState(FSM.StateID.Chase);
     }
@@ -46,12 +44,7 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     }
     public void Rotate(Vector3 direction)
     {
-        Vector3 _dirRot = new Vector3(direction.x, 0, direction.z).normalized;
-        if (_dirRot.sqrMagnitude > 0.001f)
-        {
-            Quaternion _rotDir = Quaternion.LookRotation(_dirRot);
-            _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, _rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime));
-        }
+        _model.Rotate(direction);
     }
     public void SetReturnToPoolCallBack(Action<Enemy> returnToPoolCallBack)
     {
@@ -65,21 +58,11 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
             .SetOwnerBullet(BulletOwner.Enemy)
             .Build();
     }
-    public void Die()
-    {
-        NotifyObservers(EnemyEvent.EnemyDie);
-        _returnToPoolCallBack?.Invoke(this);
-    }
     public void TakeDamage(float dmg)
     {
-        if (_isDead) return;
-        _currentLife -= dmg;
-        if (_currentLife <= 0) 
-        {
-            _isDead = true;
-            EventManager.TriggerEvent(EventType.EnemyKilled, 1);
-            Die();
-        }
+        _model.TakeDamage(dmg);
+        if (_model.IsDead)
+            _returnToPoolCallBack?.Invoke(this);
     }
     public void WarpToPosition(Vector3 position)
     {
@@ -92,22 +75,14 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     }
     public void Subscribe(IObserver<EnemyEvent> observer)
     {
-        _enemyObservers.Subscribe(observer);
-    }
-    public void Unsubscribe(IObserver<EnemyEvent> observer)
-    {
-        _enemyObservers.Unsubscribe(observer);
-    }
-    public void NotifyObservers(EnemyEvent action)
-    {
-        _enemyObservers.NotifyObservers(action);
+        _model.Subscribe(observer);
     }
     public EnemyMemento CaptureState()
     {
         return new EnemyMemento
         {
-            life = _currentLife,
-            isDead = _isDead,
+            life = _model.CurrentLife,
+            isDead = _model.IsDead,
             isActive = gameObject.activeSelf,
             position = transform.position,
             rotation = transform.rotation,
@@ -118,8 +93,7 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     {
         gameObject.SetActive(memory.isActive);
         if (!memory.isActive) return;
-        _currentLife = memory.life;
-        _isDead = memory.isDead;
+        _model.RestoreLife(memory.life, memory.isDead);
         _agent.Warp(memory.position);
         transform.rotation = memory.rotation;
         _fsm.ChangeState(memory.currentState);
@@ -133,5 +107,9 @@ public class Enemy : MonoBehaviour , IDamageable , IObservable<EnemyEvent> , IPa
     {
         enabled = true;
         _agent.enabled = true;
+    }
+    private void OnDestroy()
+    {
+        _model.Unsubscribe(_view);
     }
 }

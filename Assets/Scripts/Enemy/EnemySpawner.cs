@@ -9,7 +9,7 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     private int _poolSize = 20;
     private EnemyService _enemyService;
     private float _timer;
-    private Dictionary<EnemyEvent, Action> _actions;
+    private Dictionary<EnemyEvent, Action> _actions = new Dictionary<EnemyEvent, Action>();
     private int _enemyKills;
     private int _killsPerDifficultyIncrease = 5;
     private float _minSpawnRate = 1f;
@@ -30,7 +30,6 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     }
     private void FillDictionary()
     {
-        _actions = new Dictionary<EnemyEvent, Action>();
         _actions.Add(EnemyEvent.EnemyDie, IncreaseEnemyKilled);
     }
     private void IncreaseEnemyKilled()
@@ -38,6 +37,7 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
         _enemyKills++;
         if (_enemyKills % _killsPerDifficultyIncrease == 0)
         {
+            Debug.Log("Increasing difficulty, new spawn rate: " + (_spawnRate - 1f));
             _spawnRate -= 1f;
             _spawnRate = Mathf.Max(_minSpawnRate, _spawnRate);
         }
