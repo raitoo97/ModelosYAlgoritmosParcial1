@@ -14,6 +14,7 @@ public class ButtonTranslate : MonoBehaviour
     }
     private void OnEnable()
     {
+        if (LocalizationManager.Instance == null) return;
         if (LocalizationManager.Instance.IsReady)
             UpdateText();
     }
