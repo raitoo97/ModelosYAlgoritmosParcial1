@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-public enum BulletOwner
+public enum Factions
 {
     Player,
     Enemy
@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviour
     private float _damageMultiplier = 1f;
     private Renderer _renderer;
     private Action<Bullet> _returnToPoolCallBack;
-    private BulletOwner _owner;
+    private Factions _owner;
     private bool _isActive;
     private void Awake()
     {
@@ -62,7 +62,7 @@ public class Bullet : MonoBehaviour
     {
         _damageMultiplier = damage;
     }
-    public void SetOwner(BulletOwner owner)
+    public void SetOwner(Factions owner)
     {
         _owner = owner;
     }

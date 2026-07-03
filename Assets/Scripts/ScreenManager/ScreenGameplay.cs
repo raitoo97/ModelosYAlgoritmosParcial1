@@ -11,10 +11,9 @@ public class ScreenGameplay : IScreen
     }
     public void Deactivate()
     {
-        _pauseables.Clear();
         foreach (MonoBehaviour behaviour in _root.GetComponentsInChildren<MonoBehaviour>())
         {
-            if(behaviour.TryGetComponent<IPauseable>(out var pauseable))
+            if (behaviour is IPauseable pauseable)
             {
                 if (!_pauseables.Contains(pauseable))
                 {

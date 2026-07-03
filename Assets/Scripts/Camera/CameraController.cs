@@ -2,16 +2,18 @@ using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
-public class CameraController : MonoBehaviour , IObserver<PlayerEvent>
+public class CameraController : MonoBehaviour , IObserver<PlayerEvent> , IMementoEntity<CameraMemento> , IObserver<SaveEvent> ,IPauseable
 {
     [SerializeField]private Transform followTarget;
     [SerializeField]private float _sensitivity;
     [SerializeField]private bool _invertY = false;
     [SerializeField]private CinemachineCamera _mainCamera;
     [SerializeField]private CinemachineCamera _aimCamera;
+    private MementoState<CameraMemento> _cameraMemento = new MementoState<CameraMemento>();
     [SerializeField] private Vector3 _mainCameraOffset = new Vector3(0.8f, -0.4f, -2f);
     [SerializeField] private Vector3 _aimCameraOffset = new Vector3(0.8f, -0.5f, -1.2f);
-    private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
+    private Dictionary<PlayerEvent, Action> _playerActions = new Dictionary<PlayerEvent, Action>();
+    private Dictionary<SaveEvent, Action> _saveActions = new Dictionary<SaveEvent, Action>();
     private Transform _player;
     private float xRotation;
     private float yRotation;
@@ -21,19 +23,26 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent>
         GameManager.instance.player.SubscribeObserver(this);
         _aimCamera.Priority = 0;
         _mainCamera.Priority = 1;
-        FillDictionary();
+        FillPlayerActionsDictionary();
+        FillSaveActionsDictionary();
+        SaveManager.instance.Subscribe(this);
     }
     public void Notify(PlayerEvent Actions)
     {
-        if (_actions.ContainsKey(Actions))
+        if (_playerActions.ContainsKey(Actions))
         {
-            _actions[Actions].Invoke();
+            _playerActions[Actions].Invoke();
         }
     }
-    private void FillDictionary()
+    private void FillPlayerActionsDictionary()
     {
-        _actions.Add(PlayerEvent.Aim, ChangeCameraAim);
-        _actions.Add(PlayerEvent.StopAim, ChangeCameraNormal);
+        _playerActions.Add(PlayerEvent.Aim, ChangeCameraAim);
+        _playerActions.Add(PlayerEvent.StopAim, ChangeCameraNormal);
+    }
+    private void FillSaveActionsDictionary()
+    {
+        _saveActions.Add(SaveEvent.Save, SaveState);
+        _saveActions.Add(SaveEvent.Load, TryLoadStates);
     }
     private void ChangeCameraAim()
     {
@@ -73,5 +82,41 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent>
     private void OnDestroy()
     {
         GameManager.instance.player.UnsubscribeObserver(this);
+        SaveManager.instance.Unsubscribe(this);
+    }
+    public void SaveState()
+    {
+        _cameraMemento.SaveMemory(
+            new CameraMemento
+            {
+                xRotation = xRotation,
+                yRotation = yRotation,
+            });
+    }
+    public void LoadState(CameraMemento memory)
+    {
+        xRotation = memory.xRotation;
+        yRotation = memory.yRotation;
+    }
+    public void TryLoadStates()
+    {
+        if (_cameraMemento.memoriesAmount == 0) return;
+        var lastMemory = _cameraMemento.LoadMemory();
+        LoadState(lastMemory);
+    }
+    public void Notify(SaveEvent Actions)
+    {
+        if (_saveActions.ContainsKey(Actions))
+        {
+            _saveActions[Actions].Invoke();
+        }
+    }
+    public void Pause()
+    {
+        enabled = false;
+    }
+    public void Resume()
+    {
+        enabled = true;
     }
 }
