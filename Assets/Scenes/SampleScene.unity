@@ -2197,7 +2197,6 @@ GameObject:
   - component: {fileID: 1920595095}
   - component: {fileID: 1920595096}
   - component: {fileID: 1920595097}
-  - component: {fileID: 1920595098}
   - component: {fileID: 1920595099}
   m_Layer: 0
   m_Name: Manager
@@ -2289,19 +2288,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainGame: {fileID: 164945402}
---- !u!114 &1920595098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1920595091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5100c6f0fbf91f428c3d0534f66134e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _currentLengugage: 34
 --- !u!114 &1920595099
 MonoBehaviour:
   m_ObjectHideFlags: 0

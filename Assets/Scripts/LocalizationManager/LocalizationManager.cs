@@ -7,7 +7,8 @@ public class LocalizationManager : MonoBehaviour
 {
     public static LocalizationManager Instance { get; private set; }
     private string _webURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRv1q9nQCMNFiwF8wBqwJdDnGmGzk-mHFcTb1gH3sLblpw1RISs724svd5pqgbC_h0sPeurnhnhq7J4/pub?output=csv";
-    [SerializeField] private SystemLanguage _currentLengugage;
+    public bool IsReady => _lenguageCodex != null;
+    [SerializeField] private SystemLanguage _currentLenguage;
     Dictionary<SystemLanguage, Dictionary<string, string>> _lenguageCodex;
     public event Action onUpdate = delegate { };
     private void Awake()
@@ -15,12 +16,15 @@ public class LocalizationManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+            if (PlayerPrefs.HasKey("SelectedLanguage"))
+                _currentLenguage = (SystemLanguage)PlayerPrefs.GetInt("SelectedLanguage");
+            StartCoroutine(InitializeCodex());
         }
         else
         {
             Destroy(gameObject);
         }
-        StartCoroutine(InitializeCodex());
     }
     private IEnumerator InitializeCodex()
     {
@@ -36,17 +40,20 @@ public class LocalizationManager : MonoBehaviour
     }
     public void ChangeLanguage(SystemLanguage language)
     {
-        if (_currentLengugage == language)
+        if (_currentLenguage == language)
             return;
-        _currentLengugage = language;
+        _currentLenguage = language;
+        PlayerPrefs.SetInt("SelectedLanguage", (int)language);
         onUpdate?.Invoke();
     }
     public string GetTranslation(string ID)
     {
-        if (!_lenguageCodex.ContainsKey(_currentLengugage))
+        if (_lenguageCodex == null)
+            return string.Empty;
+        if (!_lenguageCodex.ContainsKey(_currentLenguage))
             return "No Lenguage";
-        if (!_lenguageCodex[_currentLengugage].ContainsKey(ID))
+        if (!_lenguageCodex[_currentLenguage].ContainsKey(ID))
             return "No ID";
-        return _lenguageCodex[_currentLengugage][ID];
+        return _lenguageCodex[_currentLenguage][ID];
     }
 }
