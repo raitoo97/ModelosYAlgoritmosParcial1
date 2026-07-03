@@ -4,12 +4,18 @@ public class ScreenManager : MonoBehaviour
 {
     public static ScreenManager Instance { get; private set; }
     private Stack<IScreen> screenStack = new Stack<IScreen>();
+    [SerializeField] private Transform mainGame;
     private void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
+    }
+    private void Start()
+    {
+        var mainScreen = new ScreenGameplay(mainGame);
+        Push(mainScreen);
     }
     public void Pop()
     {

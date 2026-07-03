@@ -46,7 +46,11 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable
     }
     private void OnAnimatorIK(int layerIndex)
     {
-        _view.UpdateAimIK(_model.GetAiming, _model.GetAimPoint());
+        _view.UpdateAimIK(_model.GetAiming, GetAimPoint());
+    }
+    public Vector3 GetAimPoint()
+    {
+        return _model.GetAimPoint();
     }
     IEnumerator LateAwake()
     {

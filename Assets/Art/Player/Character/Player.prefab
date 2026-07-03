@@ -493,7 +493,7 @@ Transform:
   m_GameObject: {fileID: 1153342729071540972}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.033, y: 0.169, z: 2.07}
+  m_LocalPosition: {x: -0.02, y: 0.2, z: 2.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1904,6 +1904,37 @@ Transform:
   - {fileID: 7980270442788477785}
   m_Father: {fileID: 460734152594333624}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5330858394751318955
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6342030579705313789}
+  m_Layer: 0
+  m_Name: LeftHandTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6342030579705313789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5330858394751318955}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.404105, y: 0.8342105, z: 0.36324143, w: 0.094062604}
+  m_LocalPosition: {x: -0.8331378, y: -0.4386909, z: -0.03348394}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5438226258481038875}
+  m_LocalEulerAnglesHint: {x: -32.007, y: -212.091, z: -298.876}
 --- !u!1 &5750861376843216371
 GameObject:
   m_ObjectHideFlags: 0
@@ -2103,6 +2134,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1757644519343158784}
+  - component: {fileID: 5245263327385484436}
   m_Layer: 0
   m_Name: mixamorig:LeftForeArm
   m_TagString: Untagged
@@ -2118,14 +2150,41 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6727480082757318863}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000000029802322, y: 0.00000007450581, z: 2.2204463e-15, w: 1}
-  m_LocalPosition: {x: -3.0594114e-11, y: 0.2740468, z: -1.5165656e-16}
+  m_LocalRotation: {x: -0.84563965, y: -0.058471777, z: -0.39488518, w: 0.3543169}
+  m_LocalPosition: {x: -0.111163974, y: -1.067658, z: 0.2397317}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 689118015779710571}
   m_Father: {fileID: 4967825551106045201}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1773428102 &5245263327385484436
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6727480082757318863}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0.027799815, y: -1.098791, z: 0.01132841}
+  m_RotationAtRest: {x: 84.01766, y: -71.1493, z: -157.31136}
+  m_TranslationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_Active: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 6342030579705313789}
+    weight: 1
 --- !u!1 &6778731727828944709
 GameObject:
   m_ObjectHideFlags: 0
@@ -2616,6 +2675,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5245177176829504959, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6739243654744398407}
+    - targetCorrespondingSourceObject: {fileID: 5245177176829504959, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6342030579705313789}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2010531234007859668, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
       insertIndex: -1
@@ -2640,6 +2702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _gunSight: {fileID: 6739243654744398407}
+  _maxDeviationAngle: 45
 --- !u!4 &5438226258481038875 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5245177176829504959, guid: 4b0956040e1ddb247bf30ea731bdbece, type: 3}
