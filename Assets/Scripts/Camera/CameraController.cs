@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
-public class CameraController : MonoBehaviour , IObserver<PlayerEvent> , IMementoEntity<CameraMemento> , IObserver<SaveEvent>
+public class CameraController : MonoBehaviour , IObserver<PlayerEvent> , IMementoEntity<CameraMemento> , IObserver<SaveEvent> ,IPauseable
 {
     [SerializeField]private Transform followTarget;
     [SerializeField]private float _sensitivity;
@@ -110,5 +110,13 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent> , IMement
         {
             _saveActions[Actions].Invoke();
         }
+    }
+    public void Pause()
+    {
+        enabled = false;
+    }
+    public void Resume()
+    {
+        enabled = true;
     }
 }
