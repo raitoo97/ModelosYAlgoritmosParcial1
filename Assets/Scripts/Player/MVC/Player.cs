@@ -17,7 +17,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
     private PlayerView _view;
     private Gun _gun;
     [SerializeField] private Transform _cameraReference;
-    public BulletOwner Faction => BulletOwner.Player;
+    public Factions Faction => Factions.Player;
     private void Awake()
     {
         _model = new PlayerModel(this, _cameraReference);

@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     [SerializeField]private Transform _gunSight;
     private int _initPoolSize = 50;
     private Action<Enemy> _returnToPoolCallBack;
-    public BulletOwner Faction => BulletOwner.Enemy;
+    public Factions Faction => Factions.Enemy;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
         new BulletBuilder(bullet)
             .SetColorMaterial(Color.red)
-            .SetOwnerBullet(BulletOwner.Enemy)
+            .SetOwnerBullet(Factions.Enemy)
             .Build();
     }
     public void TakeDamage(float dmg)

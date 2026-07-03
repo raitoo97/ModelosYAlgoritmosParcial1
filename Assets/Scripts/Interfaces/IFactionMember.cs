@@ -1,4 +1,4 @@
 public interface IFactionMember
 {
-    BulletOwner Faction { get; }
+    Factions Faction { get; }
 }
