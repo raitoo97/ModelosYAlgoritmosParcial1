@@ -8,7 +8,7 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
     private IObserver<EnemyEvent> _observer;
     private List<Enemy> _allEnemies = new List<Enemy>();
     private MementoState<List<EnemyMemento>> _enemiesMemento;
-    private Dictionary<SaveEvent, Action> _actions;
+    private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
     public EnemyService(Enemy prefab, Transform parent, int size , IObserver<EnemyEvent> observer)
     {
         _factory = new EnemyFactory(prefab, parent);
@@ -46,7 +46,6 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
     }
     private void FillDictionary()
     {
-        _actions = new Dictionary<SaveEvent, Action>();
         _actions.Add(SaveEvent.Save, SaveState);
         _actions.Add(SaveEvent.Load, TryLoadStates);
     }

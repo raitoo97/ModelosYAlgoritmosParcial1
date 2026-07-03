@@ -12,6 +12,7 @@ public class Bullet : MonoBehaviour
     private Renderer _renderer;
     private Action<Bullet> _returnToPoolCallBack;
     private BulletOwner _owner;
+    private bool _isActive;
     private void Awake()
     {
         _renderer = GetComponentInChildren<Renderer>();
@@ -22,7 +23,7 @@ public class Bullet : MonoBehaviour
         transform.position += transform.forward * distanceToTravel;
         _currentDistance += distanceToTravel;
         if(_currentDistance >= FlyWeightPointer.Projectile.maxLife)
-            _returnToPoolCallBack?.Invoke(this);
+            ReturnToPool();
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -32,15 +33,19 @@ public class Bullet : MonoBehaviour
             {
                 entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
             }
-            _returnToPoolCallBack?.Invoke(this);
+            ReturnToPool();
         }
+    }
+    private void ReturnToPool()
+    {
+        if (!_isActive) return;
+        _isActive = false;
+        _returnToPoolCallBack?.Invoke(this);
     }
     private bool ShouldHit(Collider other)
     {
-        if (_owner == BulletOwner.Player && other.CompareTag("Player"))
-            return false;
-        if (_owner == BulletOwner.Enemy && other.CompareTag("Enemy"))
-            return false;
+        if (other.TryGetComponent<IFactionMember>(out var member))
+            return member.Faction != _owner;
         return true;
     }
     public void SetReturnToPoolCallBack(Action<Bullet> returnToPoolCallBack)
@@ -51,6 +56,7 @@ public class Bullet : MonoBehaviour
     {
         _damageMultiplier = 1f;
         _currentDistance = 0;
+        _isActive = true;
     }
     public void SetDamageMultiplier(float damage)
     {
