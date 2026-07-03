@@ -29,12 +29,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
         if (desiredDirection.sqrMagnitude < 0.0001f)
             return _initLocalRotation;
         Vector3 currentForward = transform.forward;
-        Vector3 clampedDirection = Vector3.RotateTowards(
-            currentForward,
-            desiredDirection,
-            _maxDeviationAngle * Mathf.Deg2Rad,
-            0f
-        );
+        Vector3 clampedDirection = Vector3.RotateTowards(currentForward,desiredDirection,_maxDeviationAngle * Mathf.Deg2Rad,0f);
         Quaternion targetWorldRotation = Quaternion.LookRotation(clampedDirection, Vector3.up);
         if (transform.parent != null)
             return Quaternion.Inverse(transform.parent.rotation) * targetWorldRotation;

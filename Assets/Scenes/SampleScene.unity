@@ -2329,10 +2329,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 164945402}
     m_Modifications:
-    - target: {fileID: 6040573054041989, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
-      propertyPath: _maxDeviationAngle
-      value: 45
-      objectReference: {fileID: 0}
     - target: {fileID: 2983887043116833135, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2376,18 +2372,6 @@ PrefabInstance:
     - target: {fileID: 3986948207530036325, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6739243654744398407, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 6739243654744398407, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6739243654744398407, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 2.38
       objectReference: {fileID: 0}
     - target: {fileID: 8740020015889929888, guid: bf0df487f8a0e844489fccf9ce6c8eb0, type: 3}
       propertyPath: _cameraReference
