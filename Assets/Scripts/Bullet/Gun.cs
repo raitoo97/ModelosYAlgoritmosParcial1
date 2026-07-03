@@ -6,26 +6,39 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField]private Bullet _bulletPrefab;
     [SerializeField]private Transform _gunSight;
     private bool _isAiming;
+    [SerializeField] private float _maxDeviationAngle = 25f;
     private BulletService _bulletService;
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
     private int _initPoolSize = 50;
+    private Quaternion _initLocalRotation;
     private void Start()
     {
-        _bulletService = new BulletService(_bulletPrefab,GameManager.instance._projectilesParent,_initPoolSize);
+        _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
         GameManager.instance.player.SubscribeObserver(this);
+        _initLocalRotation = transform.localRotation;
         FillDictionary();
     }
     private void LateUpdate()
     {
-        if (!_isAiming) return;
-        AimAt(GameManager.instance.player.GetAimPoint());
+        Quaternion targetLocalRotation = _isAiming? ComputeAimLocalRotation(GameManager.instance.player.GetAimPoint()): _initLocalRotation;
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetLocalRotation, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime);
     }
-    private void AimAt(Vector3 aimPoint)
+    private Quaternion ComputeAimLocalRotation(Vector3 aimPoint)
     {
-        Vector3 direction = (aimPoint - this.transform.position).normalized;
-        if (direction.sqrMagnitude < 0.0001f) return;
-        Quaternion targetRotation = Quaternion.LookRotation(direction, Vector3.up);
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, targetRotation, Time.deltaTime * FlyWeightPointer.Projectile.damage);
+        Vector3 desiredDirection = (aimPoint - transform.position).normalized;
+        if (desiredDirection.sqrMagnitude < 0.0001f)
+            return _initLocalRotation;
+        Vector3 currentForward = transform.forward;
+        Vector3 clampedDirection = Vector3.RotateTowards(
+            currentForward,
+            desiredDirection,
+            _maxDeviationAngle * Mathf.Deg2Rad,
+            0f
+        );
+        Quaternion targetWorldRotation = Quaternion.LookRotation(clampedDirection, Vector3.up);
+        if (transform.parent != null)
+            return Quaternion.Inverse(transform.parent.rotation) * targetWorldRotation;
+        return targetWorldRotation;
     }
     private void FillDictionary()
     {
