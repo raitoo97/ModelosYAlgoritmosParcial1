@@ -10,13 +10,14 @@ public enum PlayerEvent
     StopAim
 }
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour , IDamageable ,IPauseable
+public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
 {
     private PlayerModel _model;
     private ICharacterController _controller;
     private PlayerView _view;
     private Gun _gun;
     [SerializeField] private Transform _cameraReference;
+    public BulletOwner Faction => BulletOwner.Player;
     private void Awake()
     {
         _model = new PlayerModel(this, _cameraReference);

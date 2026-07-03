@@ -7,7 +7,7 @@ public enum EnemyEvent
 }
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour , IDamageable , IPauseable
+public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
 {
     private FSM _fsm;
     private NavMeshAgent _agent;
@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable
     [SerializeField]private Transform _gunSight;
     private int _initPoolSize = 50;
     private Action<Enemy> _returnToPoolCallBack;
+    public BulletOwner Faction => BulletOwner.Enemy;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
