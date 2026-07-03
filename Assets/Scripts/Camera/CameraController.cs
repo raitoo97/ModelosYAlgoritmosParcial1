@@ -2,47 +2,37 @@ using System;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
-public class CameraController : MonoBehaviour , IObserver<PlayerEvent> , IMementoEntity<CameraMemento> , IObserver<SaveEvent> ,IPauseable
+public class CameraController : MonoBehaviour, IObserver<PlayerEvent>, IPauseable
 {
-    [SerializeField]private Transform followTarget;
-    [SerializeField]private float _sensitivity;
-    [SerializeField]private bool _invertY = false;
-    [SerializeField]private CinemachineCamera _mainCamera;
-    [SerializeField]private CinemachineCamera _aimCamera;
-    private MementoState<CameraMemento> _cameraMemento = new MementoState<CameraMemento>();
+    [SerializeField] private Transform followTarget;
+    [SerializeField] private float _sensitivity;
+    [SerializeField] private bool _invertY = false;
+    [SerializeField] private CinemachineCamera _mainCamera;
+    [SerializeField] private CinemachineCamera _aimCamera;
     [SerializeField] private Vector3 _mainCameraOffset = new Vector3(0.8f, -0.4f, -2f);
     [SerializeField] private Vector3 _aimCameraOffset = new Vector3(0.8f, -0.5f, -1.2f);
+    private CameraModel _model;
     private Dictionary<PlayerEvent, Action> _playerActions = new Dictionary<PlayerEvent, Action>();
-    private Dictionary<SaveEvent, Action> _saveActions = new Dictionary<SaveEvent, Action>();
     private Transform _player;
-    private float xRotation;
-    private float yRotation;
     private void Start()
     {
         _player = GameManager.instance.player.transform;
         GameManager.instance.player.SubscribeObserver(this);
+        _model = new CameraModel(_sensitivity, _invertY);
+        SaveManager.instance.Subscribe(_model);
         _aimCamera.Priority = 0;
         _mainCamera.Priority = 1;
         FillPlayerActionsDictionary();
-        FillSaveActionsDictionary();
-        SaveManager.instance.Subscribe(this);
     }
     public void Notify(PlayerEvent Actions)
     {
         if (_playerActions.ContainsKey(Actions))
-        {
             _playerActions[Actions].Invoke();
-        }
     }
     private void FillPlayerActionsDictionary()
     {
         _playerActions.Add(PlayerEvent.Aim, ChangeCameraAim);
         _playerActions.Add(PlayerEvent.StopAim, ChangeCameraNormal);
-    }
-    private void FillSaveActionsDictionary()
-    {
-        _saveActions.Add(SaveEvent.Save, SaveState);
-        _saveActions.Add(SaveEvent.Load, TryLoadStates);
     }
     private void ChangeCameraAim()
     {
@@ -63,18 +53,14 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent> , IMement
     private void UpdateFollowTarget()
     {
         followTarget.position = _player.position + Vector3.up * 2;
-        Vector2 look = PlayerInputsManager.instance.GetCameraLook() * _sensitivity;
-        xRotation += (_invertY ? -1 : 1) * look.y;
-        xRotation = Mathf.Clamp(xRotation, -30f, 70f);
-        yRotation += look.x;
-        followTarget.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        Vector2 look = PlayerInputsManager.instance.GetCameraLook();
+        followTarget.rotation = _model.ComputeRotation(look);
     }
     private void UpdateCameraPositions()
     {
         Vector3 offset = followTarget.rotation * _mainCameraOffset;
         _mainCamera.transform.position = followTarget.position + offset;
         _mainCamera.transform.rotation = followTarget.rotation;
-
         Vector3 aimOffset = followTarget.rotation * _aimCameraOffset;
         _aimCamera.transform.position = followTarget.position + aimOffset;
         _aimCamera.transform.rotation = followTarget.rotation;
@@ -82,34 +68,7 @@ public class CameraController : MonoBehaviour , IObserver<PlayerEvent> , IMement
     private void OnDestroy()
     {
         GameManager.instance.player.UnsubscribeObserver(this);
-        SaveManager.instance.Unsubscribe(this);
-    }
-    public void SaveState()
-    {
-        _cameraMemento.SaveMemory(
-            new CameraMemento
-            {
-                xRotation = xRotation,
-                yRotation = yRotation,
-            });
-    }
-    public void LoadState(CameraMemento memory)
-    {
-        xRotation = memory.xRotation;
-        yRotation = memory.yRotation;
-    }
-    public void TryLoadStates()
-    {
-        if (_cameraMemento.memoriesAmount == 0) return;
-        var lastMemory = _cameraMemento.LoadMemory();
-        LoadState(lastMemory);
-    }
-    public void Notify(SaveEvent Actions)
-    {
-        if (_saveActions.ContainsKey(Actions))
-        {
-            _saveActions[Actions].Invoke();
-        }
+        SaveManager.instance.Unsubscribe(_model);
     }
     public void Pause()
     {
