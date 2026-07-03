@@ -4,7 +4,6 @@ public class GunModel
     private float _maxDeviationAngle;
     public bool IsAiming { get; private set; }
     public Quaternion InitLocalRotation { get; }
-
     public GunModel(float maxDeviationAngle, Quaternion initLocalRotation)
     {
         _maxDeviationAngle = maxDeviationAngle;
