@@ -19,7 +19,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void LateUpdate()
     {
-        Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.position, transform.forward, transform.parent);
+        Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.position, transform.parent);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime);
     }
     private void FillDictionary()
@@ -30,7 +30,8 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Shoot()
     {
-        Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
+        Quaternion bulletRotation = _model.IsAiming? Quaternion.LookRotation(GameManager.instance.player.GetAimPoint() - _gunSight.position): _gunSight.rotation;
+        Bullet bullet = _bulletService.Shoot(_gunSight.position, bulletRotation);
         new BulletBuilder(bullet).SetDamageMultiplierBullet(4).SetColorMaterial(Color.blue).SetOwnerBullet(Factions.Player).Build();
     }
     public void Notify(PlayerEvent Actions)

@@ -5,10 +5,8 @@ public class GunModel
     private Dictionary<bool, IGunRotationStrategy> _strategies;
     private IGunRotationStrategy _currentStrategy;
     public bool IsAiming { get; private set; }
-    public Quaternion InitLocalRotation { get; }
     public GunModel(float maxDeviationAngle, Quaternion initLocalRotation)
     {
-        InitLocalRotation = initLocalRotation;
         _strategies = new Dictionary<bool, IGunRotationStrategy>
         {
             { false, new GunIdleRotationStrategy(initLocalRotation) },
@@ -21,8 +19,8 @@ public class GunModel
         IsAiming = isAiming;
         _currentStrategy = _strategies[isAiming];
     }
-    public Quaternion ComputeTargetLocalRotation(Vector3 aimPoint, Vector3 gunPosition, Vector3 currentForward, Transform parent)
+    public Quaternion ComputeTargetLocalRotation(Vector3 aimPoint, Vector3 gunPosition, Transform parent)
     {
-        return _currentStrategy.ComputeTargetLocalRotation(aimPoint, gunPosition, currentForward, parent);
+        return _currentStrategy.ComputeTargetLocalRotation(aimPoint, gunPosition, parent);
     }
 }
