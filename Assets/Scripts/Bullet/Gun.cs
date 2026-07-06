@@ -5,7 +5,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
 {
     [SerializeField]private Bullet _bulletPrefab;
     [SerializeField]private Transform _gunSight;
-    [SerializeField] private float _maxDeviationAngle = 25f;
     private GunModel _model;
     private BulletService _bulletService;
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
@@ -13,13 +12,13 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private void Start()
     {
         _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
-        _model = new GunModel(_maxDeviationAngle, transform.localRotation);
+        _model = new GunModel(transform.localRotation);
         GameManager.instance.player.SubscribeObserver(this);
         FillDictionary();
     }
     private void LateUpdate()
     {
-        Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.position, transform.parent);
+        Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.localPosition, transform.parent);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime);
     }
     private void FillDictionary()

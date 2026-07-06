@@ -5,12 +5,12 @@ public class GunModel
     private Dictionary<bool, IGunRotationStrategy> _strategies;
     private IGunRotationStrategy _currentStrategy;
     public bool IsAiming { get; private set; }
-    public GunModel(float maxDeviationAngle, Quaternion initLocalRotation)
+    public GunModel(Quaternion initLocalRotation)
     {
         _strategies = new Dictionary<bool, IGunRotationStrategy>
         {
             { false, new GunIdleRotationStrategy(initLocalRotation) },
-            { true,  new GunAimRotationStrategy(maxDeviationAngle, initLocalRotation) }
+            { true,  new GunAimRotationStrategy(initLocalRotation) }
         };
         _currentStrategy = _strategies[false];
     }
