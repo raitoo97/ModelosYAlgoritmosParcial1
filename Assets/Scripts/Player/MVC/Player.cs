@@ -36,6 +36,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
     private void FixedUpdate()
     {
         _controller.FixedUpdateInputs();
+        Debug.Log(GetComponent<Rigidbody>().linearVelocity);
     }
     private void OnDeath(params object[] parameters)
     {
