@@ -1500,6 +1500,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2131018919323893079, guid: 1d4488344b416c744b74be5addfcc1c8, type: 3}
+  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
+  _bulletPoolSize: 50
 --- !u!1 &1186505534
 GameObject:
   m_ObjectHideFlags: 0
