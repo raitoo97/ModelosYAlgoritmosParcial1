@@ -1,9 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 public enum EnemyEvent
 {
-    EnemyDie
+    EnemyDie,
+    Run,
+    Aim,
+    Reset
 }
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
@@ -16,7 +20,9 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     [SerializeField] private Bullet _bulletPrefab;
     private BulletService _bulletService;
     [SerializeField]private Transform _gunSight;
+    [SerializeField] private float _deathAnimationDuration = 2f;
     private int _initPoolSize = 50;
+    private bool _isDying;
     private Action<Enemy> _returnToPoolCallBack;
     public Factions Faction => Factions.Enemy;
     private void Awake()
@@ -34,13 +40,16 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     }
     public void ResetEnemy()
     {
+        _isDying = false;
         _model.ResetLife();
+        _model.NotifyObservers(EnemyEvent.Reset);
         if (_agent.hasPath)
             _agent.ResetPath();
         _fsm.ChangeState(FSM.StateID.Chase);
     }
     void Update()
     {
+        if (_isDying) return;
         _fsm.onUpdateState();
     }
     public void Rotate(Vector3 direction)
@@ -61,9 +70,30 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     }
     public void TakeDamage(float dmg)
     {
+        if (_isDying) return;
         _model.TakeDamage(dmg);
         if (_model.IsDead)
-            _returnToPoolCallBack?.Invoke(this);
+            StartCoroutine(DeathRoutine());
+    }
+    // Espera a que termine la animacion de muerte antes de devolverlo al pool.
+    private IEnumerator DeathRoutine()
+    {
+        _isDying = true;
+        if (_agent.enabled && _agent.isOnNavMesh)
+        {
+            _agent.ResetPath();
+            _agent.isStopped = true;
+        }
+        yield return new WaitForSeconds(_deathAnimationDuration);
+        _returnToPoolCallBack?.Invoke(this);
+    }
+    public void PlayRunAnimation()
+    {
+        _model.NotifyObservers(EnemyEvent.Run);
+    }
+    public void PlayAimAnimation()
+    {
+        _model.NotifyObservers(EnemyEvent.Aim);
     }
     public void WarpToPosition(Vector3 position)
     {
@@ -94,7 +124,10 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     {
         gameObject.SetActive(memory.isActive);
         if (!memory.isActive) return;
+        _isDying = false;
         _model.RestoreLife(memory.life, memory.isDead);
+        if (!memory.isDead)
+            _model.NotifyObservers(EnemyEvent.Reset);
         _agent.Warp(memory.position);
         transform.rotation = memory.rotation;
         _fsm.ChangeState(memory.currentState);
