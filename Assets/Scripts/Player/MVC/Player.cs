@@ -17,10 +17,11 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
     private PlayerView _view;
     private Gun _gun;
     [SerializeField] private Transform _cameraReference;
+    [SerializeField] private LayerMask _aimMask;
     public Factions Faction => Factions.Player;
     private void Awake()
     {
-        _model = new PlayerModel(this, _cameraReference);
+        _model = new PlayerModel(this, _cameraReference, _aimMask);
         _controller = new PlayerController(_model);
         _view = new PlayerView(this);
         _model.Subscribe(_view);
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
     private void OnDestroy()
     {
         _model.Unsubscribe(_view);
-        _model.Unsubscribe(_gun);
+        if (_gun != null) _model.Unsubscribe(_gun);
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnDeath);
         SaveManager.instance.Unsubscribe(_model);
     }

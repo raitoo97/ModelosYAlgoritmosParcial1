@@ -12,15 +12,17 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private Vector3 _pausedVelocity;
     private Transform _cameraReference;
     private bool _isAiming;
-    private float _aimDistance = 20f;
+    private float _aimDistance = 100f;
     private Dictionary<bool, IRotationStrategy> _rotationStrategies;
     private IRotationStrategy _currentRotation;
-    public PlayerModel(Player user, Transform cameraReference)
+    private LayerMask _aimMask;
+    public PlayerModel(Player user, Transform cameraReference, LayerMask aimMask)
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _playerMemento = new MementoState<PlayerMemento>();
+        _aimMask = aimMask;
         _cameraReference = cameraReference;
         FillRotationStrategies();
         FillDictionary();
@@ -141,12 +143,24 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     public void SetAiming(bool isAiming)
     {
+        if (isAiming == _isAiming) return;
         _isAiming = isAiming;
         _currentRotation = _rotationStrategies[isAiming];
         NotifyObservers(isAiming ? PlayerEvent.Aim : PlayerEvent.StopAim);
     }
+    //Punto de mira: raycast desde la posicion de la camara en la direccion en que mira.
+    //Del impacto solo uso el punto; si no pega en nada, devuelvo un punto lejano como fallback.
+    //Es la referencia comun a la que convergen todos los sistemas de apuntado,
+    //asi todo apunta a lo mismo que el jugador ve bajo el crosshair. Lo consumen:
+    //  - GunModel.Shoot()        -> direccion del disparo hitscan (trayectoria, no rotacion).
+    //  - Gun.ComputeLaser()      -> endpoint del laser (tampoco es rotacion).
+    //  - Gun.LateUpdate()        -> target de la rotacion del arma (esto si es rotacion).
+    //  - Player.OnAnimatorIK()   -> UpdateAimIK, el LookAt del torso/cabeza (rotacion via IK).
     public Vector3 GetAimPoint()
     {
+        Ray ray = new Ray(_cameraReference.position, _cameraReference.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, _aimDistance, _aimMask, QueryTriggerInteraction.Ignore))
+            return hit.point;
         return _cameraReference.position + _cameraReference.forward * _aimDistance;
     }
     public bool GetAiming => _isAiming;

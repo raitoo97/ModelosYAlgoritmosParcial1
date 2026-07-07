@@ -28,7 +28,7 @@ public class CameraModel : IObserver<SaveEvent>, IMementoEntity<CameraMemento>
     {
         Vector2 look = lookInput * _sensitivity;
         _xRotation += (_invertY ? -1 : 1) * look.y;
-        _xRotation = Mathf.Clamp(_xRotation, -30f, 70f);
+        _xRotation = Mathf.Clamp(_xRotation, -30f, 30f);
         _yRotation += look.x;
         return Quaternion.Euler(_xRotation, _yRotation, 0);
     }
