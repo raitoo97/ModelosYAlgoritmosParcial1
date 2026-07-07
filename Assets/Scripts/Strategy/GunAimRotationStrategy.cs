@@ -17,7 +17,7 @@ public class GunAimRotationStrategy : IGunRotationStrategy
         Vector3 restForward = restWorldRotation * Vector3.forward;
         //girdo el forward del arma hacia la direccion deseada
         Vector3 clampedDirection = Vector3.RotateTowards(restForward, desiredDirection,0,0f);
-        //¿Que rotación necesito aplicar para que a pase a ser b? y luego aplico esa rotacion sobre la rotacion en reposo.
+        //Que rotacion necesito aplicar para que a pase a ser b? y luego aplico esa rotacion sobre la rotacion en reposo.
         Quaternion targetWorldRotation = Quaternion.FromToRotation(restForward, clampedDirection) * restWorldRotation;
         //si el padre es distinto de nulo, aplico la rotacion inversa del padre para obtener la rotacion local
         return parent != null ? Quaternion.Inverse(parent.rotation) * targetWorldRotation : targetWorldRotation;

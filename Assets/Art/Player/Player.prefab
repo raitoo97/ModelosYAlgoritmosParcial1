@@ -1183,13 +1183,13 @@ Transform:
   m_GameObject: {fileID: 3729331727565317370}
   serializedVersion: 2
   m_LocalRotation: {x: 0.11717107, y: 0.035547182, z: -0.7310849, w: -0.67120963}
-  m_LocalPosition: {x: -12.306262, y: -4.0560174, z: -23.2771}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: -29.38488, y: -1.4525847, z: -23.831436}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 5197687787629731692}
   m_Father: {fileID: 8278141166213857835}
-  m_LocalEulerAnglesHint: {x: -173.955, y: -192.725, z: -84.435}
+  m_LocalEulerAnglesHint: {x: -184.787, y: -188.83301, z: -85.356995}
 --- !u!33 &8816020603197251458
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1257,7 +1257,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _gunSight: {fileID: 5197687787629731692}
-  _maxDeviationAngle: 10
 --- !u!1 &3810104624290840303
 GameObject:
   m_ObjectHideFlags: 0
