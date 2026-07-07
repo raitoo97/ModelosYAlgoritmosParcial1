@@ -1079,7 +1079,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.08627451, b: 0.36862746, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2371,14 +2371,10 @@ PrefabInstance:
       propertyPath: _impactEffect
       value: 
       objectReference: {fileID: 1293732618}
-    - target: {fileID: 4045872316046245670, guid: 5c9224075ab2dd64aa19dbf6225ecfa8, type: 3}
-      propertyPath: _impactLateralOffset
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5283149740442725242, guid: 5c9224075ab2dd64aa19dbf6225ecfa8, type: 3}
       propertyPath: _cameraReference
       value: 
-      objectReference: {fileID: 145314493}
+      objectReference: {fileID: 330585546}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

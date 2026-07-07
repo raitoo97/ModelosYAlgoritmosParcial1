@@ -12,12 +12,14 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private GunModel _model;
     private IShootStrategy _shootStrategy;
     private GunView _view;
+    [SerializeField] private LineRenderer _laser;
+    [SerializeField] private Transform _laserDot;
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
     private void Start()
     {
         _model = new GunModel(transform.localRotation);
         _shootStrategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, _maxShootDistance);
-        _view = new GunView(_muzzleFlash, _impactEffect);
+        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
         GameManager.instance.player.SubscribeObserver(this);
         FillDictionary();
     }
@@ -25,6 +27,19 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     {
         Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.localPosition, transform.parent);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime);
+        UpdateLaserSight();
+    }
+    private void UpdateLaserSight()
+    {
+        if (!_model.IsAiming)
+        {
+            _view.UpdateLaser(false, Vector3.zero, Vector3.zero, false, Vector3.zero);
+            return;
+        }
+        Vector3 direction = (GameManager.instance.player.GetAimPoint() - _gunSight.position).normalized;
+        bool hasHit = Physics.Raycast(_gunSight.position, direction, out RaycastHit hit, _maxShootDistance, _hitMask, QueryTriggerInteraction.Ignore);
+        Vector3 end = hasHit ? hit.point : _gunSight.position + direction * _maxShootDistance;
+        _view.UpdateLaser(true, _gunSight.position, end, hasHit, hasHit ? hit.normal : Vector3.zero);
     }
     private void FillDictionary()
     {
