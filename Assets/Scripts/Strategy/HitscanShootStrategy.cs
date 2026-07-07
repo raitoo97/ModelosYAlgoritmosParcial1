@@ -12,8 +12,13 @@ public class HitscanShootStrategy : IShootStrategy
         _hitMask = hitMask;
         _maxDistance = maxDistance;
     }
-    //estrategia de disparo que utiliza raycast para determinar si un disparo impacta en un objetivo
-    //devuelve un ShotResult que indica si el disparo impactó y la informacion del impacto
+    //Este raycast ES la bala: reemplaza al proyectil fisico por un impacto instantaneo (hitscan).
+    //Sale desde la boca del arma (origin) en la direccion del disparo, hasta _maxDistance,
+    //ignorando triggers y las layers fuera de _hitMask (ej. el propio Player).
+    //A diferencia del raycast de GetAimPoint (que solo usa el punto), este consume todo el RaycastHit:
+    //  - hit.collider -> busca IDamageable y valida faccion (ShouldHit) para aplicar el daño.
+    //  - hit.point y hit.normal -> viajan en el ShotResult para que la vista (GunView)
+    //    posicione los efectos de impacto sobre la superficie golpeada.
     public ShotResult Shoot(Vector3 origin, Vector3 direction)
     {
         if (Physics.Raycast(origin, direction, out RaycastHit hit, _maxDistance, _hitMask, QueryTriggerInteraction.Ignore))

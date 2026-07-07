@@ -37,7 +37,7 @@ public class PlayerView : IObserver<PlayerEvent>
         // Define el punto del mundo hacia el que debe mirar el personaje.
         _animator.SetLookAtPosition(aimPoint);
         // Configura el LookAt IK indicando el peso total y cuanto participan
-        // el torso, la cabeza, los ojos y la restricción del giro.
+        // el torso, la cabeza, los ojos y la restriccion del giro.
         _animator.SetLookAtWeight(
             weight: _currentAimWeight,
             bodyWeight: 0.6f,

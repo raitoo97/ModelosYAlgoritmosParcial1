@@ -62,7 +62,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
     private void OnDestroy()
     {
         _model.Unsubscribe(_view);
-        _model.Unsubscribe(_gun);
+        if (_gun != null) _model.Unsubscribe(_gun);
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnDeath);
         SaveManager.instance.Unsubscribe(_model);
     }

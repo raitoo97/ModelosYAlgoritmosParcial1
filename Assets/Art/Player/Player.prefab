@@ -1263,7 +1263,7 @@ MonoBehaviour:
   _impactEffect: {fileID: 0}
   _hitMask:
     serializedVersion: 2
-    m_Bits: 119
+    m_Bits: 65
   _maxShootDistance: 100
   _damageMultiplier: 4
   _laser: {fileID: 2548988218624664917}

@@ -10,47 +10,38 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private float _maxShootDistance = 100f;
     [SerializeField] private float _damageMultiplier = 4f;
     private GunModel _model;
-    private IShootStrategy _shootStrategy;
     private GunView _view;
     [SerializeField] private LineRenderer _laser;
     [SerializeField] private Transform _laserDot;
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
     private void Start()
     {
-        _model = new GunModel(transform.localRotation);
-        _shootStrategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, _maxShootDistance);
+        _model = new GunModel(transform.localRotation, new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, _maxShootDistance), _hitMask, _maxShootDistance);
         _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
         GameManager.instance.player.SubscribeObserver(this);
         FillDictionary();
     }
     private void LateUpdate()
     {
-        Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.localPosition, transform.parent);
+        Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.position, transform.parent);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime);
         UpdateLaserSight();
     }
     private void UpdateLaserSight()
     {
-        if (!_model.IsAiming)
-        {
-            _view.UpdateLaser(false, Vector3.zero, Vector3.zero, false, Vector3.zero);
-            return;
-        }
-        Vector3 direction = (GameManager.instance.player.GetAimPoint() - _gunSight.position).normalized;
-        bool hasHit = Physics.Raycast(_gunSight.position, direction, out RaycastHit hit, _maxShootDistance, _hitMask, QueryTriggerInteraction.Ignore);
-        Vector3 end = hasHit ? hit.point : _gunSight.position + direction * _maxShootDistance;
-        _view.UpdateLaser(true, _gunSight.position, end, hasHit, hasHit ? hit.normal : Vector3.zero);
+        LaserState laser = _model.ComputeLaser(_gunSight.position, GameManager.instance.player.GetAimPoint());
+        _view.UpdateLaser(laser);
     }
     private void FillDictionary()
     {
         _actions.Add(PlayerEvent.Shoot, Shoot);
         _actions.Add(PlayerEvent.Aim, () => _model.SetAiming(true));
         _actions.Add(PlayerEvent.StopAim, () => _model.SetAiming(false));
+        _actions.Add(PlayerEvent.Death, () => _model.SetAiming(false));
     }
     private void Shoot()
     {
-        Vector3 direction = _model.IsAiming? (GameManager.instance.player.GetAimPoint() - _gunSight.position).normalized: _gunSight.forward;
-        ShotResult result = _shootStrategy.Shoot(_gunSight.position, direction);
+        ShotResult result = _model.Shoot(_gunSight.position, GameManager.instance.player.GetAimPoint(), _gunSight.forward);
         _view.PlayShootEffects(result);
     }
     public void Notify(PlayerEvent Actions)
