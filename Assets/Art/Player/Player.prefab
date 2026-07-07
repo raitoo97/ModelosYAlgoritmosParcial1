@@ -507,7 +507,7 @@ MonoBehaviour:
   _cameraReference: {fileID: 0}
   _aimMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 321
 --- !u!136 &6237932049744719317
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   _impactEffect: {fileID: 0}
   _hitMask:
     serializedVersion: 2
-    m_Bits: 65
+    m_Bits: 321
   _maxShootDistance: 100
   _damageMultiplier: 4
   _laser: {fileID: 2548988218624664917}
