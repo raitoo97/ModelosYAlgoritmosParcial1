@@ -12,15 +12,17 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private Vector3 _pausedVelocity;
     private Transform _cameraReference;
     private bool _isAiming;
-    private float _aimDistance = 20f;
+    private float _aimDistance = 100f;
     private Dictionary<bool, IRotationStrategy> _rotationStrategies;
     private IRotationStrategy _currentRotation;
-    public PlayerModel(Player user, Transform cameraReference)
+    private LayerMask _aimMask;
+    public PlayerModel(Player user, Transform cameraReference, LayerMask aimMask)
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _playerMemento = new MementoState<PlayerMemento>();
+        _aimMask = aimMask;
         _cameraReference = cameraReference;
         FillRotationStrategies();
         FillDictionary();
@@ -147,6 +149,9 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     public Vector3 GetAimPoint()
     {
+        Ray ray = new Ray(_cameraReference.position, _cameraReference.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, _aimDistance, _aimMask, QueryTriggerInteraction.Ignore))
+            return hit.point;
         return _cameraReference.position + _cameraReference.forward * _aimDistance;
     }
     public bool GetAiming => _isAiming;

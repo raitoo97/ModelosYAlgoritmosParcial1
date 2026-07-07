@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
 {
-    [SerializeField]private Bullet _bulletPrefab;
-    [SerializeField]private Transform _gunSight;
+    [SerializeField] private Transform _gunSight;
+    [SerializeField] private ParticleSystem _muzzleFlash;
+    [SerializeField] private ParticleSystem _impactEffect;
+    [SerializeField] private LayerMask _hitMask;
+    [SerializeField] private float _maxShootDistance = 100f;
+    [SerializeField] private float _damageMultiplier = 4f;
     private GunModel _model;
-    private BulletService _bulletService;
+    private IShootStrategy _shootStrategy;
+    private GunView _view;
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
-    private int _initPoolSize = 50;
     private void Start()
     {
-        _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
         _model = new GunModel(transform.localRotation);
+        _shootStrategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, _maxShootDistance);
+        _view = new GunView(_muzzleFlash, _impactEffect);
         GameManager.instance.player.SubscribeObserver(this);
         FillDictionary();
     }
@@ -29,9 +34,9 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Shoot()
     {
-        Quaternion bulletRotation = _model.IsAiming? Quaternion.LookRotation(GameManager.instance.player.GetAimPoint() - _gunSight.position): _gunSight.rotation;
-        Bullet bullet = _bulletService.Shoot(_gunSight.position, bulletRotation);
-        new BulletBuilder(bullet).SetDamageMultiplierBullet(4).SetColorMaterial(Color.blue).SetOwnerBullet(Factions.Player).Build();
+        Vector3 direction = _model.IsAiming? (GameManager.instance.player.GetAimPoint() - _gunSight.position).normalized: _gunSight.forward;
+        ShotResult result = _shootStrategy.Shoot(_gunSight.position, direction);
+        _view.PlayShootEffects(result);
     }
     public void Notify(PlayerEvent Actions)
     {
