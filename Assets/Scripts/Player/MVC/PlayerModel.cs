@@ -143,6 +143,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     public void SetAiming(bool isAiming)
     {
+        if (isAiming == _isAiming) return;
         _isAiming = isAiming;
         _currentRotation = _rotationStrategies[isAiming];
         NotifyObservers(isAiming ? PlayerEvent.Aim : PlayerEvent.StopAim);
@@ -152,7 +153,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     //Es la referencia comun a la que convergen todos los sistemas de apuntado,
     //asi todo apunta a lo mismo que el jugador ve bajo el crosshair. Lo consumen:
     //  - GunModel.Shoot()        -> direccion del disparo hitscan (trayectoria, no rotacion).
-    //  - Gun.UpdateLaserSight()  -> endpoint del laser (tampoco es rotacion).
+    //  - Gun.ComputeLaser()      -> endpoint del laser (tampoco es rotacion).
     //  - Gun.LateUpdate()        -> target de la rotacion del arma (esto si es rotacion).
     //  - Player.OnAnimatorIK()   -> UpdateAimIK, el LookAt del torso/cabeza (rotacion via IK).
     public Vector3 GetAimPoint()
