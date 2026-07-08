@@ -7,10 +7,10 @@ public class EnemyModel : IObservable<EnemyEvent>
     private ObserverList<EnemyEvent> _enemyObservers;
     private IShootStrategy _shootStrategy;
     private Transform _playerTransform;
-    public EnemyModel(Enemy user, Transform playerTransform)
+    public EnemyModel(Rigidbody rb, Transform playerTransform)
     {
         _enemyObservers = new ObserverList<EnemyEvent>();
-        _rb = user.GetComponent<Rigidbody>();
+        _rb = rb;
         _playerTransform = playerTransform;
     }
     public void ResetLife()
@@ -35,7 +35,6 @@ public class EnemyModel : IObservable<EnemyEvent>
         {
             _currentLife = 0;
             _isDead = true;
-            EventManager.TriggerEvent(EventType.EnemyKilled, 1);
             NotifyObservers(EnemyEvent.EnemyDie);
         }
     }

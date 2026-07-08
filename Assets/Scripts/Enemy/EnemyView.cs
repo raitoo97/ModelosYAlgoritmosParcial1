@@ -64,6 +64,8 @@ public class EnemyView : IObserver<EnemyEvent>
         _animator.ResetTrigger("OnDeath");
         _animator.SetBool("IsRunning", false);
         _animator.Play("Aim", 0, 0f);
+        _isAiming = false;
+        _currentAimWeight = 0f;
     }
     public void Notify(EnemyEvent Actions)
     {

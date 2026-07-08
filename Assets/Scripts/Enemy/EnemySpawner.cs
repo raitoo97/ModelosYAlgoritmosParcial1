@@ -36,6 +36,7 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     }
     private void IncreaseEnemyKilled()
     {
+        EventManager.TriggerEvent(EventType.EnemyKilled, 1);
         _enemyKills++;
         if (_enemyKills % _killsPerDifficultyIncrease == 0)
         {

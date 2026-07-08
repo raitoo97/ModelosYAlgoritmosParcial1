@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     {
         _agent = GetComponent<NavMeshAgent>();
         _playerTransform = GameManager.instance.player.transform;
-        _model = new EnemyModel(this, _playerTransform);
+        _model = new EnemyModel(GetComponent<Rigidbody>(), _playerTransform);
         _view = new EnemyView(this);
         _model.Subscribe(_view);
         _fsm = new FSM();
@@ -35,9 +35,9 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, _playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
     }
-    public void SetBulletService(BulletService bulletService)
+    public void SetShootStrategy(IShootStrategy strategy)
     {
-        _model.SetShootStrategy(new ProjectileShootStrategy(bulletService, Factions.Enemy, Color.red));
+        _model.SetShootStrategy(strategy);
     }
     public void ResetEnemy()
     {
