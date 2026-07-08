@@ -43,7 +43,7 @@ public class EnemyModel : IObservable<EnemyEvent>
         Vector3 dirRot = new Vector3(direction.x, 0, direction.z).normalized;
         if (dirRot.sqrMagnitude <= 0.001f) return;
         Quaternion rotDir = Quaternion.LookRotation(dirRot);
-        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime));
+        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, rotDir, FlyWeightPointer.Projectile.rotateSpeed * Time.deltaTime));
     }
     public void RestoreLife(float life, bool isDead)
     {
