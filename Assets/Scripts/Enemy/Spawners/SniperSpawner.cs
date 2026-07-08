@@ -6,7 +6,7 @@ public class SniperSpawner : MonoBehaviour, IObserver<EnemyEvent>, IPauseable
     [SerializeField] private Enemy _sniperPrefab;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private LayerMask _hitMask;
-    [SerializeField] private float _respawnTime = 15f;
+    [SerializeField] private float _respawnTime;
     private EnemyService _sniperService;
     private Enemy[] _activeSnipers;
     private float[] _respawnTimers;

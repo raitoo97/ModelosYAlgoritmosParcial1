@@ -13,6 +13,10 @@ public class SniperEnemy : Enemy
     {
         return new SniperAttackState(transform, _agent, this, _fsm, playerTransform, Stats, _gunSight, _losMask);
     }
+    protected override IState CreateChaseState(Transform playerTransform)
+    {
+        return new SniperChaseState(transform, _agent, this, _fsm, playerTransform, Stats);
+    }
     public override void Shoot()
     {
         ShotResult result = Model.Shoot(_gunSight.position);
