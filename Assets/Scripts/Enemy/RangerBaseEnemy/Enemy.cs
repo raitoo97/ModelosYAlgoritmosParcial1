@@ -25,12 +25,14 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     protected virtual FlyWeight Stats => FlyWeightPointer.Entity;
     protected EnemyModel Model => _model;
     public Factions Faction => Factions.Enemy;
+    private Rigidbody _rb;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _agent.speed = Stats.speed;
         _playerTransform = GameManager.instance.player.transform;
-        _model = new EnemyModel(GetComponent<Rigidbody>(), _playerTransform, Stats);
+        _rb = GetComponent<Rigidbody>();
+        _model = new EnemyModel(_rb, _playerTransform, Stats);
         _view = CreateView();
         _model.Subscribe(_view);
         _fsm = new FSM();
@@ -113,6 +115,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     public void WarpToPosition(Vector3 position)
     {
         _agent.Warp(position);
+        _rb.position = position;
     }
     private void OnAnimatorIK(int layerIndex)
     {

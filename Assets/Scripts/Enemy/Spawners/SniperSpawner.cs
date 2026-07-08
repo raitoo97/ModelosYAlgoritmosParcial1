@@ -21,11 +21,12 @@ public class SniperSpawner : MonoBehaviour, IObserver<EnemyEvent>, IPauseable
         _activeSnipers = new Enemy[_spawnPoints.Length];
         _respawnTimers = new float[_spawnPoints.Length];
         for (int i = 0; i < _spawnPoints.Length; i++)
+        {
             _activeSnipers[i] = _sniperService.Spawn(_spawnPoints[i].position);
+        }
     }
     private void Update()
     {
-        // Puesto vacio (el sniper murio y volvio al pool) -> corre el timer y respawnea ahi mismo
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
             if (_activeSnipers[i].gameObject.activeSelf) continue;
