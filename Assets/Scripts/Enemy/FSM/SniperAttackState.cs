@@ -47,8 +47,7 @@ public class SniperAttackState : IState
         Vector3 origin = _gunSight.position;
         Vector3 aimDir = (_enemy.GetAimPoint() - origin).normalized;
         // La carga solo avanza si el rayo llega al player sin obstaculos en el medio
-        if (Physics.Raycast(origin, aimDir, out RaycastHit hit, _stats.maxDistance, _losMask, QueryTriggerInteraction.Ignore)
-            && hit.collider.TryGetComponent<Player>(out _))// uso el _ porque descarto el valor de salida, solo me interesa si es player o no
+        if (Physics.Raycast(origin, aimDir, out RaycastHit hit, _stats.maxDistance, _losMask, QueryTriggerInteraction.Ignore)&& hit.collider.TryGetComponent<Player>(out _))// uso el _ porque descarto el valor de salida, solo me interesa si es player o no
         {
             _charge += Time.deltaTime;
             _enemy.UpdateLaser(origin, hit.point, _charge / _stats.coolDown);

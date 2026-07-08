@@ -28,14 +28,22 @@ public class SniperSpawner : MonoBehaviour, IObserver<EnemyEvent>, IPauseable
     }
     private void Update()
     {
+        SpwanSnipers();
+    }
+    private void SpwanSnipers()
+    {
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
-            if (_activeSnipers[i].gameObject.activeSelf) continue;
+            if (_activeSnipers[i] != null && _activeSnipers[i].gameObject.activeSelf) continue;
+            _activeSnipers[i] = null;
             _respawnTimers[i] += Time.deltaTime;
             if (_respawnTimers[i] >= _respawnTime)
             {
                 _respawnTimers[i] = 0;
-                _activeSnipers[i] = _sniperService.Spawn(_spawnPoints[i].position);
+                Enemy spawned = _sniperService.Spawn(_spawnPoints[i].position);
+                for (int j = 0; j < _activeSnipers.Length; j++)
+                    if (j != i && _activeSnipers[j] == spawned) _activeSnipers[j] = null;
+                _activeSnipers[i] = spawned;
             }
         }
     }
