@@ -15,6 +15,7 @@ public class SniperSpawner : MonoBehaviour, IObserver<EnemyEvent>, IPauseable
     {
         IShootStrategy sniperStrategy = new HitscanShootStrategy(
             FlyWeightPointer.Sniper.damage, Factions.Enemy, _hitMask, FlyWeightPointer.Sniper.maxDistance);
+
         _sniperService = new EnemyService(_sniperPrefab, transform, _spawnPoints.Length, this, sniperStrategy);
         SaveManager.instance.Subscribe(_sniperService);
         FillDictionary();

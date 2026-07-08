@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         _agent.speed = Stats.speed;
         _playerTransform = GameManager.instance.player.transform;
         _rb = GetComponent<Rigidbody>();
-        _model = new EnemyModel(_rb, _playerTransform, Stats);
+        _model = CreateModel(_rb, _playerTransform);
         _view = CreateView();
         _model.Subscribe(_view);
         _fsm = new FSM();
@@ -40,13 +40,17 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         _fsm.AddState(FSM.StateID.Attack, CreateAttackState(_playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
     }
-    protected virtual IState CreateAttackState(Transform playerTransform)
-    {
-        return new AttackState(transform, _agent, this, _fsm, playerTransform, Stats);
-    }
     protected virtual EnemyView CreateView()
     {
         return new EnemyView(this);
+    }
+    protected virtual EnemyModel CreateModel(Rigidbody rb, Transform playerTransform)
+    {
+        return new EnemyModel(rb, playerTransform, Stats);
+    }
+    protected virtual IState CreateAttackState(Transform playerTransform)
+    {
+        return new AttackState(transform, _agent, this, _fsm, playerTransform, Stats);
     }
     protected virtual IState CreateChaseState(Transform playerTransform)
     {
