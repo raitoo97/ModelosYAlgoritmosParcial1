@@ -5,15 +5,27 @@ public class EnemyModel : IObservable<EnemyEvent>
     private float _currentLife;
     private bool _isDead;
     private ObserverList<EnemyEvent> _enemyObservers;
-    public EnemyModel(Enemy user)
+    private IShootStrategy _shootStrategy;
+    private Transform _playerTransform;
+    public EnemyModel(Enemy user, Transform playerTransform)
     {
         _enemyObservers = new ObserverList<EnemyEvent>();
         _rb = user.GetComponent<Rigidbody>();
+        _playerTransform = playerTransform;
     }
     public void ResetLife()
     {
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _isDead = false;
+    }
+    public void SetShootStrategy(IShootStrategy strategy)
+    {
+        _shootStrategy = strategy;
+    }
+    public void Shoot(Vector3 origin)
+    {
+        Vector3 dir = (GetAimPoint() - origin).normalized;
+        _shootStrategy?.Shoot(origin, dir);
     }
     public void TakeDamage(float dmg)
     {
@@ -50,6 +62,10 @@ public class EnemyModel : IObservable<EnemyEvent>
     public void NotifyObservers(EnemyEvent action) 
     {
         _enemyObservers.NotifyObservers(action);
+    }
+    public Vector3 GetAimPoint()
+    {
+        return _playerTransform.position + Vector3.up * 1.5f;
     }
     public bool IsDead => _isDead;
     public float CurrentLife => _currentLife;

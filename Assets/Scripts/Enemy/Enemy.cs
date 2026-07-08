@@ -17,27 +17,27 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     private NavMeshAgent _agent;
     private EnemyModel _model;
     private EnemyView _view;
-    private BulletService _bulletService;
     [SerializeField]private Transform _gunSight;
     [SerializeField] private float _deathAnimationDuration = 2f;
     private bool _isDying;
     private Action<Enemy> _returnToPoolCallBack;
+    private Transform _playerTransform;
     public Factions Faction => Factions.Enemy;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _model = new EnemyModel(this);
+        _playerTransform = GameManager.instance.player.transform;
+        _model = new EnemyModel(this, _playerTransform);
         _view = new EnemyView(this);
         _model.Subscribe(_view);
         _fsm = new FSM();
-        Transform playerTransform = GameManager.instance.player.transform;
-        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, playerTransform));
-        _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, playerTransform));
+        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, _playerTransform));
+        _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, _playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
     }
     public void SetBulletService(BulletService bulletService)
     {
-        _bulletService = bulletService;
+        _model.SetShootStrategy(new ProjectileShootStrategy(bulletService, Factions.Enemy, Color.red));
     }
     public void ResetEnemy()
     {
@@ -63,11 +63,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     }
     public void Shoot()
     {
-        Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
-        new BulletBuilder(bullet)
-            .SetColorMaterial(Color.red)
-            .SetOwnerBullet(Factions.Enemy)
-            .Build();
+        _model.Shoot(_gunSight.position);
     }
     public void TakeDamage(float dmg)
     {
@@ -99,6 +95,10 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     public void WarpToPosition(Vector3 position)
     {
         _agent.Warp(position);
+    }
+    private void OnAnimatorIK(int layerIndex)
+    {
+        _view.UpdateAimIK(_model.GetAimPoint());
     }
     private void OnDrawGizmos()
     {

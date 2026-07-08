@@ -5,6 +5,8 @@ public class EnemyView : IObserver<EnemyEvent>
 {
     private Animator _animator;
     private Dictionary<EnemyEvent, Action> _actions;
+    private float _currentAimWeight;
+    private bool _isAiming;
     public EnemyView(Enemy user)
     {
         _animator = user.GetComponent<Animator>();
@@ -13,10 +15,36 @@ public class EnemyView : IObserver<EnemyEvent>
     }
     private void FillDictionary()
     {
-        _actions.Add(EnemyEvent.EnemyDie, OnEnemyDeath);
-        _actions.Add(EnemyEvent.Run, () => SetRunning(true));
-        _actions.Add(EnemyEvent.Aim, () => SetRunning(false));
+        _actions.Add(EnemyEvent.EnemyDie, () =>
+        {
+            _isAiming = false;
+            OnEnemyDeath();
+        });
+        _actions.Add(EnemyEvent.Run, () =>
+        {
+            _isAiming = false;
+            SetRunning(true);
+        });
+        _actions.Add(EnemyEvent.Aim, () =>
+        {
+            _isAiming = true;
+            SetRunning(false);
+        });
         _actions.Add(EnemyEvent.Reset, ResetView);
+    }
+    public void UpdateAimIK(Vector3 aimPoint)
+    {
+        if (_animator == null) return;
+        float targetWeight = _isAiming ? 1f : 0f;
+        _currentAimWeight = Mathf.Lerp(_currentAimWeight, targetWeight, Time.deltaTime * 8f);
+        _animator.SetLookAtPosition(aimPoint);
+        _animator.SetLookAtWeight(
+            weight: _currentAimWeight,
+            bodyWeight: 0.3f,
+            headWeight: 0.7f,
+            eyesWeight: 0f,
+            clampWeight: 0.2f
+        );
     }
     private void OnEnemyDeath()
     {
