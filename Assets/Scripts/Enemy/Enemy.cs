@@ -1,9 +1,13 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 public enum EnemyEvent
 {
-    EnemyDie
+    EnemyDie,
+    Run,
+    Aim,
+    Reset
 }
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NavMeshAgent))]
@@ -13,34 +17,40 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     private NavMeshAgent _agent;
     private EnemyModel _model;
     private EnemyView _view;
-    [SerializeField] private Bullet _bulletPrefab;
-    private BulletService _bulletService;
     [SerializeField]private Transform _gunSight;
-    private int _initPoolSize = 50;
+    [SerializeField] private float _deathAnimationDuration = 2f;
+    private bool _isDying;
     private Action<Enemy> _returnToPoolCallBack;
+    private Transform _playerTransform;
     public Factions Faction => Factions.Enemy;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
-        _model = new EnemyModel(this);
+        _playerTransform = GameManager.instance.player.transform;
+        _model = new EnemyModel(GetComponent<Rigidbody>(), _playerTransform);
         _view = new EnemyView(this);
         _model.Subscribe(_view);
         _fsm = new FSM();
-        _bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _initPoolSize);
-        Transform playerTransform = GameManager.instance.player.transform;
-        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, playerTransform));
-        _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, playerTransform));
+        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, _playerTransform));
+        _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, _playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
+    }
+    public void SetShootStrategy(IShootStrategy strategy)
+    {
+        _model.SetShootStrategy(strategy);
     }
     public void ResetEnemy()
     {
+        _isDying = false;
         _model.ResetLife();
+        _model.NotifyObservers(EnemyEvent.Reset);
         if (_agent.hasPath)
             _agent.ResetPath();
         _fsm.ChangeState(FSM.StateID.Chase);
     }
     void Update()
     {
+        if (_isDying) return;
         _fsm.onUpdateState();
     }
     public void Rotate(Vector3 direction)
@@ -53,21 +63,42 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     }
     public void Shoot()
     {
-        Bullet bullet = _bulletService.Shoot(_gunSight.position, _gunSight.rotation);
-        new BulletBuilder(bullet)
-            .SetColorMaterial(Color.red)
-            .SetOwnerBullet(Factions.Enemy)
-            .Build();
+        _model.Shoot(_gunSight.position);
     }
     public void TakeDamage(float dmg)
     {
+        if (_isDying) return;
         _model.TakeDamage(dmg);
         if (_model.IsDead)
-            _returnToPoolCallBack?.Invoke(this);
+            StartCoroutine(DeathRoutine());
+    }
+    // Espera a que termine la animacion de muerte antes de devolverlo al pool.
+    private IEnumerator DeathRoutine()
+    {
+        _isDying = true;
+        if (_agent.enabled && _agent.isOnNavMesh)
+        {
+            _agent.ResetPath();
+            _agent.isStopped = true;
+        }
+        yield return new WaitForSeconds(_deathAnimationDuration);
+        _returnToPoolCallBack?.Invoke(this);
+    }
+    public void PlayRunAnimation()
+    {
+        _model.NotifyObservers(EnemyEvent.Run);
+    }
+    public void PlayAimAnimation()
+    {
+        _model.NotifyObservers(EnemyEvent.Aim);
     }
     public void WarpToPosition(Vector3 position)
     {
         _agent.Warp(position);
+    }
+    private void OnAnimatorIK(int layerIndex)
+    {
+        _view.UpdateAimIK(_model.GetAimPoint());
     }
     private void OnDrawGizmos()
     {
@@ -94,7 +125,10 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     {
         gameObject.SetActive(memory.isActive);
         if (!memory.isActive) return;
+        _isDying = false;
         _model.RestoreLife(memory.life, memory.isDead);
+        if (!memory.isDead)
+            _model.NotifyObservers(EnemyEvent.Reset);
         _agent.Warp(memory.position);
         transform.rotation = memory.rotation;
         _fsm.ChangeState(memory.currentState);

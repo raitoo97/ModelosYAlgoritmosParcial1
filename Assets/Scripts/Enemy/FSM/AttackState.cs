@@ -20,6 +20,7 @@ public class AttackState : IState
     {
         _agent.isStopped = true;
         _timer = 0;
+        _enemy.PlayAimAnimation();
     }
     public void OnExit()
     {

@@ -5,15 +5,20 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
 {
     private Pool<Enemy> _pool;
     private EnemyFactory _factory;
+    private BulletService _bulletService;
     private IObserver<EnemyEvent> _observer;
     private List<Enemy> _allEnemies = new List<Enemy>();
     private MementoState<List<EnemyMemento>> _enemiesMemento;
     private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
-    public EnemyService(Enemy prefab, Transform parent, int size , IObserver<EnemyEvent> observer)
+    private IShootStrategy _shootStrategy;
+
+    public EnemyService(Enemy prefab, Transform parent, int size , IObserver<EnemyEvent> observer, Bullet bulletPrefab, int bulletPoolSize)
     {
         _factory = new EnemyFactory(prefab, parent);
         _observer = observer;
         _enemiesMemento = new MementoState<List<EnemyMemento>>();
+        _bulletService = new BulletService(bulletPrefab, GameManager.instance._projectilesParent, bulletPoolSize);
+        _shootStrategy = new ProjectileShootStrategy(_bulletService, Factions.Enemy, Color.red);
         FillDictionary();
         _pool = new Pool<Enemy>(CreateEnemy, TurnOn, TurnOff, size);
     }
@@ -21,6 +26,7 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
     {
         Enemy enemy = _factory.CreateObject();
         enemy.SetReturnToPoolCallBack(ReturnToPool);
+        enemy.SetShootStrategy(_shootStrategy);
         enemy.Subscribe(_observer);
         _allEnemies.Add(enemy);
         return enemy;

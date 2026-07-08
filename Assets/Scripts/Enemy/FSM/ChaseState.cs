@@ -18,6 +18,7 @@ public class ChaseState : IState
     public void OnEnter()
     {
         _agent.isStopped = false;
+        _enemy.PlayRunAnimation();
     }
     public void OnExit()
     {

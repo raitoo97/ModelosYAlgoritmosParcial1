@@ -5,15 +5,27 @@ public class EnemyModel : IObservable<EnemyEvent>
     private float _currentLife;
     private bool _isDead;
     private ObserverList<EnemyEvent> _enemyObservers;
-    public EnemyModel(Enemy user)
+    private IShootStrategy _shootStrategy;
+    private Transform _playerTransform;
+    public EnemyModel(Rigidbody rb, Transform playerTransform)
     {
         _enemyObservers = new ObserverList<EnemyEvent>();
-        _rb = user.GetComponent<Rigidbody>();
+        _rb = rb;
+        _playerTransform = playerTransform;
     }
     public void ResetLife()
     {
         _currentLife = FlyWeightPointer.Entity.maxLife;
         _isDead = false;
+    }
+    public void SetShootStrategy(IShootStrategy strategy)
+    {
+        _shootStrategy = strategy;
+    }
+    public void Shoot(Vector3 origin)
+    {
+        Vector3 dir = (GetAimPoint() - origin).normalized;
+        _shootStrategy?.Shoot(origin, dir);
     }
     public void TakeDamage(float dmg)
     {
@@ -23,7 +35,6 @@ public class EnemyModel : IObservable<EnemyEvent>
         {
             _currentLife = 0;
             _isDead = true;
-            EventManager.TriggerEvent(EventType.EnemyKilled, 1);
             NotifyObservers(EnemyEvent.EnemyDie);
         }
     }
@@ -32,7 +43,7 @@ public class EnemyModel : IObservable<EnemyEvent>
         Vector3 dirRot = new Vector3(direction.x, 0, direction.z).normalized;
         if (dirRot.sqrMagnitude <= 0.001f) return;
         Quaternion rotDir = Quaternion.LookRotation(dirRot);
-        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, rotDir, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime));
+        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, rotDir, FlyWeightPointer.Projectile.rotateSpeed * Time.deltaTime));
     }
     public void RestoreLife(float life, bool isDead)
     {
@@ -50,6 +61,10 @@ public class EnemyModel : IObservable<EnemyEvent>
     public void NotifyObservers(EnemyEvent action) 
     {
         _enemyObservers.NotifyObservers(action);
+    }
+    public Vector3 GetAimPoint()
+    {
+        return _playerTransform.position + Vector3.up * 1.5f;
     }
     public bool IsDead => _isDead;
     public float CurrentLife => _currentLife;

@@ -8,6 +8,8 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     private float _radius = 10f;
     private int _poolSize = 20;
     private EnemyService _enemyService;
+    [SerializeField] private Bullet _bulletPrefab;
+    [SerializeField] private int _bulletPoolSize = 50;
     private float _timer;
     private Dictionary<EnemyEvent, Action> _actions = new Dictionary<EnemyEvent, Action>();
     private int _enemyKills;
@@ -15,7 +17,7 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     private float _minSpawnRate = 1f;
     private void Start()
     {
-        _enemyService = new EnemyService(_enemyPrefab, this.transform, _poolSize,this);
+        _enemyService = new EnemyService(_enemyPrefab, this.transform, _poolSize,this, _bulletPrefab, _bulletPoolSize);
         SaveManager.instance.Subscribe(_enemyService);
         FillDictionary();
     }
@@ -34,6 +36,7 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     }
     private void IncreaseEnemyKilled()
     {
+        EventManager.TriggerEvent(EventType.EnemyKilled, 1);
         _enemyKills++;
         if (_enemyKills % _killsPerDifficultyIncrease == 0)
         {
