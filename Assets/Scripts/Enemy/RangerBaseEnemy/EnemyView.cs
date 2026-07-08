@@ -46,7 +46,7 @@ public class EnemyView : IObserver<EnemyEvent>
             clampWeight: 0.2f
         );
     }
-    private void OnEnemyDeath()
+    protected virtual void OnEnemyDeath()
     {
         if (_animator == null) return;
         _animator.SetTrigger("OnDeath");
@@ -58,7 +58,7 @@ public class EnemyView : IObserver<EnemyEvent>
     }
     // El estado Death no tiene transiciones de salida: al reutilizar el enemigo
     // del pool hay que forzar al animator a volver al estado inicial.
-    private void ResetView()
+    protected virtual void ResetView()
     {
         if (_animator == null) return;
         _animator.ResetTrigger("OnDeath");

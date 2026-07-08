@@ -24,10 +24,10 @@ public class EnemyModel : IObservable<EnemyEvent>
     {
         _shootStrategy = strategy;
     }
-    public void Shoot(Vector3 origin)
+    public ShotResult Shoot(Vector3 origin)
     {
         Vector3 dir = (GetAimPoint() - origin).normalized;
-        _shootStrategy?.Shoot(origin, dir);
+        return _shootStrategy?.Shoot(origin, dir) ?? default;
     }
     public void TakeDamage(float dmg)
     {

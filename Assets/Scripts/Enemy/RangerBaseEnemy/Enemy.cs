@@ -23,6 +23,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     private Action<Enemy> _returnToPoolCallBack;
     private Transform _playerTransform;
     protected virtual FlyWeight Stats => FlyWeightPointer.Entity;
+    protected EnemyModel Model => _model;
     public Factions Faction => Factions.Enemy;
     private void Awake()
     {
@@ -30,16 +31,24 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         _agent.speed = Stats.speed;
         _playerTransform = GameManager.instance.player.transform;
         _model = new EnemyModel(GetComponent<Rigidbody>(), _playerTransform, Stats);
-        _view = new EnemyView(this);
+        _view = CreateView();
         _model.Subscribe(_view);
         _fsm = new FSM();
-        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, _playerTransform, Stats));
+        _fsm.AddState(FSM.StateID.Chase, CreateChaseState(_playerTransform));
         _fsm.AddState(FSM.StateID.Attack, CreateAttackState(_playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
     }
     protected virtual IState CreateAttackState(Transform playerTransform)
     {
         return new AttackState(transform, _agent, this, _fsm, playerTransform, Stats);
+    }
+    protected virtual EnemyView CreateView()
+    {
+        return new EnemyView(this);
+    }
+    protected virtual IState CreateChaseState(Transform playerTransform)
+    {
+        return new ChaseState(transform, _agent, this, _fsm, playerTransform, Stats);
     }
     public void SetShootStrategy(IShootStrategy strategy)
     {
@@ -67,9 +76,13 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     {
         _returnToPoolCallBack = returnToPoolCallBack;
     }
-    public void Shoot()
+    public virtual void Shoot()  
     {
         _model.Shoot(_gunSight.position);
+    }
+    public Vector3 GetAimPoint()
+    {
+        return _model.GetAimPoint();
     }
     public void TakeDamage(float dmg)
     {
@@ -78,7 +91,6 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         if (_model.IsDead)
             StartCoroutine(DeathRoutine());
     }
-    // Espera a que termine la animacion de muerte antes de devolverlo al pool.
     private IEnumerator DeathRoutine()
     {
         _isDying = true;
