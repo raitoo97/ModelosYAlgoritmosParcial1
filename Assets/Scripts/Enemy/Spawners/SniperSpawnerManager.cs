@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class SniperSpawner : MonoBehaviour, IObserver<EnemyEvent>, IPauseable
+public class SniperSpawnerManager : MonoBehaviour, IObserver<EnemyEvent>, IPauseable
 {
     [SerializeField] private Enemy _sniperPrefab;
     [SerializeField] private Transform[] _spawnPoints;

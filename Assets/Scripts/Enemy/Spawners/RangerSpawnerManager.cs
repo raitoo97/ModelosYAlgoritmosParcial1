@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class RangerSpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
+public class RangerSpawnerManager : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
 {
     [SerializeField] private Enemy _enemyPrefab;
     private float _spawnRate = 5f;
