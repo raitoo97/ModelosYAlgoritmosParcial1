@@ -11,6 +11,10 @@ public class SniperSpawnerManager : MonoBehaviour, IObserver<EnemyEvent>, IPause
     private Enemy[] _activeSnipers;
     private float[] _respawnTimers;
     private Dictionary<EnemyEvent, Action> _actions = new Dictionary<EnemyEvent, Action>();
+    private int _sniperKills;
+    private int _killsPerDifficultyIncrease = 5;
+    private float _respawnTimeDecrease = 1f;
+    private float _minRespawnTime = 1f;
     private void Start()
     {
         IShootStrategy sniperStrategy = new HitscanShootStrategy(
@@ -53,7 +57,12 @@ public class SniperSpawnerManager : MonoBehaviour, IObserver<EnemyEvent>, IPause
     }
     private void OnSniperKilled()
     {
-        EventManager.TriggerEvent(EventType.EnemyKilled, 1); // cuenta para la UI, no para la dificultad del ranger
+        EventManager.TriggerEvent(EventType.EnemyKilled, 1);
+        _sniperKills++;
+        if (_sniperKills % _killsPerDifficultyIncrease == 0)
+        {
+            _respawnTime = Mathf.Max(_minRespawnTime, _respawnTime - _respawnTimeDecrease);
+        }
     }
     public void Notify(EnemyEvent Actions)
     {
