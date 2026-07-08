@@ -13,27 +13,33 @@ public enum EnemyEvent
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
 {
-    private FSM _fsm;
-    private NavMeshAgent _agent;
+    protected FSM _fsm;
+    protected NavMeshAgent _agent;
     private EnemyModel _model;
     private EnemyView _view;
-    [SerializeField]private Transform _gunSight;
-    [SerializeField] private float _deathAnimationDuration = 2f;
+    [SerializeField]protected Transform _gunSight;
+    [SerializeField]private float _deathAnimationDuration = 2f;
     private bool _isDying;
     private Action<Enemy> _returnToPoolCallBack;
     private Transform _playerTransform;
+    protected virtual FlyWeight Stats => FlyWeightPointer.Entity;
     public Factions Faction => Factions.Enemy;
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
+        _agent.speed = Stats.speed;
         _playerTransform = GameManager.instance.player.transform;
-        _model = new EnemyModel(GetComponent<Rigidbody>(), _playerTransform);
+        _model = new EnemyModel(GetComponent<Rigidbody>(), _playerTransform, Stats);
         _view = new EnemyView(this);
         _model.Subscribe(_view);
         _fsm = new FSM();
-        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, _playerTransform));
-        _fsm.AddState(FSM.StateID.Attack, new AttackState(transform, _agent, this, _fsm, _playerTransform));
+        _fsm.AddState(FSM.StateID.Chase, new ChaseState(transform, _agent, this, _fsm, _playerTransform, Stats));
+        _fsm.AddState(FSM.StateID.Attack, CreateAttackState(_playerTransform));
         _fsm.ChangeState(FSM.StateID.Chase);
+    }
+    protected virtual IState CreateAttackState(Transform playerTransform)
+    {
+        return new AttackState(transform, _agent, this, _fsm, playerTransform, Stats);
     }
     public void SetShootStrategy(IShootStrategy strategy)
     {
@@ -103,7 +109,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(this.transform.position, FlyWeightPointer.Entity.maxDistance);
+        Gizmos.DrawWireSphere(this.transform.position, Stats.maxDistance);
     }
     public void Subscribe(IObserver<EnemyEvent> observer)
     {

@@ -1,15 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
+public class RangerSpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
 {
     [SerializeField] private Enemy _enemyPrefab;
     private float _spawnRate = 5f;
     private float _radius = 10f;
     private int _poolSize = 20;
     private EnemyService _enemyService;
-    [SerializeField] private Bullet _bulletPrefab;
-    [SerializeField] private int _bulletPoolSize = 50;
+    [SerializeField]private Bullet _bulletPrefab;
+    [SerializeField]private int _bulletPoolSize = 50;
     private float _timer;
     private Dictionary<EnemyEvent, Action> _actions = new Dictionary<EnemyEvent, Action>();
     private int _enemyKills;
@@ -17,7 +17,9 @@ public class EnemySpawner : MonoBehaviour , IObserver<EnemyEvent> ,IPauseable
     private float _minSpawnRate = 1f;
     private void Start()
     {
-        _enemyService = new EnemyService(_enemyPrefab, this.transform, _poolSize,this, _bulletPrefab, _bulletPoolSize);
+        BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _bulletPoolSize);
+        IShootStrategy enemyStrategy = new ProjectileShootStrategy(bulletService, Factions.Enemy, Color.red);
+        _enemyService = new EnemyService(_enemyPrefab, this.transform, _poolSize, this, enemyStrategy);
         SaveManager.instance.Subscribe(_enemyService);
         FillDictionary();
     }

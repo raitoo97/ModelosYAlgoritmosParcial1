@@ -7,13 +7,15 @@ public class ChaseState : IState
     private FSM _fsm;
     private Enemy _enemy;
     private Transform _playerTransform;
-    public ChaseState(Transform transform, NavMeshAgent agent, Enemy enemy, FSM fsm,Transform playerTransform)
+    private FlyWeight _stats;
+    public ChaseState(Transform transform, NavMeshAgent agent, Enemy enemy, FSM fsm,Transform playerTransform, FlyWeight stats)
     {
         _transform = transform;
         _agent = agent;
         _enemy = enemy;
         _fsm = fsm;
         _playerTransform = playerTransform;
+        _stats = stats;
     }
     public void OnEnter()
     {
@@ -27,7 +29,7 @@ public class ChaseState : IState
     {
         var dir = _playerTransform.position - _transform.position;
         var distance = dir.magnitude;
-        if (distance < FlyWeightPointer.Entity.maxDistance)
+        if (distance < _stats.maxDistance)
         {
             _fsm.ChangeState(FSM.StateID.Attack);
             return;

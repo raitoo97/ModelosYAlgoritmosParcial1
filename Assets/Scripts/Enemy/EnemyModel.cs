@@ -7,15 +7,17 @@ public class EnemyModel : IObservable<EnemyEvent>
     private ObserverList<EnemyEvent> _enemyObservers;
     private IShootStrategy _shootStrategy;
     private Transform _playerTransform;
-    public EnemyModel(Rigidbody rb, Transform playerTransform)
+    private FlyWeight _stats;
+    public EnemyModel(Rigidbody rb, Transform playerTransform, FlyWeight stats)
     {
         _enemyObservers = new ObserverList<EnemyEvent>();
         _rb = rb;
         _playerTransform = playerTransform;
+        _stats = stats;
     }
     public void ResetLife()
     {
-        _currentLife = FlyWeightPointer.Entity.maxLife;
+        _currentLife = _stats.maxLife;
         _isDead = false;
     }
     public void SetShootStrategy(IShootStrategy strategy)
@@ -43,7 +45,7 @@ public class EnemyModel : IObservable<EnemyEvent>
         Vector3 dirRot = new Vector3(direction.x, 0, direction.z).normalized;
         if (dirRot.sqrMagnitude <= 0.001f) return;
         Quaternion rotDir = Quaternion.LookRotation(dirRot);
-        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, rotDir, FlyWeightPointer.Projectile.rotateSpeed * Time.deltaTime));
+        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, rotDir, _stats.rotateSpeed * Time.deltaTime));
     }
     public void RestoreLife(float life, bool isDead)
     {
