@@ -1,40 +1,40 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-public class SniperSpawnerManager : MonoBehaviour, IObserver<EnemyEvent>, IPauseable
+public class SniperSpawnerManager : EnemySpawnerManager
 {
-    [SerializeField] private Enemy _sniperPrefab;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private LayerMask _hitMask;
     [SerializeField] private float _respawnTime;
-    private EnemyService _sniperService;
+    [SerializeField] private float _respawnTimeDecrease = 1f;
+    [SerializeField] private float _minRespawnTime = 1f;
     private Enemy[] _activeSnipers;
     private float[] _respawnTimers;
-    private Dictionary<EnemyEvent, Action> _actions = new Dictionary<EnemyEvent, Action>();
-    private int _sniperKills;
-    private int _killsPerDifficultyIncrease = 5;
-    private float _respawnTimeDecrease = 1f;
-    private float _minRespawnTime = 1f;
-    private void Start()
+    protected override void Start()
     {
-        IShootStrategy sniperStrategy = new HitscanShootStrategy(
-            FlyWeightPointer.Sniper.damage, Factions.Enemy, _hitMask, FlyWeightPointer.Sniper.maxDistance);
-
-        _sniperService = new EnemyService(_sniperPrefab, transform, _spawnPoints.Length, this, sniperStrategy);
-        SaveManager.instance.Subscribe(_sniperService);
-        FillDictionary();
+        base.Start(); // la base crea el EnemyService y se suscribe al SaveManager
         _activeSnipers = new Enemy[_spawnPoints.Length];
         _respawnTimers = new float[_spawnPoints.Length];
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
-            _activeSnipers[i] = _sniperService.Spawn(_spawnPoints[i].position);
+            _activeSnipers[i] = _enemyService.Spawn(_spawnPoints[i].position);
         }
+    }
+    protected override IShootStrategy CreateShootStrategy()
+    {
+        return new HitscanShootStrategy(FlyWeightPointer.Sniper.damage, Factions.Enemy, _hitMask, FlyWeightPointer.Sniper.maxDistance);
+    }
+    protected override int GetPoolSize()
+    {
+        return _spawnPoints.Length;
+    }
+    protected override void IncreaseDifficulty()
+    {
+        _respawnTime = Mathf.Max(_minRespawnTime, _respawnTime - _respawnTimeDecrease);
     }
     private void Update()
     {
-        SpwanSnipers();
+        SpawnSnipers();
     }
-    private void SpwanSnipers()
+    private void SpawnSnipers()
     {
         for (int i = 0; i < _spawnPoints.Length; i++)
         {
@@ -44,35 +44,11 @@ public class SniperSpawnerManager : MonoBehaviour, IObserver<EnemyEvent>, IPause
             if (_respawnTimers[i] >= _respawnTime)
             {
                 _respawnTimers[i] = 0;
-                Enemy spawned = _sniperService.Spawn(_spawnPoints[i].position);
+                Enemy spawned = _enemyService.Spawn(_spawnPoints[i].position);
                 for (int j = 0; j < _activeSnipers.Length; j++)
                     if (j != i && _activeSnipers[j] == spawned) _activeSnipers[j] = null;
                 _activeSnipers[i] = spawned;
             }
         }
-    }
-    private void FillDictionary()
-    {
-        _actions.Add(EnemyEvent.EnemyDie, OnSniperKilled);
-    }
-    private void OnSniperKilled()
-    {
-        EventManager.TriggerEvent(EventType.EnemyKilled, 1);
-        _sniperKills++;
-        if (_sniperKills % _killsPerDifficultyIncrease == 0)
-        {
-            _respawnTime = Mathf.Max(_minRespawnTime, _respawnTime - _respawnTimeDecrease);
-        }
-    }
-    public void Notify(EnemyEvent Actions)
-    {
-        if (_actions.ContainsKey(Actions))
-            _actions[Actions].Invoke();
-    }
-    public void Pause() { enabled = false; }
-    public void Resume() { enabled = true; }
-    private void OnDestroy()
-    {
-        SaveManager.instance.Unsubscribe(_sniperService);
     }
 }

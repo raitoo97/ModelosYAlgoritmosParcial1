@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 117220942}
   - component: {fileID: 117220943}
   m_Layer: 0
-  m_Name: SniperSpawn
+  m_Name: SniperSpawnManager
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -349,11 +349,11 @@ Transform:
   m_GameObject: {fileID: 117220941}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.76, y: 0, z: -8.68}
+  m_LocalPosition: {x: -0.14456224, y: -1.3667935, z: 5.572028}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 164945402}
+  m_Father: {fileID: 1920595093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &117220943
 MonoBehaviour:
@@ -367,7 +367,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5eea702f62f59f64bb1bda13710ea182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sniperPrefab: {fileID: 5563108817560274627, guid: 13a2ca83ea35e8d4e816e3ed9dd60b38, type: 3}
+  _enemyPrefab: {fileID: 5563108817560274627, guid: 13a2ca83ea35e8d4e816e3ed9dd60b38, type: 3}
+  _killsPerDifficultyIncrease: 5
   _spawnPoints:
   - {fileID: 55523060}
   - {fileID: 40860751}
@@ -377,6 +378,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 193
   _respawnTime: 5
+  _respawnTimeDecrease: 1
+  _minRespawnTime: 1
 --- !u!1 &145314491
 GameObject:
   m_ObjectHideFlags: 0
@@ -523,8 +526,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 953963703}
-  - {fileID: 1155634307}
-  - {fileID: 117220942}
   - {fileID: 1920595093}
   - {fileID: 102500044}
   - {fileID: 319548951}
@@ -790,7 +791,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -816,8 +817,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.67817646, y: -0.16332595, z: 0.1585133, w: 0.69876677}
-  m_LocalPosition: {x: -0.95, y: 2.28, z: -15.41}
+  m_LocalRotation: {x: -0.004809027, y: -0.050510347, z: -0.00024321892, w: 0.99871194}
+  m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1923,12 +1924,12 @@ GameObject:
   - component: {fileID: 1155634307}
   - component: {fileID: 1155634308}
   m_Layer: 0
-  m_Name: RangerEnemySpawn
+  m_Name: RangerEnemySpawnManager
   m_TagString: Untagged
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1155634307
 Transform:
   m_ObjectHideFlags: 0
@@ -1938,11 +1939,11 @@ Transform:
   m_GameObject: {fileID: 1155634306}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -8.68}
+  m_LocalPosition: {x: 3.6154377, y: -1.3667935, z: 5.572028}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 164945402}
+  m_Father: {fileID: 1920595093}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1155634308
 MonoBehaviour:
@@ -1957,8 +1958,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2131018919323893079, guid: 1d4488344b416c744b74be5addfcc1c8, type: 3}
+  _killsPerDifficultyIncrease: 5
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _bulletPoolSize: 50
+  _poolSize: 20
+  _spawnRate: 5
+  _spawnRateDecrease: 1
+  _minSpawnRate: 1
+  _radius: 10
+  _spawnHeight: 1.5
 --- !u!1 &1186505534
 GameObject:
   m_ObjectHideFlags: 0
@@ -9324,7 +9332,9 @@ Transform:
   m_LocalPosition: {x: -3.6154377, y: 1.3667935, z: -14.252028}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1155634307}
+  - {fileID: 117220942}
   m_Father: {fileID: 164945402}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1920595094
