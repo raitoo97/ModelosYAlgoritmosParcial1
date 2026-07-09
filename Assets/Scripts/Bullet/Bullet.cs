@@ -29,6 +29,7 @@ public class Bullet : MonoBehaviour
     {
         if(other.TryGetComponent<IDamageable>(out var entity))
         {
+            //si el objeto que colisiona es del mismo bando,no hace nada
             if (!ShouldHit(other)) return;
             entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
             ReturnToPool();
