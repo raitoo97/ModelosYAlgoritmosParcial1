@@ -70,16 +70,15 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void CycleShootType(int step)
     {
-        // Cambio el índice del tipo de disparo de forma circular.
+        // Cambio el indice del tipo de disparo de forma circular.
         // step = 1  -> siguiente tipo.
         // step = -1 -> tipo anterior.
-        // Ejemplo con 4 estrategias (indices 0,1,2,3):
-        // Si estoy en 3 y avanzo:
-        // (3 + 1 + 4) % 4 = 8 % 4 = 0  -> vuelve al primero.
-        // Si estoy en 0 y retrocedo:
-        // (0 - 1 + 4) % 4 = 3 % 4 = 3  -> vuelve al último.
-        // Sumar Count evita índices negativos y el módulo (%) mantiene
-        // el resultado siempre entre 0 y Count - 1.
+        // Ejemplo con 2 estrategias (0 = Pistola, 1 = Escopeta):
+        // (0 + 1 + 2) % 2 = 1 -> pasa a Escopeta.
+        // (1 + 1 + 2) % 2 = 0 -> vuelve a Pistola.
+        // (0 - 1 + 2) % 2 = 1 -> retrocede a Escopeta.
+        // Sumar Count evita indices negativos y el modulo (%) mantiene
+        // el indice siempre entre 0 y Count - 1.
         _currentShootType = (_currentShootType + step + _shootTypes.Count) % _shootTypes.Count;
         ShootType current = _shootTypes[_currentShootType];
         _model.SetShootStrategy(current.strategy, current.showLaser);
