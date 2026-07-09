@@ -65,6 +65,7 @@ public class EnemyModel : IObservable<EnemyEvent>
         _enemyObservers.NotifyObservers(action);
     }
     //lo llama el mismo model para el shoot
+    //lo llama el Enemy para el OnAnimatorIK del EnemyView y para el attackState del Sniper
     public Vector3 GetAimPoint()
     {
         return _playerTransform.position + Vector3.up * 1.5f;
