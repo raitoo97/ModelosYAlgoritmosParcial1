@@ -64,8 +64,6 @@ public class EnemyModel : IObservable<EnemyEvent>
     {
         _enemyObservers.NotifyObservers(action);
     }
-    //lo llama enemy para el sniperattack para el OnUpdate
-    //lo llama enemy para el enemyview para el OnAnimatorIK 
     //lo llama el mismo model para el shoot
     public Vector3 GetAimPoint()
     {

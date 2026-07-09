@@ -370,9 +370,6 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 5563108817560274627, guid: 13a2ca83ea35e8d4e816e3ed9dd60b38, type: 3}
   _killsPerDifficultyIncrease: 5
   _spawnPoints:
-  - {fileID: 55523060}
-  - {fileID: 40860751}
-  - {fileID: 1037440399}
   - {fileID: 1880590110}
   _hitMask:
     serializedVersion: 2

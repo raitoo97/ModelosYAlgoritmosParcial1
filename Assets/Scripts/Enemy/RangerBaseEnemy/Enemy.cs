@@ -87,6 +87,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         _model.Shoot(_gunSight.position);
     }
     //Lo usa solo SniperAttackState para obtener el punto de mira del player
+    //se usa para el OnAnimatorIK del Enemyview
     public Vector3 GetAimPoint()
     {
         return _model.GetAimPoint();
@@ -124,7 +125,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     }
     private void OnAnimatorIK(int layerIndex)
     {
-        _view.UpdateAimIK(_model.GetAimPoint());
+        _view.UpdateAimIK(GetAimPoint());
     }
     private void OnDrawGizmos()
     {
