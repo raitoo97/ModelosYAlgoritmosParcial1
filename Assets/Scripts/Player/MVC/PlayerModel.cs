@@ -7,12 +7,12 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private float _currentLife;
     private ObserverList<PlayerEvent> _playerObservers = new ObserverList<PlayerEvent>();
     private bool _isDead;
+    private bool _isMoving;
     private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
     private MementoState<PlayerMemento> _playerMemento;
     private Vector3 _pausedVelocity;
     private Transform _cameraReference;
     private bool _isAiming;
-    private float _aimDistance = 100f;
     private Dictionary<bool, IRotationStrategy> _rotationStrategies;
     private IRotationStrategy _currentRotation;
     private LayerMask _aimMask;
@@ -20,7 +20,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
-        _currentLife = FlyWeightPointer.Entity.maxLife;
+        _currentLife = FlyWeightPointer.Player.maxLife;
         _playerMemento = new MementoState<PlayerMemento>();
         _aimMask = aimMask;
         _cameraReference = cameraReference;
@@ -43,9 +43,15 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         {
             float targetRotation = GetTargetRotation(direction);
             Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
-            Vector3 moveVelocity = targetDirection * FlyWeightPointer.Entity.speed;
+            Vector3 moveVelocity = targetDirection * FlyWeightPointer.Player.speed;
             _rb.MovePosition(_rb.position + moveVelocity * Time.fixedDeltaTime);
         }
+        SetMoving(isMoving);
+    }
+    private void SetMoving(bool isMoving)
+    {
+        if (isMoving == _isMoving) return;
+        _isMoving = isMoving;
         NotifyObservers(isMoving ? PlayerEvent.Move : PlayerEvent.Idle);
     }
     public void Rotate(Vector3 direction)
@@ -73,7 +79,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         if (_isDead) return;
         _currentLife -= dmg;
-        float normalizedLife = _currentLife / FlyWeightPointer.Entity.maxLife;
+        float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
         EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
         if (_currentLife <= 0)
         {
@@ -124,8 +130,9 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         _rb.rotation = memory.rotation;
         _currentLife = memory.life;
         _isDead = memory.isDead;
-        float normalizedLife = _currentLife / FlyWeightPointer.Entity.maxLife;
+        float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
         EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+        _isMoving = false;
         NotifyObservers(_isDead ? PlayerEvent.Death : PlayerEvent.Idle);
     }
     public void TryLoadStates()
@@ -136,6 +143,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     public void Pause()
     {
+        _isMoving = false;
         NotifyObservers(PlayerEvent.Idle);
     }
     public void PausePhysics()
@@ -166,10 +174,11 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     //  - Player.OnAnimatorIK()   -> UpdateAimIK, el LookAt del torso/cabeza (rotacion via IK).
     public Vector3 GetAimPoint()
     {
+        float aimDistance = FlyWeightPointer.Player.maxDistance;
         Ray ray = new Ray(_cameraReference.position, _cameraReference.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, _aimDistance, _aimMask, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(ray, out RaycastHit hit, aimDistance, _aimMask, QueryTriggerInteraction.Ignore))
             return hit.point;
-        return _cameraReference.position + _cameraReference.forward * _aimDistance;
+        return _cameraReference.position + _cameraReference.forward * aimDistance;
     }
     public bool GetAiming => _isAiming;
 }

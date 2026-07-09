@@ -9,11 +9,11 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private GunModel _model;
     private GunView _view;
     private int _currentShootType;
+    private IAimPointProvider _aimPointProvider;
     [Header("DisparoRayCast")]
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private ParticleSystem _impactEffect;
     [SerializeField] private LayerMask _hitMask;
-    [SerializeField] private float _maxShootDistance = 100f;
     [SerializeField] private float _damageMultiplier = 4f;
     [SerializeField] private LineRenderer _laser;
     [SerializeField] private Transform _laserDot;
@@ -25,15 +25,27 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private float _pelletDamageMultiplier = 0.8f;
     // Celeste para distinguirlas de las rojas del Ranger y naranjas del Shotgunner.
     [SerializeField] private Color _spreadBulletColor = new Color(0.3f, 0.8f, 1f);
+    public void Init(IAimPointProvider aimPointProvider)
+    {
+        _aimPointProvider = aimPointProvider;
+    }
     private void Start()
+    {
+        _shootTypes = CreateShootTypes();
+        _currentShootType = 0;
+        _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _hitMask, FlyWeightPointer.Player.maxDistance);
+        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
+        FillDictionary();
+    }
+    private List<ShootType> CreateShootTypes()
     {
         // Pool de balas propio del gun, mismo patron que usan los spawners enemigos.
         BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _bulletPoolSize);
-        _shootTypes = new List<ShootType>
+        return new List<ShootType>
         {
             new ShootType
             {
-                strategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, _maxShootDistance),
+                strategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, FlyWeightPointer.Player.maxDistance),
                 showLaser = true
             },
             new ShootType
@@ -42,16 +54,11 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
                 showLaser = false
             }
         };
-        _currentShootType = 0;
-        _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _hitMask, _maxShootDistance);
-        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
-        GameManager.instance.player.SubscribeObserver(this);
-        FillDictionary();
     }
     private void LateUpdate()
     {
         Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.position, transform.parent);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Entity.rotateSpeed * Time.deltaTime);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Player.rotateSpeed * Time.deltaTime);
         UpdateLaserSight();
     }
     private void UpdateLaserSight()

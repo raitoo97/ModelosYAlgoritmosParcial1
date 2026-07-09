@@ -12,7 +12,7 @@ public enum PlayerEvent
     PreviousShootType
 }
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
+public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,IAimPointProvider
 {
     private PlayerModel _model;
     private ICharacterController _controller;
@@ -28,7 +28,11 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember
         _view = new PlayerView(this);
         _model.Subscribe(_view);
         _gun = GetComponentInChildren<Gun>();
-        if (_gun != null) _model.Subscribe(_gun);
+        if (_gun != null)
+        {
+            _gun.Init(this);
+            _model.Subscribe(_gun);
+        }
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnDeath);
         StartCoroutine(LateAwake());
     }

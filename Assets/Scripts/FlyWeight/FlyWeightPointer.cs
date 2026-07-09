@@ -1,9 +1,14 @@
 public static class FlyWeightPointer
 {
     /// <summary>
-    /// Entity values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
+    /// Player values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
+    /// maxDistance es el alcance de punteria y del hitscan: una sola fuente para ambos.
     /// </summary>
-    public static readonly FlyWeight Entity = new FlyWeight(6, 100, 260, 25, 1f, 25);
+    public static readonly FlyWeight Player = new FlyWeight(6, 100, 260, 100, 0, 25);
+    ///// <summary>
+    ///// Ranger values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
+    ///// </summary>
+    public static readonly FlyWeight Ranger = new FlyWeight(6, 100, 260, 25, 1f, 25);
     /// <summary>
     /// Projectile values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
     /// </summary>

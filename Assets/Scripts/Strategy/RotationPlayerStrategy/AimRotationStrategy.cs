@@ -11,6 +11,6 @@ public class AimRotationStrategy : IRotationStrategy
     public void Rotate(Vector3 direction)
     {
         Quaternion finalRotation = Quaternion.Euler(0, _cameraReference.eulerAngles.y, 0);
-        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, finalRotation, FlyWeightPointer.Entity.rotateSpeed * Time.fixedDeltaTime));
+        _rb.MoveRotation(Quaternion.RotateTowards(_rb.rotation, finalRotation, FlyWeightPointer.Player.rotateSpeed * Time.fixedDeltaTime));
     }
 }
