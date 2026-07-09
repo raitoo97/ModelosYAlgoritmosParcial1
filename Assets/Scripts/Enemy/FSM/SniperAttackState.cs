@@ -11,6 +11,7 @@ public class SniperAttackState : IState
     private LayerMask _losMask;
     private FlyWeight _stats;
     private float _charge;
+    private const float FacingAngleThreshold = 1f;
     public SniperAttackState(Transform transform, NavMeshAgent agent, SniperEnemy enemy, FSM fsm,
                              Transform playerTransform, FlyWeight stats, Transform gunSight, LayerMask losMask)
     {
@@ -44,6 +45,15 @@ public class SniperAttackState : IState
             return;
         }
         _enemy.Rotate(dir);
+        //Chequeo que el sniper este mirando al player, si no lo esta, no carga el disparo
+        //lo hago en base al angulo que se forma entre el forward del sniper y el dir que es un vector que va desde el sniper hacia el player, si el angulo es menor a un threshold, significa que esta mirando al player
+        bool isFacing = Vector3.Angle(_transform.forward, new Vector3(dir.x, 0f, dir.z)) <= FacingAngleThreshold;
+        _enemy.ShowLaser(isFacing);
+        if (!isFacing)
+        {
+            _charge = 0;
+            return;
+        }
         Vector3 origin = _gunSight.position;
         Vector3 aimDir = (_enemy.GetAimPoint() - origin).normalized;
         // La carga solo avanza si el rayo llega al player sin obstaculos en el medio
