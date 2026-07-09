@@ -29,10 +29,8 @@ public class Bullet : MonoBehaviour
     {
         if(other.TryGetComponent<IDamageable>(out var entity))
         {
-            if (ShouldHit(other))
-            {
-                entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
-            }
+            if (!ShouldHit(other)) return;
+            entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
             ReturnToPool();
         }
     }
