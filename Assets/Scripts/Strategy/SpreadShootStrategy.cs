@@ -32,11 +32,11 @@ public class SpreadShootStrategy : IShootStrategy
         {
             // Calculo el angulo de esta bala.
             // EJ: startAngle = -45, step = 22.5
-            // i = 0 -> -45°
-            // i = 1 -> -22.5°
-            // i = 2 ->   0°
-            // i = 3 ->  22.5°
-            // i = 4 ->  45°
+            // i = 0 -> -45
+            // i = 1 -> -22.5
+            // i = 2 ->   0
+            // i = 3 ->  22.5
+            // i = 4 ->  45
             float angle = startAngle + step * i;
             // Roto la direccion original sobre el eje Y para obtener
             // la direccion final de esta bala dentro del abanico.
