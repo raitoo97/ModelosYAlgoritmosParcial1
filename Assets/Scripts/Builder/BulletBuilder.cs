@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class BulletBuilder
 {
@@ -19,6 +20,11 @@ public class BulletBuilder
     public BulletBuilder SetOwnerBullet(Factions owner)
     {
         _bullet.SetOwner(owner);
+        return this;
+    }
+    public BulletBuilder SetOnImpactBullet(Action<Vector3, Vector3> onImpact)
+    {
+        _bullet.SetOnImpact(onImpact);
         return this;
     }
     public Bullet Build()

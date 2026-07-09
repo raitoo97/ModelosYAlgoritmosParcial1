@@ -13,6 +13,8 @@ public class Bullet : MonoBehaviour
     private Action<Bullet> _returnToPoolCallBack;
     private Factions _owner;
     private bool _isActive;
+    private Action<Vector3, Vector3> _onImpact;
+    private Vector3 _initialScale;
     private void Awake()
     {
         _renderer = GetComponentInChildren<Renderer>();
@@ -32,6 +34,7 @@ public class Bullet : MonoBehaviour
             //si el objeto que colisiona es del mismo bando,no hace nada
             if (!ShouldHit(other)) return;
             entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
+            _onImpact?.Invoke(transform.position, -transform.forward);
             ReturnToPool();
         }
     }
@@ -56,6 +59,7 @@ public class Bullet : MonoBehaviour
         _damageMultiplier = 1f;
         _currentDistance = 0;
         _isActive = true;
+        _onImpact = null;
     }
     public void SetDamageMultiplier(float damage)
     {
@@ -69,5 +73,9 @@ public class Bullet : MonoBehaviour
     {
         if (_renderer != null)
             _renderer.material.SetColor("_BulletColor", color);
+    }
+    public void SetOnImpact(Action<Vector3, Vector3> onImpact)
+    {
+        _onImpact = onImpact;
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class SpreadShootStrategy : IShootStrategy
 {
@@ -7,7 +8,8 @@ public class SpreadShootStrategy : IShootStrategy
     private int _pelletCount;
     private float _totalArcDegrees;
     private float _damageMultiplier;
-    public SpreadShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int pelletCount, float totalArcDegrees, float damageMultiplier)
+    private Action<Vector3, Vector3> _onImpact;
+    public SpreadShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int pelletCount, float totalArcDegrees, float damageMultiplier, Action<Vector3, Vector3> onImpact = null)
     {
         _bulletService = bulletService;
         _owner = owner;
@@ -15,6 +17,7 @@ public class SpreadShootStrategy : IShootStrategy
         _pelletCount = pelletCount;
         _totalArcDegrees = totalArcDegrees;
         _damageMultiplier = damageMultiplier;
+        _onImpact = onImpact;
     }
     public ShotResult Shoot(Vector3 origin, Vector3 direction)
     {
@@ -46,6 +49,7 @@ public class SpreadShootStrategy : IShootStrategy
                 .SetColorMaterial(_bulletColor)
                 .SetOwnerBullet(_owner)
                 .SetDamageMultiplierBullet(_damageMultiplier)
+                .SetOnImpactBullet(_onImpact)
                 .Build();
         }
         return new ShotResult { didHit = false };

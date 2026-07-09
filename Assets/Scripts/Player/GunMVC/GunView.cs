@@ -37,4 +37,10 @@ public class GunView
             _impactEffect.Play();
         }
     }
+    public void PlayImpactEffect(Vector3 point, Vector3 normal)
+    {
+        if (_impactEffect == null) return;
+        _impactEffect.transform.SetPositionAndRotation(point, Quaternion.LookRotation(normal));
+        _impactEffect.Play();
+    }
 }

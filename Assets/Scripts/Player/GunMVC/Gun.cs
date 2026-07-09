@@ -22,7 +22,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private int _bulletPoolSize = 30;
     [SerializeField] private int _pelletCount = 5;
     [SerializeField] private float _spreadArcDegrees = 35f;
-    [SerializeField] private float _pelletDamageMultiplier = 0.8f;
     // Celeste para distinguirlas de las rojas del Ranger y naranjas del Shotgunner.
     [SerializeField] private Color _spreadBulletColor = new Color(0.3f, 0.8f, 1f);
     public void Init(IAimPointProvider aimPointProvider)
@@ -31,10 +30,10 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Start()
     {
+        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
         _shootTypes = CreateShootTypes();
         _currentShootType = 0;
         _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _hitMask, FlyWeightPointer.Player.maxDistance);
-        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
         FillDictionary();
     }
     private List<ShootType> CreateShootTypes()
@@ -50,7 +49,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
             },
             new ShootType
             {
-                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier),
+                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, FlyWeightPointer.Projectile.damage * _damageMultiplier,_view.PlayImpactEffect),
                 showLaser = false
             }
         };
