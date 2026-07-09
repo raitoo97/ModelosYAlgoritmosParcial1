@@ -7,6 +7,7 @@ public class GunModel
     private IShootStrategy _shootStrategy;
     private LayerMask _hitMask;
     private float _maxDistance;
+    private bool _showLaser = true;
     public bool IsAiming { get; private set; }
     public GunModel(Quaternion initLocalRotation, IShootStrategy shootStrategy, LayerMask hitMask, float maxDistance)
     {
@@ -20,9 +21,10 @@ public class GunModel
         };
         _currentStrategy = _strategies[false];
     }
-    public void SetShootStrategy(IShootStrategy strategy)
+    public void SetShootStrategy(IShootStrategy shootStrategy, bool showLaser)
     {
-        _shootStrategy = strategy;
+        _shootStrategy = shootStrategy;
+        _showLaser = showLaser;
     }
     public void SetAiming(bool isAiming)
     {
@@ -40,7 +42,7 @@ public class GunModel
     }
     public LaserState ComputeLaser(Vector3 origin, Vector3 aimPoint)
     {
-        if (!IsAiming)
+        if (!IsAiming || !_showLaser)
             return new LaserState { isVisible = false };
         Vector3 direction = (aimPoint - origin).normalized;
         bool hasHit = Physics.Raycast(origin, direction, out RaycastHit hit, _maxDistance, _hitMask, QueryTriggerInteraction.Ignore);

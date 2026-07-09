@@ -5,7 +5,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
 {
     [SerializeField] private Transform _gunSight;
     private Dictionary<PlayerEvent, Action> _actions = new Dictionary<PlayerEvent, Action>();
-    private List<IShootStrategy> _shootStrategies;
+    private List<ShootType> _shootTypes = new List<ShootType>();
     private GunModel _model;
     private GunView _view;
     private int _currentShootType;
@@ -27,15 +27,23 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private Color _spreadBulletColor = new Color(0.3f, 0.8f, 1f);
     private void Start()
     {
-        // Pool de balas propio del gun
+        // Pool de balas propio del gun, mismo patron que usan los spawners enemigos.
         BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _bulletPoolSize);
-        _shootStrategies = new List<IShootStrategy>
+        _shootTypes = new List<ShootType>
         {
-            new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, _maxShootDistance),
-            new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier)
+            new ShootType
+            {
+                strategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, _maxShootDistance),
+                showLaser = true
+            },
+            new ShootType
+            {
+                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier),
+                showLaser = false
+            }
         };
         _currentShootType = 0;
-        _model = new GunModel(transform.localRotation, _shootStrategies[_currentShootType], _hitMask, _maxShootDistance);
+        _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _hitMask, _maxShootDistance);
         _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
         GameManager.instance.player.SubscribeObserver(this);
         FillDictionary();
@@ -62,8 +70,19 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void CycleShootType(int step)
     {
-        _currentShootType = (_currentShootType + step + _shootStrategies.Count) % _shootStrategies.Count;
-        _model.SetShootStrategy(_shootStrategies[_currentShootType]);
+        // Cambio el índice del tipo de disparo de forma circular.
+        // step = 1  -> siguiente tipo.
+        // step = -1 -> tipo anterior.
+        // Ejemplo con 4 estrategias (indices 0,1,2,3):
+        // Si estoy en 3 y avanzo:
+        // (3 + 1 + 4) % 4 = 8 % 4 = 0  -> vuelve al primero.
+        // Si estoy en 0 y retrocedo:
+        // (0 - 1 + 4) % 4 = 3 % 4 = 3  -> vuelve al último.
+        // Sumar Count evita índices negativos y el módulo (%) mantiene
+        // el resultado siempre entre 0 y Count - 1.
+        _currentShootType = (_currentShootType + step + _shootTypes.Count) % _shootTypes.Count;
+        ShootType current = _shootTypes[_currentShootType];
+        _model.SetShootStrategy(current.strategy, current.showLaser);
     }
     private void Shoot()
     {
@@ -78,5 +97,10 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private void OnDestroy()
     {
         GameManager.instance.player.UnsubscribeObserver(this);
+    }
+    private struct ShootType
+    {
+        public IShootStrategy strategy;
+        public bool showLaser;
     }
 }
