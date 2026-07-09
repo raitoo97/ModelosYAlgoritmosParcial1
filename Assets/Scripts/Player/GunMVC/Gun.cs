@@ -18,6 +18,8 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private LineRenderer _laser;
     [SerializeField] private Transform _laserDot;
     [Header("Abanico")]
+    [SerializeField] private int _impactEffectPoolSize = 10;
+    [SerializeField] private float _pelletScale = 1.6f;
     [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private int _bulletPoolSize = 30;
     [SerializeField] private int _pelletCount = 5;
@@ -30,7 +32,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Start()
     {
-        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot);
+        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot, GameManager.instance._projectilesParent, _impactEffectPoolSize);
         _shootTypes = CreateShootTypes();
         _currentShootType = 0;
         _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _hitMask, FlyWeightPointer.Player.maxDistance);
@@ -49,7 +51,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
             },
             new ShootType
             {
-                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, FlyWeightPointer.Projectile.damage * _damageMultiplier,_view.PlayImpactEffect),
+                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, FlyWeightPointer.Projectile.damage * _damageMultiplier,_view.PlayImpactEffect, _pelletScale),
                 showLaser = false
             }
         };

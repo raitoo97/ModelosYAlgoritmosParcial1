@@ -27,6 +27,11 @@ public class BulletBuilder
         _bullet.SetOnImpact(onImpact);
         return this;
     }
+    public BulletBuilder SetScaleBullet(float scaleMultiplier)
+    {
+        _bullet.SetScale(scaleMultiplier);
+        return this;
+    }
     public Bullet Build()
     {
         return _bullet;

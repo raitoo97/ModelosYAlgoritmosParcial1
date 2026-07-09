@@ -18,6 +18,7 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         _renderer = GetComponentInChildren<Renderer>();
+        _initialScale = transform.localScale;
     }
     void Update()
     {
@@ -29,14 +30,25 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<IDamageable>(out var entity))
+        if (other.TryGetComponent<IDamageable>(out var entity))
         {
             //si el objeto que colisiona es del mismo bando,no hace nada
             if (!ShouldHit(other)) return;
             entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
-            _onImpact?.Invoke(transform.position, -transform.forward);
-            ReturnToPool();
+            Impact();
         }
+        // Pared u obstaculo: cualquier collider SOLIDO sin IDamageable.
+        // Los triggers ajenos (powerups, zonas, otras balas) se atraviesan,
+        // por eso se filtra con !other.isTrigger.
+        else if (!other.isTrigger)
+        {
+            Impact();
+        }
+    }
+    private void Impact()
+    {
+        _onImpact?.Invoke(transform.position, -transform.forward);
+        ReturnToPool();
     }
     private void ReturnToPool()
     {
@@ -60,6 +72,7 @@ public class Bullet : MonoBehaviour
         _currentDistance = 0;
         _isActive = true;
         _onImpact = null;
+        transform.localScale = _initialScale;
     }
     public void SetDamageMultiplier(float damage)
     {
@@ -77,5 +90,9 @@ public class Bullet : MonoBehaviour
     public void SetOnImpact(Action<Vector3, Vector3> onImpact)
     {
         _onImpact = onImpact;
+    }
+    public void SetScale(float multiplier)
+    {
+        transform.localScale = _initialScale * multiplier;
     }
 }

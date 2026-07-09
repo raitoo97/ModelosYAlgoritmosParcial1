@@ -5,14 +5,24 @@ public class GunView
     private ParticleSystem _impactEffect;
     private LineRenderer _laser;
     private Transform _laserDot;
-    public GunView(ParticleSystem muzzleFlash, ParticleSystem impactEffect, LineRenderer laser, Transform laserDot)
+    private ParticleSystem[] _impactEffects;
+    private int _nextImpactEffect;
+    public GunView(ParticleSystem muzzleFlash, ParticleSystem impactEffectTemplate, LineRenderer laser, Transform laserDot, Transform effectsParent, int impactEffectCount)
     {
         _muzzleFlash = muzzleFlash;
-        _impactEffect = impactEffect;
         _laser = laser;
         _laserDot = laserDot;
         if (_laser != null) _laser.enabled = false;
         if (_laserDot != null) _laserDot.gameObject.SetActive(false);
+        if (impactEffectTemplate != null && impactEffectCount > 0)
+        {
+            _impactEffects = new ParticleSystem[impactEffectCount];
+            for (int i = 0; i < impactEffectCount; i++)
+            {
+                _impactEffects[i] = Object.Instantiate(impactEffectTemplate, effectsParent);
+                _impactEffects[i].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+        }
     }
     public void UpdateLaser(LaserState laser)
     {
@@ -39,8 +49,11 @@ public class GunView
     }
     public void PlayImpactEffect(Vector3 point, Vector3 normal)
     {
-        if (_impactEffect == null) return;
-        _impactEffect.transform.SetPositionAndRotation(point, Quaternion.LookRotation(normal));
-        _impactEffect.Play();
+        if (_impactEffects == null) return;
+        ParticleSystem effect = _impactEffects[_nextImpactEffect];
+        // Avanzo el indice circular para que el proximo impacto use otro clon.
+        _nextImpactEffect = (_nextImpactEffect + 1) % _impactEffects.Length;
+        effect.transform.SetPositionAndRotation(point, Quaternion.LookRotation(normal));
+        effect.Play();
     }
 }

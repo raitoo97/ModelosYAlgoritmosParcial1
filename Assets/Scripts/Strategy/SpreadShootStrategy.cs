@@ -9,7 +9,8 @@ public class SpreadShootStrategy : IShootStrategy
     private float _totalArcDegrees;
     private float _damageMultiplier;
     private Action<Vector3, Vector3> _onImpact;
-    public SpreadShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int pelletCount, float totalArcDegrees, float damageMultiplier, Action<Vector3, Vector3> onImpact = null)
+    private float _bulletScale;
+    public SpreadShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int pelletCount, float totalArcDegrees, float damageMultiplier,Action<Vector3, Vector3> onImpact = null,float bulletScale = 1f)
     {
         _bulletService = bulletService;
         _owner = owner;
@@ -17,6 +18,7 @@ public class SpreadShootStrategy : IShootStrategy
         _pelletCount = pelletCount;
         _totalArcDegrees = totalArcDegrees;
         _damageMultiplier = damageMultiplier;
+        _bulletScale = bulletScale;
         _onImpact = onImpact;
     }
     public ShotResult Shoot(Vector3 origin, Vector3 direction)
@@ -49,6 +51,7 @@ public class SpreadShootStrategy : IShootStrategy
                 .SetColorMaterial(_bulletColor)
                 .SetOwnerBullet(_owner)
                 .SetDamageMultiplierBullet(_damageMultiplier)
+                .SetScaleBullet(_bulletScale)
                 .SetOnImpactBullet(_onImpact)
                 .Build();
         }
