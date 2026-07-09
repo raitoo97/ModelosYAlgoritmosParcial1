@@ -21,7 +21,7 @@ public class SniperView : EnemyView
     }
     protected override float GetBodyWeight(Vector3 aimPoint)
     {
-        float heightDiff = Mathf.Abs(aimPoint.y - _transform.position.y);
+        float heightDiff = Mathf.Abs(aimPoint.y - (_transform.position.y + ChestHeight)); // mido pecho contra pecho, simetrico arriba/abajo
         return heightDiff <= SameHeightThreshold ? FlatBodyWeight : ElevatedBodyWeight;
     }
     protected override Vector3 GetLookAtPoint(Vector3 aimPoint)

@@ -1,77 +1,59 @@
 using UnityEngine;
 using UnityEngine.AI;
-public class SniperAttackState : IState
+public class SniperAttackState : BaseAttackState
 {
-    private Transform _transform;
-    private FSM _fsm;
-    private SniperEnemy _enemy;
-    private NavMeshAgent _agent;
-    private Transform _playerTransform;
+    private SniperEnemy _sniper;
     private Transform _gunSight;
     private LayerMask _losMask;
-    private FlyWeight _stats;
     private float _charge;
     private const float FacingAngleThreshold = 1f;
     public SniperAttackState(Transform transform, NavMeshAgent agent, SniperEnemy enemy, FSM fsm,
                              Transform playerTransform, FlyWeight stats, Transform gunSight, LayerMask losMask)
+                             : base(transform, agent, enemy, fsm, playerTransform, stats)
     {
-        _transform = transform;
-        _agent = agent;
-        _enemy = enemy;
-        _fsm = fsm;
-        _playerTransform = playerTransform;
-        _stats = stats;
+        _sniper = enemy;
         _gunSight = gunSight;
         _losMask = losMask;
     }
-    public void OnEnter()
+    public override void OnEnter()
     {
-        _agent.isStopped = true;
+        base.OnEnter();
         _charge = 0;
-        _enemy.PlayAimAnimation();
-        _enemy.ShowLaser(true);
+        _sniper.ShowLaser(true);
     }
-    public void OnExit()
+    public override void OnExit()
     {
-        _enemy.ShowLaser(false);
-        _agent.isStopped = false;
+        base.OnExit();
+        _sniper.ShowLaser(false);
     }
-    public void OnUpdate()
+    protected override void OnAttackUpdate(Vector3 dirToPlayer)
     {
-        var dir = _playerTransform.position - _transform.position;
-        if (dir.magnitude > _stats.maxDistance)
-        {
-            _fsm.ChangeState(FSM.StateID.Chase);
-            return;
-        }
-        _enemy.Rotate(dir);
-        //Chequeo que el sniper este mirando al player, si no lo esta, no carga el disparo
-        //lo hago en base al angulo que se forma entre el forward del sniper y el dir que es un vector que va desde el sniper hacia el player, si el angulo es menor a un threshold, significa que esta mirando al player
-        bool isFacing = Vector3.Angle(_transform.forward, new Vector3(dir.x, 0f, dir.z)) <= FacingAngleThreshold;
-        _enemy.ShowLaser(isFacing);
+        //Chequeo que el sniper este mirando al player en base al angulo entre su forward y la direccion al player
+        bool isFacing = Vector3.Angle(_transform.forward, new Vector3(dirToPlayer.x, 0f, dirToPlayer.z)) <= FacingAngleThreshold;
+        _sniper.ShowLaser(isFacing);
         if (!isFacing)
         {
             _charge = 0;
             return;
         }
         Vector3 origin = _gunSight.position;
-        Vector3 aimDir = (_enemy.GetAimPoint() - origin).normalized;
+        Vector3 aimDir = (_sniper.GetAimPoint() - origin).normalized;
         // La carga solo avanza si el rayo llega al player sin obstaculos en el medio
-        if (Physics.Raycast(origin, aimDir, out RaycastHit hit, _stats.maxDistance, _losMask, QueryTriggerInteraction.Ignore)&& hit.collider.TryGetComponent<Player>(out _))// uso el _ porque descarto el valor de salida, solo me interesa si es player o no
+        if (Physics.Raycast(origin, aimDir, out RaycastHit hit, _stats.maxDistance, _losMask, QueryTriggerInteraction.Ignore) && hit.collider.TryGetComponent<Player>(out _))
         {
             _charge += Time.deltaTime;
-            _enemy.UpdateLaser(origin, hit.point, _charge / _stats.coolDown);
+            _sniper.UpdateLaser(origin, hit.point, _charge / _stats.coolDown);
             if (_charge >= _stats.coolDown)
             {
                 _charge = 0;
-                _enemy.Shoot();
+                _sniper.Shoot();
             }
         }
         else
         {
             _charge = 0;
             Vector3 end = hit.collider != null ? hit.point : origin + aimDir * _stats.maxDistance;
-            _enemy.UpdateLaser(origin, end, 0f);
+            _sniper.UpdateLaser(origin, end, 0f);
         }
     }
 }

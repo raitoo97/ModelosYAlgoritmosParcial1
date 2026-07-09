@@ -26,11 +26,11 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     protected EnemyModel Model => _model;
     public Factions Faction => Factions.Enemy;
     private Rigidbody _rb;
-    private void Awake()
+    public void Init(Transform playerTransform)
     {
         _agent = GetComponent<NavMeshAgent>();
         _agent.speed = Stats.speed;
-        _playerTransform = GameManager.instance.player.transform;
+        _playerTransform = playerTransform;
         _rb = GetComponent<Rigidbody>();
         _model = CreateModel(_rb, _playerTransform);
         _view = CreateView();
@@ -71,8 +71,8 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     }
     void Update()
     {
-        if (_isDying) return;
-        _fsm.onUpdateState();
+        if (_isDying || _fsm == null) return;
+        _fsm.OnUpdateState();
     }
     public void Rotate(Vector3 direction)
     {
@@ -125,6 +125,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     }
     private void OnAnimatorIK(int layerIndex)
     {
+        if (_view == null) return;
         _view.UpdateAimIK(GetAimPoint());
     }
     private void OnDrawGizmos()
@@ -156,8 +157,8 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
         _model.RestoreLife(memory.life, memory.isDead);
         if (!memory.isDead)
             _model.NotifyObservers(EnemyEvent.Reset);
-        _agent.Warp(memory.position);
-        transform.rotation = memory.rotation;
+        WarpToPosition(memory.position);
+        _rb.rotation = memory.rotation;
         _fsm.ChangeState(memory.currentState);
     }
     public void Pause()

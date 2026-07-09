@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 public class RangerSpawnerManager : EnemySpawnerManager
 {
     [SerializeField] private Bullet _bulletPrefab;
@@ -36,7 +37,10 @@ public class RangerSpawnerManager : EnemySpawnerManager
     {
         Vector3 randomPos = transform.position + Random.insideUnitSphere * _radius;
         randomPos.y = _spawnHeight;
-        _enemyService.Spawn(randomPos);
+        // Busco el punto navegable mas cercano (hasta 2 unidades) al punto aleatorio.
+        // Si no encuentro un punto valido del NavMesh, no hago el spawn.
+        if (NavMesh.SamplePosition(randomPos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+            _enemyService.Spawn(hit.position);
     }
     private void OnDrawGizmos()
     {

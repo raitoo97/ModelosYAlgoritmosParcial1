@@ -10,8 +10,10 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
     private MementoState<List<EnemyMemento>> _enemiesMemento;
     private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
     private IShootStrategy _shootStrategy;
-    public EnemyService(Enemy prefab, Transform parent, int size, IObserver<EnemyEvent> observer, IShootStrategy shootStrategy)
+    private Transform _playerTransform;
+    public EnemyService(Enemy prefab, Transform parent, int size, IObserver<EnemyEvent> observer, IShootStrategy shootStrategy, Transform playerTransform)
     {
+        _playerTransform = playerTransform;
         _factory = new EnemyFactory(prefab, parent);
         _observer = observer;
         _shootStrategy = shootStrategy;
@@ -22,6 +24,7 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
     private Enemy CreateEnemy()
     {
         Enemy enemy = _factory.CreateObject();
+        enemy.Init(_playerTransform);
         enemy.SetReturnToPoolCallBack(ReturnToPool);
         enemy.SetShootStrategy(_shootStrategy);
         enemy.Subscribe(_observer);
@@ -52,11 +55,11 @@ public class EnemyService : IMementoEntity<List<EnemyMemento>>, IObserver<SaveEv
         _actions.Add(SaveEvent.Save, SaveState);
         _actions.Add(SaveEvent.Load, TryLoadStates);
     }
-    public void Notify(SaveEvent Actions)
+    public void Notify(SaveEvent actions)
     {
-        if (_actions.ContainsKey(Actions))
+        if (_actions.ContainsKey(actions))
         {
-            _actions[Actions].Invoke();
+            _actions[actions].Invoke();
         }
     }
     public void SaveState()

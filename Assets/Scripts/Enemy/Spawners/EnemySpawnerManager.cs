@@ -10,7 +10,7 @@ public abstract class EnemySpawnerManager : MonoBehaviour, IObserver<EnemyEvent>
     private int _enemyKills;
     protected virtual void Start()
     {
-        _enemyService = new EnemyService(_enemyPrefab, transform, GetPoolSize(), this, CreateShootStrategy());
+        _enemyService = new EnemyService(_enemyPrefab, transform, GetPoolSize(), this, CreateShootStrategy(), GameManager.instance.player.transform);
         SaveManager.instance.Subscribe(_enemyService);
         FillDictionary();
     }
@@ -28,10 +28,10 @@ public abstract class EnemySpawnerManager : MonoBehaviour, IObserver<EnemyEvent>
         if (_enemyKills % _killsPerDifficultyIncrease == 0)
             IncreaseDifficulty();
     }
-    public void Notify(EnemyEvent Actions)
+    public void Notify(EnemyEvent action)
     {
-        if (_actions.ContainsKey(Actions))
-            _actions[Actions].Invoke();
+        if (_actions.ContainsKey(action))
+            _actions[action].Invoke();
     }
     public void Pause() { enabled = false; }
     public void Resume() { enabled = true; }

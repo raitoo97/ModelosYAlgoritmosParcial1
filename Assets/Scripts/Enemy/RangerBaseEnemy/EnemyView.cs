@@ -69,9 +69,9 @@ public class EnemyView : IObserver<EnemyEvent>
         _isAiming = false;
         _currentAimWeight = 0f;
     }
-    public void Notify(EnemyEvent Actions)
+    public void Notify(EnemyEvent action)
     {
-        if (_actions.ContainsKey(Actions))
-            _actions[Actions].Invoke();
+        if (_actions.ContainsKey(action))
+            _actions[action].Invoke();
     }
 }

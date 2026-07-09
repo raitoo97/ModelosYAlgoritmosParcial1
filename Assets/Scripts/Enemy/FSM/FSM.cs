@@ -27,7 +27,7 @@ public class FSM
         _currentState = _allStates[key];
         _currentState?.OnEnter();
     }
-    public void onUpdateState()
+    public void OnUpdateState()
     {
         _currentState?.OnUpdate();
     }
