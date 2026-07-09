@@ -33,12 +33,13 @@ public class EnemyView : IObserver<EnemyEvent>
         _actions.Add(EnemyEvent.Reset, ResetView);
     }
     protected virtual float GetBodyWeight(Vector3 aimPoint) => 0.3f;
+    protected virtual Vector3 GetLookAtPoint(Vector3 aimPoint) => aimPoint; // punto que mira el IK; las subclases pueden retocarlo
     public void UpdateAimIK(Vector3 aimPoint)
     {
         if (_animator == null) return;
         float targetWeight = _isAiming ? 1f : 0f;
         _currentAimWeight = Mathf.Lerp(_currentAimWeight, targetWeight, Time.deltaTime * 8f);
-        _animator.SetLookAtPosition(aimPoint);
+        _animator.SetLookAtPosition(GetLookAtPoint(aimPoint));
         _animator.SetLookAtWeight(
             weight: _currentAimWeight,
             bodyWeight: GetBodyWeight(aimPoint),

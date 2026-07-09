@@ -371,6 +371,7 @@ MonoBehaviour:
   _killsPerDifficultyIncrease: 5
   _spawnPoints:
   - {fileID: 1880590110}
+  - {fileID: 40860751}
   _hitMask:
     serializedVersion: 2
     m_Bits: 193
