@@ -1,12 +1,19 @@
 public static class FlyWeightPointer
 {
     /// <summary>
-    /// Entity valores : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
+    /// Entity values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
     /// </summary>
     public static readonly FlyWeight Entity = new FlyWeight(6, 100, 260, 25, 1f, 25);
     /// <summary>
-    /// Projectile valores : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
+    /// Projectile values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
     /// </summary>
     public static readonly FlyWeight Projectile = new FlyWeight(50, 200, 2000, 0, 0, 25);
+    /// <summary>
+    /// Sniper values : speed, maxLife, rotateSpeed, maxDistance, coolDown, damage
+    /// </summary>
     public static readonly FlyWeight Sniper = new FlyWeight(3, 60, 200, 45, 3f, 60);
+    /// <summary>
+    /// Shotgunner values : speed, maxLife, rotateSpeed, maxDistance, coolDown, damage
+    /// </summary>
+    public static readonly FlyWeight Shotgunner = new FlyWeight(8, 80, 300, 10, 1.5f, 25);
 }
