@@ -8,6 +8,9 @@ public abstract class BaseAttackState : IState
     protected FSM _fsm;
     protected Transform _playerTransform;
     protected FlyWeight _stats;
+    // Umbral de punteria: cada estado puede ajustar que tan alineado
+    // tiene que estar con el player antes de disparar.
+    protected virtual float FacingAngleThreshold => 10f;
     protected BaseAttackState(Transform transform, NavMeshAgent agent, Enemy enemy, FSM fsm,Transform playerTransform, FlyWeight stats)
     {
         _transform = transform;
@@ -36,6 +39,12 @@ public abstract class BaseAttackState : IState
         }
         _enemy.Rotate(dir);
         OnAttackUpdate(dir);
+    }
+    // Chequeo comun de punteria. Aplano la direccion en Y para que el
+    // desnivel con el player no infle el angulo y trabe el disparo.
+    protected bool IsFacingPlayer(Vector3 dirToPlayer)
+    {
+        return Vector3.Angle(_transform.forward, new Vector3(dirToPlayer.x, 0f, dirToPlayer.z)) <= FacingAngleThreshold;
     }
     protected abstract void OnAttackUpdate(Vector3 dirToPlayer);
 }

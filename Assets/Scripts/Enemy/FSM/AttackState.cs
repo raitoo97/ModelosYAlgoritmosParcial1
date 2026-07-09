@@ -13,6 +13,7 @@ public class AttackState : BaseAttackState
     protected override void OnAttackUpdate(Vector3 dirToPlayer)
     {
         _timer += Time.deltaTime;
+        if (!IsFacingPlayer(dirToPlayer)) return;
         if (_timer >= _stats.coolDown)
         {
             _timer = 0;
