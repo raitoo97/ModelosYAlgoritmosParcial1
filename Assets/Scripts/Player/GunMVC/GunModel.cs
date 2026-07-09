@@ -20,6 +20,10 @@ public class GunModel
         };
         _currentStrategy = _strategies[false];
     }
+    public void SetShootStrategy(IShootStrategy strategy)
+    {
+        _shootStrategy = strategy;
+    }
     public void SetAiming(bool isAiming)
     {
         IsAiming = isAiming;

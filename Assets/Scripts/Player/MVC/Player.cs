@@ -7,7 +7,9 @@ public enum PlayerEvent
     Shoot,
     Death,
     Aim,
-    StopAim
+    StopAim,
+    NextShootType,
+    PreviousShootType
 }
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember

@@ -61,6 +61,14 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.Shoot);
     }
+    public void NextShootType()
+    {
+        NotifyObservers(PlayerEvent.NextShootType);
+    }
+    public void PreviousShootType()
+    {
+        NotifyObservers(PlayerEvent.PreviousShootType);
+    }
     public void TakeDamage(float dmg)
     {
         if (_isDead) return;

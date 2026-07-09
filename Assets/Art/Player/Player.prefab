@@ -1268,6 +1268,12 @@ MonoBehaviour:
   _damageMultiplier: 4
   _laser: {fileID: 2548988218624664917}
   _laserDot: {fileID: 2219501881101897245}
+  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
+  _bulletPoolSize: 30
+  _pelletCount: 5
+  _spreadArcDegrees: 35
+  _pelletDamageMultiplier: 0.8
+  _spreadBulletColor: {r: 0.3, g: 0.8, b: 1, a: 1}
 --- !u!1 &3810104624290840303
 GameObject:
   m_ObjectHideFlags: 0
