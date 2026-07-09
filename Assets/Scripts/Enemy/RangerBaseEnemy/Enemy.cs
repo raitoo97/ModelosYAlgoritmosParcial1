@@ -86,6 +86,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     {
         _model.Shoot(_gunSight.position);
     }
+    //Lo usa solo SniperAttackState para obtener el punto de mira del player
     public Vector3 GetAimPoint()
     {
         return _model.GetAimPoint();
