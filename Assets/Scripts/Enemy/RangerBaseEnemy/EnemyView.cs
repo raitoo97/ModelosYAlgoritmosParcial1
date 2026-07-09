@@ -32,6 +32,7 @@ public class EnemyView : IObserver<EnemyEvent>
         });
         _actions.Add(EnemyEvent.Reset, ResetView);
     }
+    protected virtual float GetBodyWeight(Vector3 aimPoint) => 0.3f;
     public void UpdateAimIK(Vector3 aimPoint)
     {
         if (_animator == null) return;
@@ -40,7 +41,7 @@ public class EnemyView : IObserver<EnemyEvent>
         _animator.SetLookAtPosition(aimPoint);
         _animator.SetLookAtWeight(
             weight: _currentAimWeight,
-            bodyWeight: 0.3f,
+            bodyWeight: GetBodyWeight(aimPoint),
             headWeight: 0.7f,
             eyesWeight: 0f,
             clampWeight: 0.2f
