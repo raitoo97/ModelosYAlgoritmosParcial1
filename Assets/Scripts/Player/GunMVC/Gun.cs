@@ -57,13 +57,13 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void LateUpdate()
     {
-        Quaternion target = _model.ComputeTargetLocalRotation(GameManager.instance.player.GetAimPoint(), transform.position, transform.parent);
+        Quaternion target = _model.ComputeTargetLocalRotation(_aimPointProvider.GetAimPoint(), transform.position, transform.parent);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Player.rotateSpeed * Time.deltaTime);
         UpdateLaserSight();
     }
     private void UpdateLaserSight()
     {
-        LaserState laser = _model.ComputeLaser(_gunSight.position, GameManager.instance.player.GetAimPoint());
+        LaserState laser = _model.ComputeLaser(_gunSight.position, _aimPointProvider.GetAimPoint());
         _view.UpdateLaser(laser);
     }
     private void FillDictionary()
@@ -92,17 +92,13 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Shoot()
     {
-        ShotResult result = _model.Shoot(_gunSight.position, GameManager.instance.player.GetAimPoint(), _gunSight.forward);
+        ShotResult result = _model.Shoot(_gunSight.position, _aimPointProvider.GetAimPoint(), _gunSight.forward);
         _view.PlayShootEffects(result);
     }
-    public void Notify(PlayerEvent Actions)
+    public void Notify(PlayerEvent actions)
     {
-        if (_actions.ContainsKey(Actions))
-            _actions[Actions].Invoke();
-    }
-    private void OnDestroy()
-    {
-        GameManager.instance.player.UnsubscribeObserver(this);
+        if (_actions.ContainsKey(actions))
+            _actions[actions].Invoke();
     }
     private struct ShootType
     {

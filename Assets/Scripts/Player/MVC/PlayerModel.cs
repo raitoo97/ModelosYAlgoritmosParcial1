@@ -101,11 +101,11 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         _playerObservers.Unsubscribe(observer);
     }
-    public void Notify(SaveEvent Actions)
+    public void Notify(SaveEvent action)
     {
-        if (_actions.ContainsKey(Actions))
+        if (_actions.ContainsKey(action))
         {
-            _actions[Actions].Invoke();
+            _actions[action].Invoke();
         }
     }
     private void FillDictionary()

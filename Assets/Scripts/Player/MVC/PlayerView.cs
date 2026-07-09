@@ -52,11 +52,11 @@ public class PlayerView : IObserver<PlayerEvent>
         _actions.Add(PlayerEvent.Idle, () => MoveAnimation(false));
         _actions.Add(PlayerEvent.Death, OnPlayerDeath);
     }
-    public void Notify(PlayerEvent Actions)
+    public void Notify(PlayerEvent actions)
     {
-        if (_actions.ContainsKey(Actions))
+        if (_actions.ContainsKey(actions))
         {
-            _actions[Actions].Invoke();
+            _actions[actions].Invoke();
         }
     }
     public Animator GetAnimator => _animator;
