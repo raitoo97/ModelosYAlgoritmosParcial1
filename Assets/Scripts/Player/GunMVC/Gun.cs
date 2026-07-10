@@ -82,7 +82,11 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void UpdateAimIndicator()
     {
+        // PASO 1 (modelo, la matematica): le pido al modelo que calcule las lineas
+        // de ESTE frame. El modelo decide QUE calcular segun el _indicator que
+        // tenga guardado desde el ultimo cambio de arma.
         AimIndicatorState indicatorState = _model.ComputeAimIndicator(_gunSight.position, _aimPointProvider.GetAimPoint());
+        // PASO 2 (vista, el dibujo): le paso el RESULTADO ya calculado al view para que dibuje las lineas. La vista no sabe que tipo de indicador es ni como se calcula, solo dibuja lo que le llega.
         _view.UpdateAimIndicator(indicatorState);
     }
     private void FillDictionary()
