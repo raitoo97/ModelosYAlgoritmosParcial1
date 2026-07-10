@@ -10,7 +10,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private GunView _view;
     private int _currentShootType;
     private IAimPointProvider _aimPointProvider;
-    // REFACTOR: las armas ahora son assets. Agregar un arma = crear el asset
+    // las armas ahora son assets. Agregar un arma = crear el asset
     // y sumarlo a esta lista. El orden de la lista es el orden de ciclado
     // y el indice 0 es el arma inicial. Gun no conoce tipos concretos.
     [Header("Armas")]
@@ -19,8 +19,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private ImpactEffect _impactEffectPrefab;
     [SerializeField] private int _impactEffectPoolSize = 10;
     [Header("ReferenciasDeEscena")]
-    // REFACTOR: aca quedo SOLO lo que es del tirador/escena, no del arma:
-    // efectos, lineas de punteria, mascara y el pool de proyectiles compartido.
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private LayerMask _hitMask;
     [SerializeField] private LineRenderer _laser;
