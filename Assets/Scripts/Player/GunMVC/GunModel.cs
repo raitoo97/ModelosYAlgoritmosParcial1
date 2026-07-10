@@ -16,20 +16,20 @@ public class GunModel
     private IShootStrategy _shootStrategy;
     private LayerMask _hitMask;
     private float _maxDistance;
-    // Datos del cono de la escopeta: el arco real de dispersion y el alcance
-    // real del perdigon, para que la V telegrafie exactamente el disparo.
+    // Arco del cono DEL ARMA ACTIVA: se actualiza en cada SetShootStrategy
+    // (viene del asset del arma equipada).
+    // _coneRange si es global:
+    // la distancia de vida del proyectil (maxLife), igual para todas.
     private float _coneArcDegrees;
     private float _coneRange;
-    private AimIndicatorType _indicator;
+    // Arranca en None: el modelo nace SIN arma equipada y no dibuja nada
+    // hasta que Gun llama ApplyShootType (mismo frame, en Start).
+    private AimIndicatorType _indicator = AimIndicatorType.None;
     public bool IsAiming { get; private set; }
-    public GunModel(Quaternion initLocalRotation, IShootStrategy shootStrategy, AimIndicatorType indicator, LayerMask hitMask, float maxDistance, float coneArcDegrees, float coneRange)
+    public GunModel(Quaternion initLocalRotation, LayerMask hitMask, float maxDistance, float coneRange)
     {
-        _shootStrategy = shootStrategy;
-        _indicator = indicator;
         _hitMask = hitMask;
         _maxDistance = maxDistance;
-        //es el mismo parametro que el de la escopeta, para que la V telegrafie exactamente el disparo.
-        _coneArcDegrees = coneArcDegrees;
         _coneRange = coneRange;
         _strategies = new Dictionary<bool, IGunRotationStrategy>
         {
@@ -38,15 +38,13 @@ public class GunModel
         };
         _currentStrategy = _strategies[false];
     }
-    // Se ejecuta SOLO cuando el Gun cambia de tipo de disparo (CycleShootType).
-    // Aca se ESCRIBE _indicator: queda guardado que dibujar de ahora en mas
-    // (Laser si entro la pistola, Cone si entro la escopeta).
-    // No dibuja nada: solo deja la configuracion lista para que el ciclo
-    // de dibujado por frame la lea.
-    public void SetShootStrategy(IShootStrategy shootStrategy, AimIndicatorType indicator)
+    // Se ejecuta al equipar un arma (arranque y ciclado). Deja guardada la
+    // config activa: que estrategia dispara, que se dibuja y con que arco.
+    public void SetShootStrategy(IShootStrategy shootStrategy, AimIndicatorType indicator, float coneArcDegrees)
     {
         _shootStrategy = shootStrategy;
         _indicator = indicator;
+        _coneArcDegrees = coneArcDegrees;
     }
     public void SetAiming(bool isAiming)
     {
@@ -59,7 +57,8 @@ public class GunModel
     }
     public ShotResult Shoot(Vector3 origin, Vector3 aimPoint, Vector3 barrelForward)
     {
-        // El modelo no pregunta que tipo de arma es ni nada, solo ejecuta la estrategia de disparo que tenga puesta.
+        // El modelo no pregunta que arma es: ejecuta la estrategia que tenga puesta.
+        //la estrategia se setea en SetShootStrategy que lo llama gun, cuando paso de arma.
         Vector3 direction = IsAiming ? (aimPoint - origin).normalized : barrelForward;
         return _shootStrategy.Shoot(origin, direction);
     }
@@ -78,9 +77,8 @@ public class GunModel
                 state.laser = ComputeLine(origin, direction, _maxDistance);
                 break;
             case AimIndicatorType.Cone:
-                // Bordes de la V: roto la direccion de apuntado +-arco/2 sobre el
-                // eje Y, la MISMA rotacion con la que la escopeta abre los perdigones,
-                // asi el telegraph coincide con el disparo real
+                // Bordes de la V: la misma rotacion sobre Y con la que la
+                // escopeta abre los perdigones -> telegraph = disparo real.
                 float halfArc = _coneArcDegrees * 0.5f;
                 state.coneLeft = ComputeLine(origin, Quaternion.AngleAxis(-halfArc, Vector3.up) * direction, _coneRange);
                 state.coneRight = ComputeLine(origin, Quaternion.AngleAxis(halfArc, Vector3.up) * direction, _coneRange);
@@ -110,8 +108,6 @@ public struct LaserState
     public bool hasHit;
     public Vector3 hitNormal;
 }
-// Estado completo del indicador de punteria de un frame.
-// Solo las lineas del indicador activo vienen con isVisible = true.
 public struct AimIndicatorState
 {
     public LaserState laser;

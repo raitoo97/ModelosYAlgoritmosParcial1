@@ -1259,24 +1259,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunSight: {fileID: 5197687787629731692}
+  _weapons:
+  - {fileID: 11400000, guid: aaebe78741562744cb73b3b350229d5d, type: 2}
+  - {fileID: 11400000, guid: 6fc8d99b52a46e0478dbbc5035f5da30, type: 2}
   _impactEffectPrefab: {fileID: 7974238921554058918, guid: 0354879eac415b946a99f250756740d9, type: 3}
   _impactEffectPoolSize: 20
   _muzzleFlash: {fileID: 3528706564318035202}
   _hitMask:
     serializedVersion: 2
     m_Bits: 321
-  _damageMultiplier: 4
   _laser: {fileID: 2548988218624664917}
   _laserDot: {fileID: 2219501881101897245}
-  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
-  _bulletPoolSize: 30
-  _pelletCount: 5
-  _spreadArcDegrees: 35
-  _pelletDamageMultiplier: 0.8
-  _pelletScale: 2.5
-  _spreadBulletColor: {r: 0.3, g: 0.8, b: 1, a: 1}
   _coneLeftLine: {fileID: 2548988218624664917}
   _coneRightLine: {fileID: 5347920189067975782}
+  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
+  _bulletPoolSize: 30
 --- !u!1 &3810104624290840303
 GameObject:
   m_ObjectHideFlags: 0
@@ -1663,8 +1660,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2700350464465932501}
+  m_Children: []
   m_Father: {fileID: 5197687787629731692}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &5347920189067975782
@@ -2589,92 +2585,6 @@ SkinnedMeshRenderer:
     m_Center: {x: -31.982391, y: 2.5145874, z: 0.0000019073486}
     m_Extent: {x: 51.12609, y: 46.604404, z: 27.749142}
   m_DirtyAABB: 0
---- !u!1 &6754726287915458076
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2700350464465932501}
-  - component: {fileID: 783441421062437355}
-  - component: {fileID: 4450413026194960196}
-  m_Layer: 7
-  m_Name: LaserDot
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2700350464465932501
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6754726287915458076}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.37, y: 0, z: 5.37}
-  m_LocalScale: {x: 25, y: 25, z: 25}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 5961482582408856947}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &783441421062437355
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6754726287915458076}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &4450413026194960196
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6754726287915458076}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: d5f5dcd3a1e173a46ac114323a5cca85, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &7024617505473774425
 GameObject:
   m_ObjectHideFlags: 0

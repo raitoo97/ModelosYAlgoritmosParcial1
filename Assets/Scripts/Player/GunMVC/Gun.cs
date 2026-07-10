@@ -10,25 +10,26 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private GunView _view;
     private int _currentShootType;
     private IAimPointProvider _aimPointProvider;
+    // REFACTOR: las armas ahora son assets. Agregar un arma = crear el asset
+    // y sumarlo a esta lista. El orden de la lista es el orden de ciclado
+    // y el indice 0 es el arma inicial. Gun no conoce tipos concretos.
+    [Header("Armas")]
+    [SerializeField] private List<WeaponConfig> _weapons;
     [Header("ParticulasDeImpacto")]
     [SerializeField] private ImpactEffect _impactEffectPrefab;
     [SerializeField] private int _impactEffectPoolSize = 10;
-    [Header("DisparoRayCast")]
+    [Header("ReferenciasDeEscena")]
+    // REFACTOR: aca quedo SOLO lo que es del tirador/escena, no del arma:
+    // efectos, lineas de punteria, mascara y el pool de proyectiles compartido.
     [SerializeField] private ParticleSystem _muzzleFlash;
     [SerializeField] private LayerMask _hitMask;
-    [SerializeField] private float _damageMultiplier = 4f;
     [SerializeField] private LineRenderer _laser;
     [SerializeField] private Transform _laserDot;
-    [Header("Abanico")]
-    [SerializeField] private Bullet _bulletPrefab;
-    [SerializeField] private int _bulletPoolSize = 30;
-    [SerializeField] private int _pelletCount = 5;
-    [SerializeField] private float _spreadArcDegrees = 35f;
-    [SerializeField] private float _pelletScale = 1.6f;
-    [SerializeField] private Color _spreadBulletColor = new Color(0.3f, 0.8f, 1f);
-    // Bordes de la V que telegrafia el abanico de la escopeta al apuntar.
     [SerializeField] private LineRenderer _coneLeftLine;
     [SerializeField] private LineRenderer _coneRightLine;
+    [Header("PoolDeBalas")]
+    [SerializeField] private Bullet _bulletPrefab;
+    [SerializeField] private int _bulletPoolSize = 30;
     public void Init(IAimPointProvider aimPointProvider)
     {
         _aimPointProvider = aimPointProvider;
@@ -36,55 +37,53 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private void Start()
     {
         ImpactEffectService impactEffectService = _impactEffectPrefab != null ? new ImpactEffectService(_impactEffectPrefab, GameManager.instance._projectilesParent, _impactEffectPoolSize) : null;
-        // La vista se crea antes que las estrategias porque la escopeta
-        // recibe su metodo de particula de impacto como callback.
         _view = new GunView(_muzzleFlash, _laser, _laserDot, _coneLeftLine, _coneRightLine, impactEffectService);
         _shootTypes = CreateShootTypes();
         _currentShootType = 0;
-        // El cono usa el arco real de la escopeta y el alcance real del perdigon
-        // (maxLife de Bullet es distancia), asi la V muestra el disparo verdadero.
-        // Al modelo le paso SOLO el tipo de disparo activo (el del indice actual):
-        // su estrategia y su indicador. El modelo nunca conoce la lista completa,
-        // no sabe cuantos tipos existen ni cuales son: solo sabe ejecutar
-        _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _shootTypes[_currentShootType].indicator, _hitMask, FlyWeightPointer.Player.maxDistance, _spreadArcDegrees, FlyWeightPointer.Projectile.maxLife);
+        _model = new GunModel(transform.localRotation, _hitMask, FlyWeightPointer.Player.maxDistance, FlyWeightPointer.Projectile.maxLife);
+        ApplyShootType();
         FillDictionary();
     }
-    //tipo de disparo tambien cambia su indicador.
     private List<ShootType> CreateShootTypes()
     {
-        // Pool de balas propio del gun.
+        // Pool de balas propio del gun, compartido por todas sus armas de proyectil.
         BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _bulletPoolSize);
-        return new List<ShootType>
+        ShootStrategyDependencies deps = new ShootStrategyDependencies
         {
-            new ShootType
-            {
-                strategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, FlyWeightPointer.Player.maxDistance),
-                indicator = AimIndicatorType.Laser
-            },
-            new ShootType
-            {
-                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, FlyWeightPointer.Projectile.damage * _damageMultiplier, _view.PlayImpactEffect, _pelletScale),
-                indicator = AimIndicatorType.Cone
-            }
+            bulletService = bulletService,
+            owner = Factions.Player,
+            hitMask = _hitMask,
+            maxDistance = FlyWeightPointer.Player.maxDistance,
+            onImpact = _view.PlayImpactEffect
         };
+        // Cada asset construye su propia estrategia//
+        // se crea DENTRO del asset, no en el Gun. Gun solo recorre la lista y le
+        // pide a cada arma la suya. Camino para agregar un arma: creo el asset,
+        // lo agrego a la lista del Gun, y listo (Gun no se toca).
+        // Todas comparten el struct de dependencias, pero es cada CONFIG la que
+        // elige que usar al construir: Por ejemplo la estrategia de pistola no necesita el onImpact, pero la de escopeta si.
+        List<ShootType> shootTypes = new List<ShootType>();
+        foreach (WeaponConfig weapon in _weapons)
+        {
+            shootTypes.Add(new ShootType
+            {
+                strategy = weapon.CreateStrategy(deps),
+                indicator = weapon.Indicator,
+                coneArcDegrees = weapon.ConeArcDegrees
+            });
+        }
+        return shootTypes;
     }
     private void LateUpdate()
     {
         Quaternion target = _model.ComputeTargetLocalRotation(_aimPointProvider.GetAimPoint(), transform.position, transform.parent);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Player.rotateSpeed * Time.deltaTime);
-        // Cada frame refresco el indicador de punteria: como el player y el mouse
-        // se mueven continuamente, las lineas hay que recalcularlas siempre.
         UpdateAimIndicator();
     }
-    //Calcula TODO el indicador de punteria del frame segun el tipo activo; la vista solo dibuja el resultado
     private void UpdateAimIndicator()
     {
-        // PASO 1 (modelo, la matematica): le pido al modelo que calcule las lineas
-        // de ESTE frame. El modelo decide QUE calcular segun el _indicator que
-        // tenga guardado desde el ultimo cambio de arma.
-        AimIndicatorState indicator = _model.ComputeAimIndicator(_gunSight.position, _aimPointProvider.GetAimPoint());
-        // PASO 2 (vista, el dibujo): le paso el RESULTADO ya calculado al view para que dibuje las lineas. La vista no sabe que tipo de indicador es ni como se calcula, solo dibuja lo que le llega.
-        _view.UpdateAimIndicator(indicator);
+        AimIndicatorState indicatorState = _model.ComputeAimIndicator(_gunSight.position, _aimPointProvider.GetAimPoint());
+        _view.UpdateAimIndicator(indicatorState);
     }
     private void FillDictionary()
     {
@@ -107,10 +106,15 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
         // Sumar Count evita indices negativos y el modulo (%) mantiene
         // el indice siempre entre 0 y Count - 1.
         _currentShootType = (_currentShootType + step + _shootTypes.Count) % _shootTypes.Count;
+        ApplyShootType();
+    }
+    private void ApplyShootType()
+    {
+        // UNICO punto donde se equipa el arma activa en el modelo (lo usan Start
+        // y CycleShootType): estrategia, indicador y arco del cono del tipo actual.
+        // cambio de estrategia a traves del model con el metodo SetShootStrategy, que recibe la estrategia, el indicador y el arco de cono del tipo de disparo actual.
         ShootType current = _shootTypes[_currentShootType];
-        // CAMBIO al modelo la estrategia activa por esta nueva. El modelo no conoce la lista completa de estrategias, solo sabe ejecutar la que tiene asignada.
-        // El modelo suelta la referencia a la anterior y agarra la nueva.
-        _model.SetShootStrategy(current.strategy, current.indicator);
+        _model.SetShootStrategy(current.strategy, current.indicator, current.coneArcDegrees);
     }
     private void Shoot()
     {
@@ -126,5 +130,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     {
         public IShootStrategy strategy;
         public AimIndicatorType indicator;
+        public float coneArcDegrees;
     }
 }
