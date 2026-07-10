@@ -2,7 +2,6 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Weapons/Piercing Weapon", fileName = "PiercingWeapon")]
 public class PiercingWeaponConfig : WeaponConfig
 {
-    [SerializeField] private Color _bulletColor = new Color(0.85f, 0.3f, 1f);
     [SerializeField] private int _bulletCount = 3;
     // Cono bien mas cerrado que los 35 grados de la escopeta.
     [SerializeField] private float _arcDegrees = 12f;
@@ -14,6 +13,6 @@ public class PiercingWeaponConfig : WeaponConfig
     public override float ConeArcDegrees => _arcDegrees;
     public override IShootStrategy CreateStrategy(ShootStrategyDependencies deps)
     {
-        return new PiercingShootStrategy(deps.bulletService, deps.owner, _bulletColor, _bulletCount, _arcDegrees, _damageMultiplier, _bulletScale, deps.onImpact);
+        return new PiercingShootStrategy(deps.bulletService, deps.owner, WeaponColor, _bulletCount, _arcDegrees, _damageMultiplier, _bulletScale, deps.onImpact);
     }
 }
