@@ -59,7 +59,7 @@ public class Bullet : MonoBehaviour
     }
     private void Impact()
     {
-        _onImpact?.Invoke(transform.position, -transform.forward);
+        PlayImpactFeedback();
         ReturnToPool();
     }
     private void ReturnToPool()

@@ -29,10 +29,18 @@ public class SpreadShootStrategy : IShootStrategy
         // EJ: _pelletCount = 5, _totalArcDegrees = 90
         // step = 90 / (5 - 1) = 22.5
         float step = _pelletCount > 1 ? _totalArcDegrees / (_pelletCount - 1) : 0f;
-        // Divido el arco por dos porque quiero que el abanico quede centrado
-        // en la direccion original.
+        // EL MENOS: startAngle es el angulo de la PRIMERA bala, no la mitad
+        // del arco. El loop solo SUMA step hacia la derecha, asi que hay que
+        // arrancar parado en el borde IZQUIERDO (-arco/2) para terminar en el
+        // derecho (+arco/2) y que el centro quede justo donde apunta el laser.
+        // EJ: 3 balas, arco 12 -> step 6 -> angulos -6, 0, +6 (centrado).
+        // Sin el menos serian +6, +12, +18: todo el abanico corrido a la
+        // derecha y desincronizado de la V del indicador, que GunModel
+        // dibuja centrada con -halfArc / +halfArc.
+        // CASO 1 BALA: step = 0 no corrige nada, asi que arranca en 0
+        // para salir por el centro.
         // EJ: 90 -> primera bala a -45 y ultima a +45.
-        float startAngle = -_totalArcDegrees * 0.5f;
+        float startAngle = _pelletCount > 1 ? -_totalArcDegrees * 0.5f : 0f;
         for (int i = 0; i < _pelletCount; i++)
         {
             // Calculo el angulo de esta bala.

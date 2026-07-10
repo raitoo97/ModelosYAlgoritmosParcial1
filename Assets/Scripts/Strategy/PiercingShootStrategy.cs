@@ -25,14 +25,23 @@ public class PiercingShootStrategy : IShootStrategy
     {
         // Mismo reparto en abanico que la escopeta pero con pocas balas
         // grandes en un cono mucho mas cerrado.
-        // Si hay una sola bala, sale derecho sin offset.
-        // EJ: _pelletCount = 5, _totalArcDegrees = 90
-        // step = 90 / (5 - 1) = 22.5
+        // step NO lleva menos: es la SEPARACION entre bala y bala (una
+        // distancia, siempre positiva), no una direccion. El signo que
+        // decide hacia donde arranca el abanico vive solo en startAngle:
+        // step camina, startAngle posiciona.
+        // EJ: _bulletCount = 3, _arcDegrees = 12 -> step = 12 / 2 = 6.
         float step = _bulletCount > 1 ? _arcDegrees / (_bulletCount - 1) : 0f;
-        // Arco centrado en la direccion original.
-        // CASO 1 BALA: si startAngle fuera -arco/2, la unica bala saldria
-        // Con una sola bala arranca en 0 para que salga por el centro.
-        float startAngle = _bulletCount > 1 ? _arcDegrees * 0.5f : 0f;
+        // EL MENOS: startAngle es el angulo de la PRIMERA bala, no la mitad
+        // del arco. El loop solo SUMA step hacia la derecha, asi que hay que
+        // arrancar parado en el borde IZQUIERDO (-arco/2) para terminar en el
+        // derecho (+arco/2) y que el centro quede justo donde apunta el laser.
+        // EJ: 3 balas, arco 12 -> step 6 -> angulos -6, 0, +6 (centrado).
+        // Sin el menos serian +6, +12, +18: todo el abanico corrido a la
+        // derecha y desincronizado de la V del indicador, que GunModel
+        // dibuja centrada con -halfArc / +halfArc.
+        // CASO 1 BALA: step = 0 no corrige nada, asi que arranca en 0
+        // para salir por el centro.
+        float startAngle = _bulletCount > 1 ? -_arcDegrees * 0.5f : 0f;
         for (int i = 0; i < _bulletCount; i++)
         {
             // Calculo el angulo de esta bala.

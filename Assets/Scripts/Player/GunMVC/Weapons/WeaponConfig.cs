@@ -16,10 +16,10 @@ public abstract class WeaponConfig : ScriptableObject
     // Que dibuja el arma al apuntar (Laser, Cone, None).
     [SerializeField] private AimIndicatorType _indicator;
     public AimIndicatorType Indicator => _indicator;
-    // Arco del cono para el indicador en V. Solo lo redefine el arma que
-    // dispara en abanico; para el resto 0 (no se usa).
     [SerializeField] private Color _weaponColor = Color.white;
     public Color WeaponColor => _weaponColor;
+    // Arco del cono para el indicador en V. Solo lo redefine el arma que
+    // dispara en abanico; para el resto 0 (no se usa).
     public virtual float ConeArcDegrees => 0f;
     // Cada arma concreta construye SU estrategia con SUS datos + las deps.
     public abstract IShootStrategy CreateStrategy(ShootStrategyDependencies deps);
