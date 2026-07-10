@@ -18,7 +18,7 @@ public class ShotgunnerSpawnerManager : EnemySpawnerManager
     {
         BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _bulletPoolSize);
         // Naranja para distinguir los balas de las balas rojas del Ranger.
-        return new SpreadShootStrategy(bulletService, Factions.Enemy, new Color(1f, 0.5f, 0f), _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier);
+        return new SpreadShootStrategy(bulletService, Factions.Enemy, new Color(1f, 0.5f, 0f), _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier, BulletImpactCallback);
     }
     protected override int GetPoolSize()
     {

@@ -8,6 +8,11 @@ public class GunView
     private LineRenderer _coneLeftLine;
     private LineRenderer _coneRightLine;
     private ImpactEffectService _impactEffectService;
+    //Creo un objeto donde voy a guardar los valores que quiero sobrescribir del material
+    private MaterialPropertyBlock _propertyBlock = new MaterialPropertyBlock();
+    // IDs de las propiedades del shader del LaserMat.
+    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    private static readonly int EmissionColorId = Shader.PropertyToID("_EmissionColor");
     public GunView(ParticleSystem muzzleFlash, LineRenderer laser, Transform laserDot, LineRenderer coneLeftLine, LineRenderer coneRightLine, ImpactEffectService impactEffectService)
     {
         _muzzleFlash = muzzleFlash;
@@ -20,6 +25,27 @@ public class GunView
         if (_coneLeftLine != null) _coneLeftLine.enabled = false;
         if (_coneRightLine != null) _coneRightLine.enabled = false;
         if (_laserDot != null) _laserDot.gameObject.SetActive(false);
+    }
+    // Pinta las lineas del indicador con el color del arma equipada.
+    // Lo llama Gun.ApplyShootType: UNA vez por cambio de arma, no por frame.
+    // La vista no sabe de que arma viene el color, solo lo aplica.
+    public void SetIndicatorColor(Color color)
+    {
+        TintLine(_laser, color);
+        TintLine(_coneLeftLine, color);
+        TintLine(_coneRightLine, color);
+    }
+    private void TintLine(LineRenderer line, Color color)
+    {
+        if (line == null) return;
+        // El look del laser NO sale del color de vertice del LineRenderer
+        // (startColor/endColor): sale del BaseColor + Emission del material.
+        // Por eso se pinta con MaterialPropertyBlock, que overridea esas
+        // propiedades por renderer sin instanciar el material compartido.
+        line.GetPropertyBlock(_propertyBlock);
+        _propertyBlock.SetColor(BaseColorId, color);
+        _propertyBlock.SetColor(EmissionColorId, color);
+        line.SetPropertyBlock(_propertyBlock);
     }
     // La vista NO conoce el enum ni pregunta que arma hay: recibe las tres lineas
     // y dibuja cada una segun su isVisible. Si el modelo calculo solo el laser,

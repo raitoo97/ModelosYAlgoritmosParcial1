@@ -14,6 +14,7 @@ public class Bullet : MonoBehaviour
     private Factions _owner;
     private bool _isActive;
     private Action<Vector3, Vector3> _onImpact;
+    private bool _isPiercing;
     private Vector3 _initialScale;
     private void Awake()
     {
@@ -35,6 +36,13 @@ public class Bullet : MonoBehaviour
             //si el objeto que colisiona es del mismo bando,no hace nada
             if (!FactionRules.ShouldHit(other, _owner)) return;
             entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
+            // La perforante dania, muestra el chispazo y sigue de largo:
+            // no vuelve al pool al atravesar enemigos.
+            if (_isPiercing)
+            {
+                PlayImpactFeedback();
+                return;
+            }
             Impact();
         }
         // Pared u obstaculo: cualquier collider SOLIDO sin IDamageable.
@@ -45,9 +53,13 @@ public class Bullet : MonoBehaviour
             Impact();
         }
     }
-    private void Impact()
+    private void PlayImpactFeedback()
     {
         _onImpact?.Invoke(transform.position, -transform.forward);
+    }
+    private void Impact()
+    {
+        PlayImpactFeedback();
         ReturnToPool();
     }
     private void ReturnToPool()
@@ -67,6 +79,7 @@ public class Bullet : MonoBehaviour
         _isActive = true;
         _onImpact = null;
         transform.localScale = _initialScale;
+        _isPiercing = false;
     }
     public void SetDamageMultiplier(float damage)
     {
@@ -88,5 +101,9 @@ public class Bullet : MonoBehaviour
     public void SetScale(float multiplier)
     {
         transform.localScale = _initialScale * multiplier;
+    }
+    public void SetPiercing(bool isPiercing)
+    {
+        _isPiercing = isPiercing;
     }
 }

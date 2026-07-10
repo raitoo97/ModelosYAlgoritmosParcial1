@@ -67,7 +67,8 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
             {
                 strategy = weapon.CreateStrategy(deps),
                 indicator = weapon.Indicator,
-                coneArcDegrees = weapon.ConeArcDegrees
+                coneArcDegrees = weapon.ConeArcDegrees,
+                color = weapon.WeaponColor
             });
         }
         return shootTypes;
@@ -112,11 +113,14 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void ApplyShootType()
     {
-        // UNICO punto donde se equipa el arma activa en el modelo (lo usan Start
-        // y CycleShootType): estrategia, indicador y arco del cono del tipo actual.
-        // cambio de estrategia a traves del model con el metodo SetShootStrategy
+        // UNICO punto donde se equipa el arma activa (lo usan Start y
+        // CycleShootType). Reparte cada dato a quien le corresponde:
+        // al MODELO lo que calcula (estrategia, indicador, arco) y a la
+        // VISTA lo que dibuja (el color del arma). Se pinta UNA vez por
+        // cambio de arma.
         ShootType current = _shootTypes[_currentShootType];
         _model.SetShootStrategy(current.strategy, current.indicator, current.coneArcDegrees);
+        _view.SetIndicatorColor(current.color);
     }
     private void Shoot()
     {
@@ -133,5 +137,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
         public IShootStrategy strategy;
         public AimIndicatorType indicator;
         public float coneArcDegrees;
+        public Color color;
     }
 }

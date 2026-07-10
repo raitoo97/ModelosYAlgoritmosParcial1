@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 102500047}
   - component: {fileID: 102500046}
   - component: {fileID: 102500045}
+  - component: {fileID: 102500048}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -289,6 +290,33 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102500043}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &102500048
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102500043}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &109295118
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,6 +397,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 5563108817560274627, guid: 13a2ca83ea35e8d4e816e3ed9dd60b38, type: 3}
   _killsPerDifficultyIncrease: 5
+  _impactEffectPrefab: {fileID: 0}
+  _impactEffectPoolSize: 10
   _spawnPoints:
   - {fileID: 1880590110}
   - {fileID: 40860751}
@@ -732,7 +762,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -758,8 +788,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.004809027, y: -0.050510347, z: -0.00024321892, w: 0.99871194}
-  m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
+  m_LocalRotation: {x: 0.67817646, y: -0.16332595, z: 0.1585133, w: 0.69876677}
+  m_LocalPosition: {x: -0.95, y: 2.28, z: -15.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -859,37 +889,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
---- !u!1 &406407019
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 406407020}
-  m_Layer: 0
-  m_Name: LastBulletType
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &406407020
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 406407019}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.01901, y: -1.631883, z: 2.4150827}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,6 +1930,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2131018919323893079, guid: 1d4488344b416c744b74be5addfcc1c8, type: 3}
   _killsPerDifficultyIncrease: 5
+  _impactEffectPrefab: {fileID: 7974238921554058918, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+  _impactEffectPoolSize: 10
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _bulletPoolSize: 50
   _poolSize: 20
@@ -9278,6 +9279,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797045373}
   m_CullTransparentMesh: 1
+--- !u!1 &1818345069
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1818345070}
+  m_Layer: 0
+  m_Name: PowerUps
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1818345070
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818345069}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -26.4371, y: 5.7273746, z: -13.738419}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1880590109
 GameObject:
   m_ObjectHideFlags: 0
@@ -9467,12 +9499,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 4086703579082776176, guid: 521286e9f4f508b4e801b5189a34552e, type: 3}
   _killsPerDifficultyIncrease: 5
+  _impactEffectPrefab: {fileID: 7974238921554058918, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+  _impactEffectPoolSize: 10
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _bulletPoolSize: 50
   _poolSize: 20
   _spawnRate: 8
   _spawnRateDecrease: 1
-  _minSpawnRate: 2
+  _minSpawnRate: 1
   _radius: 10
   _spawnHeight: 1.5
   _pelletCount: 5
@@ -9565,6 +9599,10 @@ PrefabInstance:
       propertyPath: _cameraReference
       value: 
       objectReference: {fileID: 330585546}
+    - target: {fileID: 6219664154032980366, guid: 5c9224075ab2dd64aa19dbf6225ecfa8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9588,4 +9626,4 @@ SceneRoots:
   - {fileID: 1037440399}
   - {fileID: 1880590110}
   - {fileID: 164945402}
-  - {fileID: 406407020}
+  - {fileID: 1818345070}

@@ -32,6 +32,11 @@ public class BulletBuilder
         _bullet.SetScale(scaleMultiplier);
         return this;
     }
+    public BulletBuilder SetPiercingBullet(bool isPiercing)
+    {
+        _bullet.SetPiercing(isPiercing);
+        return this;
+    }
     public Bullet Build()
     {
         return _bullet;
