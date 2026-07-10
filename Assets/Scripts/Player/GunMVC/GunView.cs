@@ -21,6 +21,9 @@ public class GunView
         if (_coneRightLine != null) _coneRightLine.enabled = false;
         if (_laserDot != null) _laserDot.gameObject.SetActive(false);
     }
+    // La vista NO conoce el enum ni pregunta que arma hay: recibe las tres lineas
+    // y dibuja cada una segun su isVisible. Si el modelo calculo solo el laser,
+    // los bordes de la V vienen invisibles y UpdateLine los apaga solo.
     public void UpdateAimIndicator(AimIndicatorState state)
     {
         // El dot solo acompania al laser central; los bordes de la V van sin dot.
