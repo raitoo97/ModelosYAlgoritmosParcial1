@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+[RequireComponent(typeof(ParticleSystem))]
 public class ImpactEffect : MonoBehaviour
 {
     private ParticleSystem _particleSystem;

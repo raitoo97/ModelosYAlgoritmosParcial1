@@ -57,8 +57,8 @@ public class GunModel
     }
     public ShotResult Shoot(Vector3 origin, Vector3 aimPoint, Vector3 barrelForward)
     {
-        // El modelo no pregunta que arma es: ejecuta la estrategia que tenga puesta.
-        //la estrategia se setea en SetShootStrategy que lo llama gun, cuando paso de arma.
+        //El modelo no pregunta que arma es: ejecuta la estrategia que tenga puesta.
+        //La estrategia se setea en SetShootStrategy: lo llama Gun al equipar la primera arma en Start y en cada cambio de arma.
         Vector3 direction = IsAiming ? (aimPoint - origin).normalized : barrelForward;
         return _shootStrategy.Shoot(origin, direction);
     }

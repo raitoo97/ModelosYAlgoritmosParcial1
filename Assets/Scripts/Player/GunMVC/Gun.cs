@@ -114,7 +114,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     {
         // UNICO punto donde se equipa el arma activa en el modelo (lo usan Start
         // y CycleShootType): estrategia, indicador y arco del cono del tipo actual.
-        // cambio de estrategia a traves del model con el metodo SetShootStrategy, que recibe la estrategia, el indicador y el arco de cono del tipo de disparo actual.
+        // cambio de estrategia a traves del model con el metodo SetShootStrategy
         ShootType current = _shootTypes[_currentShootType];
         _model.SetShootStrategy(current.strategy, current.indicator, current.coneArcDegrees);
     }
