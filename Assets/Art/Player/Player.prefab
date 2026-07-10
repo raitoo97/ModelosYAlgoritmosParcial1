@@ -1259,12 +1259,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunSight: {fileID: 5197687787629731692}
+  _impactEffectPrefab: {fileID: 7974238921554058918, guid: 0354879eac415b946a99f250756740d9, type: 3}
+  _impactEffectPoolSize: 20
   _muzzleFlash: {fileID: 3528706564318035202}
-  _impactEffect: {fileID: 0}
   _hitMask:
     serializedVersion: 2
     m_Bits: 321
-  _maxShootDistance: 100
   _damageMultiplier: 4
   _laser: {fileID: 2548988218624664917}
   _laserDot: {fileID: 2219501881101897245}
@@ -1273,6 +1273,7 @@ MonoBehaviour:
   _pelletCount: 5
   _spreadArcDegrees: 35
   _pelletDamageMultiplier: 0.8
+  _pelletScale: 1.6
   _spreadBulletColor: {r: 0.3, g: 0.8, b: 1, a: 1}
 --- !u!1 &3810104624290840303
 GameObject:

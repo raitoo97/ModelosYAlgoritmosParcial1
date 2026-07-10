@@ -2,27 +2,17 @@ using UnityEngine;
 public class GunView
 {
     private ParticleSystem _muzzleFlash;
-    private ParticleSystem _impactEffect;
     private LineRenderer _laser;
     private Transform _laserDot;
-    private ParticleSystem[] _impactEffects;
-    private int _nextImpactEffect;
-    public GunView(ParticleSystem muzzleFlash, ParticleSystem impactEffectTemplate, LineRenderer laser, Transform laserDot, Transform effectsParent, int impactEffectCount)
+    private ImpactEffectService _impactEffectService;
+    public GunView(ParticleSystem muzzleFlash, LineRenderer laser, Transform laserDot, ImpactEffectService impactEffectService)
     {
         _muzzleFlash = muzzleFlash;
         _laser = laser;
         _laserDot = laserDot;
+        _impactEffectService = impactEffectService;
         if (_laser != null) _laser.enabled = false;
         if (_laserDot != null) _laserDot.gameObject.SetActive(false);
-        if (impactEffectTemplate != null && impactEffectCount > 0)
-        {
-            _impactEffects = new ParticleSystem[impactEffectCount];
-            for (int i = 0; i < impactEffectCount; i++)
-            {
-                _impactEffects[i] = Object.Instantiate(impactEffectTemplate, effectsParent);
-                _impactEffects[i].Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            }
-        }
     }
     public void UpdateLaser(LaserState laser)
     {
@@ -41,19 +31,12 @@ public class GunView
     {
         if (_muzzleFlash != null)
             _muzzleFlash.Play();
-        if (result.didHit && _impactEffect != null)
-        {
-            _impactEffect.transform.SetPositionAndRotation(result.hitPoint , Quaternion.LookRotation(result.hitNormal));
-            _impactEffect.Play();
-        }
+        if (result.didHit)
+            PlayImpactEffect(result.hitPoint, result.hitNormal);
     }
     public void PlayImpactEffect(Vector3 point, Vector3 normal)
     {
-        if (_impactEffects == null) return;
-        ParticleSystem effect = _impactEffects[_nextImpactEffect];
-        // Avanzo el indice circular para que el proximo impacto use otro clon.
-        _nextImpactEffect = (_nextImpactEffect + 1) % _impactEffects.Length;
-        effect.transform.SetPositionAndRotation(point, Quaternion.LookRotation(normal));
-        effect.Play();
+        if (_impactEffectService == null) return;
+        _impactEffectService.PlayAt(point, normal);
     }
 }

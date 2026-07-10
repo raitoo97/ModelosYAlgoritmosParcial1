@@ -10,21 +10,21 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private GunView _view;
     private int _currentShootType;
     private IAimPointProvider _aimPointProvider;
+    [Header("ParticulasDeImpacto")]
+    [SerializeField] private ImpactEffect _impactEffectPrefab;
+    [SerializeField] private int _impactEffectPoolSize = 10;
     [Header("DisparoRayCast")]
     [SerializeField] private ParticleSystem _muzzleFlash;
-    [SerializeField] private ParticleSystem _impactEffect;
     [SerializeField] private LayerMask _hitMask;
     [SerializeField] private float _damageMultiplier = 4f;
     [SerializeField] private LineRenderer _laser;
     [SerializeField] private Transform _laserDot;
     [Header("Abanico")]
-    [SerializeField] private int _impactEffectPoolSize = 10;
-    [SerializeField] private float _pelletScale = 1.6f;
     [SerializeField] private Bullet _bulletPrefab;
     [SerializeField] private int _bulletPoolSize = 30;
     [SerializeField] private int _pelletCount = 5;
     [SerializeField] private float _spreadArcDegrees = 35f;
-    // Celeste para distinguirlas de las rojas del Ranger y naranjas del Shotgunner.
+    [SerializeField] private float _pelletScale = 1.6f;
     [SerializeField] private Color _spreadBulletColor = new Color(0.3f, 0.8f, 1f);
     public void Init(IAimPointProvider aimPointProvider)
     {
@@ -32,7 +32,10 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Start()
     {
-        _view = new GunView(_muzzleFlash, _impactEffect, _laser, _laserDot, GameManager.instance._projectilesParent, _impactEffectPoolSize);
+        ImpactEffectService impactEffectService = _impactEffectPrefab != null? new ImpactEffectService(_impactEffectPrefab, GameManager.instance._projectilesParent, _impactEffectPoolSize): null;
+        // La vista se crea antes que las estrategias porque la escopeta
+        // recibe su metodo de particula de impacto como callback.
+        _view = new GunView(_muzzleFlash, _laser, _laserDot, impactEffectService);
         _shootTypes = CreateShootTypes();
         _currentShootType = 0;
         _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _hitMask, FlyWeightPointer.Player.maxDistance);
