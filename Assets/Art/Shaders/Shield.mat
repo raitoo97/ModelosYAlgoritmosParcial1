@@ -52,15 +52,16 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorIntensity: 1
-    - _Depth: 1.74
-    - _Distance: 0.6
-    - _Frequency: 8
+    - _Depth: 10
+    - _Distance: 2
+    - _Frequency: 15.7
     - _FresnelPower: 7.89
+    - _InnerOpacity: -0.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SmoothStepEdge1: 0.239
-    - _SmoothStepEdge2: 0.781
-    - _Speed: 8
+    - _SmoothStepEdge1: 0.116
+    - _SmoothStepEdge2: 0.776
+    - _Speed: 10
     m_Colors:
     - _Color: {r: 1, g: 0.09411765, b: 0, a: 0}
     - _ColorEdges: {r: 1, g: 0.27450982, b: 0, a: 0}
