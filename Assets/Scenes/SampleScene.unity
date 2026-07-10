@@ -397,6 +397,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 5563108817560274627, guid: 13a2ca83ea35e8d4e816e3ed9dd60b38, type: 3}
   _killsPerDifficultyIncrease: 5
+  _impactEffectPrefab: {fileID: 0}
+  _impactEffectPoolSize: 10
   _spawnPoints:
   - {fileID: 1880590110}
   - {fileID: 40860751}
@@ -1928,6 +1930,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 2131018919323893079, guid: 1d4488344b416c744b74be5addfcc1c8, type: 3}
   _killsPerDifficultyIncrease: 5
+  _impactEffectPrefab: {fileID: 0}
+  _impactEffectPoolSize: 10
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _bulletPoolSize: 50
   _poolSize: 20
@@ -2103,6 +2107,95 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1280013860
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.517157
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.036
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -12.779447
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638900032874548230, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime0
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.ctime1
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 0.14344116
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.g
+      value: 0.06774927
+      objectReference: {fileID: 0}
+    - target: {fileID: 2873823370989727376, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5188043940240428419, guid: 70419d053adc97c44b01ab7644001654, type: 3}
+      propertyPath: m_Name
+      value: BulletEnemyExplosion
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 70419d053adc97c44b01ab7644001654, type: 3}
 --- !u!1 &1291160752
 GameObject:
   m_ObjectHideFlags: 0
@@ -9464,6 +9557,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyPrefab: {fileID: 4086703579082776176, guid: 521286e9f4f508b4e801b5189a34552e, type: 3}
   _killsPerDifficultyIncrease: 5
+  _impactEffectPrefab: {fileID: 0}
+  _impactEffectPoolSize: 10
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _bulletPoolSize: 50
   _poolSize: 20
@@ -9589,3 +9684,4 @@ SceneRoots:
   - {fileID: 1037440399}
   - {fileID: 1880590110}
   - {fileID: 164945402}
+  - {fileID: 1280013860}

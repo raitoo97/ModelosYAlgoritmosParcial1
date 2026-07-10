@@ -14,7 +14,7 @@ public class RangerSpawnerManager : EnemySpawnerManager
     protected override IShootStrategy CreateShootStrategy()
     {
         BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _bulletPoolSize);
-        return new ProjectileShootStrategy(bulletService, Factions.Enemy, Color.red);
+        return new ProjectileShootStrategy(bulletService, Factions.Enemy, Color.red, BulletImpactCallback);
     }
     protected override int GetPoolSize()
     {
