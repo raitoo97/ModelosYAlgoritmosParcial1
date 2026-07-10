@@ -14,6 +14,14 @@ public class PlayerController : ICharacterController
         {
             _model.Shoot();
         }
+        if(PlayerInputsManager.instance.NextShootTypeAction())
+        {
+            _model.NextShootType();
+        }
+        if(PlayerInputsManager.instance.PreviousShootTypeAction())
+        {
+            _model.PreviousShootType();
+        }
         _model.SetAiming(PlayerInputsManager.instance.AimAction());
     }
     public void FixedUpdateInputs()

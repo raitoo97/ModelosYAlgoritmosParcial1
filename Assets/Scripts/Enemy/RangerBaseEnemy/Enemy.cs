@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     private bool _isDying;
     private Action<Enemy> _returnToPoolCallBack;
     private Transform _playerTransform;
-    protected virtual FlyWeight Stats => FlyWeightPointer.Entity;
+    protected virtual FlyWeight Stats => FlyWeightPointer.Ranger;
     protected EnemyModel Model => _model;
     public Factions Faction => Factions.Enemy;
     private Rigidbody _rb;

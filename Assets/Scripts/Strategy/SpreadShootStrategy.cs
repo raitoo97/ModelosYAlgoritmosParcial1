@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class SpreadShootStrategy : IShootStrategy
 {
@@ -7,7 +8,9 @@ public class SpreadShootStrategy : IShootStrategy
     private int _pelletCount;
     private float _totalArcDegrees;
     private float _damageMultiplier;
-    public SpreadShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int pelletCount, float totalArcDegrees, float damageMultiplier)
+    private Action<Vector3, Vector3> _onImpact;
+    private float _bulletScale;
+    public SpreadShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int pelletCount, float totalArcDegrees, float damageMultiplier,Action<Vector3, Vector3> onImpact = null,float bulletScale = 1f)
     {
         _bulletService = bulletService;
         _owner = owner;
@@ -15,6 +18,8 @@ public class SpreadShootStrategy : IShootStrategy
         _pelletCount = pelletCount;
         _totalArcDegrees = totalArcDegrees;
         _damageMultiplier = damageMultiplier;
+        _bulletScale = bulletScale;
+        _onImpact = onImpact;
     }
     public ShotResult Shoot(Vector3 origin, Vector3 direction)
     {
@@ -32,11 +37,11 @@ public class SpreadShootStrategy : IShootStrategy
         {
             // Calculo el angulo de esta bala.
             // EJ: startAngle = -45, step = 22.5
-            // i = 0 -> -45°
-            // i = 1 -> -22.5°
-            // i = 2 ->   0°
-            // i = 3 ->  22.5°
-            // i = 4 ->  45°
+            // i = 0 -> -45
+            // i = 1 -> -22.5
+            // i = 2 ->   0
+            // i = 3 ->  22.5
+            // i = 4 ->  45
             float angle = startAngle + step * i;
             // Roto la direccion original sobre el eje Y para obtener
             // la direccion final de esta bala dentro del abanico.
@@ -46,6 +51,8 @@ public class SpreadShootStrategy : IShootStrategy
                 .SetColorMaterial(_bulletColor)
                 .SetOwnerBullet(_owner)
                 .SetDamageMultiplierBullet(_damageMultiplier)
+                .SetScaleBullet(_bulletScale)
+                .SetOnImpactBullet(_onImpact)
                 .Build();
         }
         return new ShotResult { didHit = false };

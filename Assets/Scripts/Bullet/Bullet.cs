@@ -13,9 +13,12 @@ public class Bullet : MonoBehaviour
     private Action<Bullet> _returnToPoolCallBack;
     private Factions _owner;
     private bool _isActive;
+    private Action<Vector3, Vector3> _onImpact;
+    private Vector3 _initialScale;
     private void Awake()
     {
         _renderer = GetComponentInChildren<Renderer>();
+        _initialScale = transform.localScale;
     }
     void Update()
     {
@@ -27,25 +30,31 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<IDamageable>(out var entity))
+        if (other.TryGetComponent<IDamageable>(out var entity))
         {
             //si el objeto que colisiona es del mismo bando,no hace nada
-            if (!ShouldHit(other)) return;
+            if (!FactionRules.ShouldHit(other, _owner)) return;
             entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
-            ReturnToPool();
+            Impact();
         }
+        // Pared u obstaculo: cualquier collider SOLIDO sin IDamageable.
+        // Los triggers ajenos (powerups, zonas, otras balas) se atraviesan,
+        // por eso se filtra con !other.isTrigger.
+        else if (!other.isTrigger)
+        {
+            Impact();
+        }
+    }
+    private void Impact()
+    {
+        _onImpact?.Invoke(transform.position, -transform.forward);
+        ReturnToPool();
     }
     private void ReturnToPool()
     {
         if (!_isActive) return;
         _isActive = false;
         _returnToPoolCallBack?.Invoke(this);
-    }
-    private bool ShouldHit(Collider other)
-    {
-        if (other.TryGetComponent<IFactionMember>(out var member))
-            return member.Faction != _owner;
-        return true;
     }
     public void SetReturnToPoolCallBack(Action<Bullet> returnToPoolCallBack)
     {
@@ -56,6 +65,8 @@ public class Bullet : MonoBehaviour
         _damageMultiplier = 1f;
         _currentDistance = 0;
         _isActive = true;
+        _onImpact = null;
+        transform.localScale = _initialScale;
     }
     public void SetDamageMultiplier(float damage)
     {
@@ -69,5 +80,13 @@ public class Bullet : MonoBehaviour
     {
         if (_renderer != null)
             _renderer.material.SetColor("_BulletColor", color);
+    }
+    public void SetOnImpact(Action<Vector3, Vector3> onImpact)
+    {
+        _onImpact = onImpact;
+    }
+    public void SetScale(float multiplier)
+    {
+        transform.localScale = _initialScale * multiplier;
     }
 }

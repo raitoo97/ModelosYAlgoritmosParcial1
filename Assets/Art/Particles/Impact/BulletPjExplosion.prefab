@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1638900032874548230}
   - component: {fileID: 2873823370989727376}
   - component: {fileID: 5396038154463313200}
+  - component: {fileID: 7974238921554058918}
   m_Layer: 13
   m_Name: BulletPjExplosion
   m_TagString: Untagged
@@ -4930,3 +4931,15 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &7974238921554058918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5188043940240428419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2ae946320663104c968fc136ab5db5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

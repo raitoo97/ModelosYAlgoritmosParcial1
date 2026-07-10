@@ -118,6 +118,24 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextShootType"",
+                    ""type"": ""Button"",
+                    ""id"": ""73f5ece2-796d-49c2-8d25-e65ab4697f18"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PreviousShootType"",
+                    ""type"": ""Button"",
+                    ""id"": ""f7f51820-eadc-4019-ba60-ed8a62dfc0a8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -195,6 +213,28 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""231c6182-4c80-4579-8b8d-219d013376df"",
+                    ""path"": ""<Mouse>/scroll/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextShootType"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa695b71-e621-45a1-a4e3-19c37090db2a"",
+                    ""path"": ""<Mouse>/scroll/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PreviousShootType"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -312,6 +352,8 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         m_PlayerInputs_Move = m_PlayerInputs.FindAction("Move", throwIfNotFound: true);
         m_PlayerInputs_Shoot = m_PlayerInputs.FindAction("Shoot", throwIfNotFound: true);
         m_PlayerInputs_Aim = m_PlayerInputs.FindAction("Aim", throwIfNotFound: true);
+        m_PlayerInputs_NextShootType = m_PlayerInputs.FindAction("NextShootType", throwIfNotFound: true);
+        m_PlayerInputs_PreviousShootType = m_PlayerInputs.FindAction("PreviousShootType", throwIfNotFound: true);
         // LoadAndSaveInputs
         m_LoadAndSaveInputs = asset.FindActionMap("LoadAndSaveInputs", throwIfNotFound: true);
         m_LoadAndSaveInputs_Save = m_LoadAndSaveInputs.FindAction("Save", throwIfNotFound: true);
@@ -408,6 +450,8 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInputs_Move;
     private readonly InputAction m_PlayerInputs_Shoot;
     private readonly InputAction m_PlayerInputs_Aim;
+    private readonly InputAction m_PlayerInputs_NextShootType;
+    private readonly InputAction m_PlayerInputs_PreviousShootType;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerInputs".
     /// </summary>
@@ -431,6 +475,14 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerInputs/Aim".
         /// </summary>
         public InputAction @Aim => m_Wrapper.m_PlayerInputs_Aim;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerInputs/NextShootType".
+        /// </summary>
+        public InputAction @NextShootType => m_Wrapper.m_PlayerInputs_NextShootType;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerInputs/PreviousShootType".
+        /// </summary>
+        public InputAction @PreviousShootType => m_Wrapper.m_PlayerInputs_PreviousShootType;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -466,6 +518,12 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @NextShootType.started += instance.OnNextShootType;
+            @NextShootType.performed += instance.OnNextShootType;
+            @NextShootType.canceled += instance.OnNextShootType;
+            @PreviousShootType.started += instance.OnPreviousShootType;
+            @PreviousShootType.performed += instance.OnPreviousShootType;
+            @PreviousShootType.canceled += instance.OnPreviousShootType;
         }
 
         /// <summary>
@@ -486,6 +544,12 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @NextShootType.started -= instance.OnNextShootType;
+            @NextShootType.performed -= instance.OnNextShootType;
+            @NextShootType.canceled -= instance.OnNextShootType;
+            @PreviousShootType.started -= instance.OnPreviousShootType;
+            @PreviousShootType.performed -= instance.OnPreviousShootType;
+            @PreviousShootType.canceled -= instance.OnPreviousShootType;
         }
 
         /// <summary>
@@ -846,6 +910,20 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAim(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "NextShootType" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnNextShootType(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PreviousShootType" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPreviousShootType(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "LoadAndSaveInputs" which allows adding and removing callbacks.
