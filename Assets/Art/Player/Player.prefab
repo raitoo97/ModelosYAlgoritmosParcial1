@@ -1272,8 +1272,7 @@ MonoBehaviour:
   _bulletPoolSize: 30
   _pelletCount: 5
   _spreadArcDegrees: 35
-  _pelletDamageMultiplier: 0.8
-  _pelletScale: 1.6
+  _pelletScale: 2.5
   _spreadBulletColor: {r: 0.3, g: 0.8, b: 1, a: 1}
 --- !u!1 &3810104624290840303
 GameObject:
