@@ -27,6 +27,10 @@ public class PlayerInputsManager : MonoBehaviour
     {
         return _playerMap.PlayerInputs.Shoot.triggered;
     }
+    public bool UsePowerUpAction()
+    {
+        return _playerMap.PlayerInputs.UsePowerUp.triggered;
+    }
     public bool NextShootTypeAction()
     {
         return _playerMap.PlayerInputs.NextShootType.triggered;

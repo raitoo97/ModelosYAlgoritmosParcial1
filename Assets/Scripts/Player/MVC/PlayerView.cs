@@ -7,8 +7,10 @@ public class PlayerView : IObserver<PlayerEvent>
     private Dictionary<PlayerEvent, Action> _actions;
     private float _currentAimWeight;
     private int _aimLayerIndex;
-    public PlayerView(Player user)
+    private GameObject _shieldVisual;
+    public PlayerView(Player user, GameObject shieldVisual)
     {
+        _shieldVisual = shieldVisual;
         _animator = user.GetComponent<Animator>();
         _actions = new Dictionary<PlayerEvent, Action>();
         _aimLayerIndex = _animator.GetLayerIndex("Aim");
@@ -46,11 +48,23 @@ public class PlayerView : IObserver<PlayerEvent>
             clampWeight: 0.5f
         );
     }
+    private void SetShieldVisible(bool visible)
+    {
+        // Warning y no silencio: si falta la referencia, que se note en consola.
+        if (_shieldVisual == null)
+        {
+            Debug.LogWarning("PlayerView: falta asignar _shieldVisual (la burbuja) en el componente Player.");
+            return;
+        }
+        _shieldVisual.SetActive(visible);
+    }
     private void FillDictionary()
     {
         _actions.Add(PlayerEvent.Move, () => MoveAnimation(true));
         _actions.Add(PlayerEvent.Idle, () => MoveAnimation(false));
         _actions.Add(PlayerEvent.Death, OnPlayerDeath);
+        _actions.Add(PlayerEvent.ShieldOn, () => SetShieldVisible(true));
+        _actions.Add(PlayerEvent.ShieldOff, () => SetShieldVisible(false));
     }
     public void Notify(PlayerEvent actions)
     {

@@ -8,6 +8,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private ObserverList<PlayerEvent> _playerObservers = new ObserverList<PlayerEvent>();
     private bool _isDead;
     private bool _isMoving;
+    private bool _isInvulnerable;
     private Dictionary<SaveEvent, Action> _actions = new Dictionary<SaveEvent, Action>();
     private MementoState<PlayerMemento> _playerMemento;
     private Vector3 _pausedVelocity;
@@ -67,6 +68,10 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.Shoot);
     }
+    public void UsePowerUp()
+    {
+        NotifyObservers(PlayerEvent.UsePowerUp);
+    }
     public void NextShootType()
     {
         NotifyObservers(PlayerEvent.NextShootType);
@@ -77,7 +82,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     }
     public void TakeDamage(float dmg)
     {
-        if (_isDead) return;
+        if (_isDead || _isInvulnerable) return;
         _currentLife -= dmg;
         float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
         EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
@@ -88,6 +93,12 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
             NotifyObservers(PlayerEvent.Death);
             EventManager.TriggerEvent(EventType.PlayerDeath);
         }
+    }
+    public void SetInvulnerable(bool value)
+    {
+        if (value == _isInvulnerable) return;
+        _isInvulnerable = value;
+        NotifyObservers(value ? PlayerEvent.ShieldOn : PlayerEvent.ShieldOff);
     }
     public void NotifyObservers(PlayerEvent action) 
     { 

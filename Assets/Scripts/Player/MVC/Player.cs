@@ -9,10 +9,13 @@ public enum PlayerEvent
     Aim,
     StopAim,
     NextShootType,
-    PreviousShootType
+    PreviousShootType,
+    UsePowerUp,
+    ShieldOn,
+    ShieldOff
 }
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,IAimPointProvider
+public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,IAimPointProvider, IShieldable
 {
     private PlayerModel _model;
     private ICharacterController _controller;
@@ -20,18 +23,26 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     private Gun _gun;
     [SerializeField] private Transform _cameraReference;
     [SerializeField] private LayerMask _aimMask;
+    private PowerUpController _powerUp;
+    [SerializeField] private GameObject _shieldVisual;
     public Factions Faction => Factions.Player;
     private void Awake()
     {
         _model = new PlayerModel(this, _cameraReference, _aimMask);
         _controller = new PlayerController(_model);
-        _view = new PlayerView(this);
+        _view = new PlayerView(this, _shieldVisual);
         _model.Subscribe(_view);
         _gun = GetComponentInChildren<Gun>();
         if (_gun != null)
         {
             _gun.Init(this);
             _model.Subscribe(_gun);
+        }
+        _powerUp = GetComponentInChildren<PowerUpController>();
+        if (_powerUp != null)
+        {
+            _powerUp.Init(gameObject);
+            _model.Subscribe(_powerUp);
         }
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnDeath);
         StartCoroutine(LateAwake());
@@ -52,6 +63,14 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     {
         _model.TakeDamage(dmg);
     }
+    public void ActivateShield()
+    {
+        _model.SetInvulnerable(true);
+    }
+    public void DeactivateShield()
+    {
+        _model.SetInvulnerable(false);
+    }
     private void OnAnimatorIK(int layerIndex)
     {
         _view.UpdateAimIK(_model.GetAiming, GetAimPoint());
@@ -69,6 +88,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     {
         _model.Unsubscribe(_view);
         if (_gun != null) _model.Unsubscribe(_gun);
+        if (_powerUp != null) _model.Unsubscribe(_powerUp);
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnDeath);
         SaveManager.instance.Unsubscribe(_model);
     }
