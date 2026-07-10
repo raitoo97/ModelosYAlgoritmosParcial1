@@ -24,21 +24,27 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private int _bulletPoolSize = 30;
     [SerializeField] private int _pelletCount = 5;
     [SerializeField] private float _spreadArcDegrees = 35f;
+    [SerializeField] private float _pelletDamageMultiplier = 0.8f;
     [SerializeField] private float _pelletScale = 1.6f;
     [SerializeField] private Color _spreadBulletColor = new Color(0.3f, 0.8f, 1f);
+    // Bordes de la V que telegrafia el abanico de la escopeta al apuntar.
+    [SerializeField] private LineRenderer _coneLeftLine;
+    [SerializeField] private LineRenderer _coneRightLine;
     public void Init(IAimPointProvider aimPointProvider)
     {
         _aimPointProvider = aimPointProvider;
     }
     private void Start()
     {
-        ImpactEffectService impactEffectService = _impactEffectPrefab != null? new ImpactEffectService(_impactEffectPrefab, GameManager.instance._projectilesParent, _impactEffectPoolSize): null;
+        ImpactEffectService impactEffectService = _impactEffectPrefab != null ? new ImpactEffectService(_impactEffectPrefab, GameManager.instance._projectilesParent, _impactEffectPoolSize) : null;
         // La vista se crea antes que las estrategias porque la escopeta
         // recibe su metodo de particula de impacto como callback.
-        _view = new GunView(_muzzleFlash, _laser, _laserDot, impactEffectService);
+        _view = new GunView(_muzzleFlash, _laser, _laserDot, _coneLeftLine, _coneRightLine, impactEffectService);
         _shootTypes = CreateShootTypes();
         _currentShootType = 0;
-        _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _hitMask, FlyWeightPointer.Player.maxDistance);
+        // El cono usa el arco real de la escopeta y el alcance real del perdigon
+        // (maxLife de Bullet es distancia), asi la V muestra el disparo verdadero.
+        _model = new GunModel(transform.localRotation, _shootTypes[_currentShootType].strategy, _shootTypes[_currentShootType].indicator, _hitMask, FlyWeightPointer.Player.maxDistance, _spreadArcDegrees, FlyWeightPointer.Projectile.maxLife);
         FillDictionary();
     }
     private List<ShootType> CreateShootTypes()
@@ -50,12 +56,12 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
             new ShootType
             {
                 strategy = new HitscanShootStrategy(FlyWeightPointer.Projectile.damage * _damageMultiplier, Factions.Player, _hitMask, FlyWeightPointer.Player.maxDistance),
-                showLaser = true
+                indicator = AimIndicatorType.Laser
             },
             new ShootType
             {
-                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, FlyWeightPointer.Projectile.damage * _damageMultiplier,_view.PlayImpactEffect, _pelletScale),
-                showLaser = false
+                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier, _view.PlayImpactEffect, _pelletScale),
+                indicator = AimIndicatorType.Cone
             }
         };
     }
@@ -63,12 +69,12 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     {
         Quaternion target = _model.ComputeTargetLocalRotation(_aimPointProvider.GetAimPoint(), transform.position, transform.parent);
         transform.localRotation = Quaternion.Slerp(transform.localRotation, target, FlyWeightPointer.Player.rotateSpeed * Time.deltaTime);
-        UpdateLaserSight();
+        UpdateAimIndicator();
     }
-    private void UpdateLaserSight()
+    private void UpdateAimIndicator()
     {
-        LaserState laser = _model.ComputeLaser(_gunSight.position, _aimPointProvider.GetAimPoint());
-        _view.UpdateLaser(laser);
+        AimIndicatorState indicator = _model.ComputeAimIndicator(_gunSight.position, _aimPointProvider.GetAimPoint());
+        _view.UpdateAimIndicator(indicator);
     }
     private void FillDictionary()
     {
@@ -92,7 +98,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
         // el indice siempre entre 0 y Count - 1.
         _currentShootType = (_currentShootType + step + _shootTypes.Count) % _shootTypes.Count;
         ShootType current = _shootTypes[_currentShootType];
-        _model.SetShootStrategy(current.strategy, current.showLaser);
+        _model.SetShootStrategy(current.strategy, current.indicator);
     }
     private void Shoot()
     {
@@ -107,6 +113,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private struct ShootType
     {
         public IShootStrategy strategy;
-        public bool showLaser;
+        public AimIndicatorType indicator;
     }
 }
