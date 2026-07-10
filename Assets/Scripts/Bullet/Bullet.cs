@@ -33,7 +33,7 @@ public class Bullet : MonoBehaviour
         if (other.TryGetComponent<IDamageable>(out var entity))
         {
             //si el objeto que colisiona es del mismo bando,no hace nada
-            if (!ShouldHit(other)) return;
+            if (!FactionRules.ShouldHit(other, _owner)) return;
             entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
             Impact();
         }
@@ -55,12 +55,6 @@ public class Bullet : MonoBehaviour
         if (!_isActive) return;
         _isActive = false;
         _returnToPoolCallBack?.Invoke(this);
-    }
-    private bool ShouldHit(Collider other)
-    {
-        if (other.TryGetComponent<IFactionMember>(out var member))
-            return member.Faction != _owner;
-        return true;
     }
     public void SetReturnToPoolCallBack(Action<Bullet> returnToPoolCallBack)
     {

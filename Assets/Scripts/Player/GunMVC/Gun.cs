@@ -24,7 +24,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     [SerializeField] private int _bulletPoolSize = 30;
     [SerializeField] private int _pelletCount = 5;
     [SerializeField] private float _spreadArcDegrees = 35f;
-    [SerializeField] private float _pelletDamageMultiplier = 0.8f;
     [SerializeField] private float _pelletScale = 1.6f;
     [SerializeField] private Color _spreadBulletColor = new Color(0.3f, 0.8f, 1f);
     // Bordes de la V que telegrafia el abanico de la escopeta al apuntar.
@@ -64,7 +63,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
             },
             new ShootType
             {
-                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier, _view.PlayImpactEffect, _pelletScale),
+                strategy = new SpreadShootStrategy(bulletService, Factions.Player, _spreadBulletColor, _pelletCount, _spreadArcDegrees, FlyWeightPointer.Projectile.damage * _damageMultiplier, _view.PlayImpactEffect, _pelletScale),
                 indicator = AimIndicatorType.Cone
             }
         };

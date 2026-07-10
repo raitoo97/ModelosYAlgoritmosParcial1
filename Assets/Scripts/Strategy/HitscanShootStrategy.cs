@@ -23,16 +23,10 @@ public class HitscanShootStrategy : IShootStrategy
     {
         if (Physics.Raycast(origin, direction, out RaycastHit hit, _maxDistance, _hitMask, QueryTriggerInteraction.Ignore))
         {
-            if (hit.collider.TryGetComponent<IDamageable>(out var target) && ShouldHit(hit.collider))
+            if (hit.collider.TryGetComponent<IDamageable>(out var target) && FactionRules.ShouldHit(hit.collider, _owner))
                 target.TakeDamage(_damage);
             return new ShotResult { didHit = true, hitPoint = hit.point, hitNormal = hit.normal };
         }
         return new ShotResult { didHit = false, hitPoint = Vector3.zero, hitNormal = Vector3.zero };
-    }
-    private bool ShouldHit(Collider other)
-    {
-        if (other.TryGetComponent<IFactionMember>(out var member))
-            return member.Faction != _owner;
-        return true;
     }
 }

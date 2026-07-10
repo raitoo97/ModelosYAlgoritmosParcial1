@@ -72,18 +72,19 @@ public class GunModel
         // Y aca _indicator decide QUE geometria se calcula este frame:
         // Laser -> una linea central. Cone -> los dos bordes de la V.
         // Las lineas que no se calculan quedan isVisible = false (default del struct).
-        if (_indicator == AimIndicatorType.Laser)
+        switch (_indicator)
         {
-            state.laser = ComputeLine(origin, direction, _maxDistance);
-        }
-        else
-        {
-            // Bordes de la V: roto la direccion de apuntado +-arco/2 sobre el
-            // eje Y, la MISMA rotacion con la que la escopeta abre los perdigones,
-            // asi el telegraph coincide con el disparo real
-            float halfArc = _coneArcDegrees * 0.5f;
-            state.coneLeft = ComputeLine(origin, Quaternion.AngleAxis(-halfArc, Vector3.up) * direction, _coneRange);
-            state.coneRight = ComputeLine(origin, Quaternion.AngleAxis(halfArc, Vector3.up) * direction, _coneRange);
+            case AimIndicatorType.Laser:
+                state.laser = ComputeLine(origin, direction, _maxDistance);
+                break;
+            case AimIndicatorType.Cone:
+                // Bordes de la V: roto la direccion de apuntado +-arco/2 sobre el
+                // eje Y, la MISMA rotacion con la que la escopeta abre los perdigones,
+                // asi el telegraph coincide con el disparo real
+                float halfArc = _coneArcDegrees * 0.5f;
+                state.coneLeft = ComputeLine(origin, Quaternion.AngleAxis(-halfArc, Vector3.up) * direction, _coneRange);
+                state.coneRight = ComputeLine(origin, Quaternion.AngleAxis(halfArc, Vector3.up) * direction, _coneRange);
+                break;
         }
         return state;
     }
