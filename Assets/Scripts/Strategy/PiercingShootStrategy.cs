@@ -29,10 +29,10 @@ public class PiercingShootStrategy : IShootStrategy
         // EJ: _pelletCount = 5, _totalArcDegrees = 90
         // step = 90 / (5 - 1) = 22.5
         float step = _bulletCount > 1 ? _arcDegrees / (_bulletCount - 1) : 0f;
-        // Divido el arco por dos porque quiero que el abanico quede centrado
-        // en la direccion original.
-        // EJ: 90 -> primera bala a -45 y ultima a +45.
-        float startAngle = -_arcDegrees * 0.5f;
+        // Arco centrado en la direccion original.
+        // CASO 1 BALA: si startAngle fuera -arco/2, la unica bala saldria
+        // Con una sola bala arranca en 0 para que salga por el centro.
+        float startAngle = _bulletCount > 1 ? _arcDegrees * 0.5f : 0f;
         for (int i = 0; i < _bulletCount; i++)
         {
             // Calculo el angulo de esta bala.
