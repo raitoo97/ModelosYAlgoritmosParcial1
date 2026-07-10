@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: HitscanWeapon
   m_EditorClassIdentifier: 
   _indicator: 1
+  _weaponColor: {r: 0, g: 0.8360355, b: 1, a: 1}
   _damageMultiplier: 4

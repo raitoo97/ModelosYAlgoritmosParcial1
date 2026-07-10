@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63fe40b7dd0196c4cb41028ba5970141, type: 3}
   m_Name: PiercingWeapon
   m_EditorClassIdentifier: 
-  _indicator: 0
-  _bulletColor: {r: 0.85, g: 0.3, b: 1, a: 1}
-  _bulletCount: 3
-  _arcDegrees: 12
+  _indicator: 2
+  _weaponColor: {r: 0.9245283, g: 0.12646852, b: 0.13755111, a: 1}
+  _bulletCount: 1
+  _arcDegrees: 0
   _damageMultiplier: 1.5
-  _bulletScale: 2.5
+  _bulletScale: 2.65
