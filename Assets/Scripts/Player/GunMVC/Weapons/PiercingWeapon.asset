@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63fe40b7dd0196c4cb41028ba5970141, type: 3}
+  m_Name: PiercingWeapon
+  m_EditorClassIdentifier: 
+  _indicator: 0
+  _bulletColor: {r: 0.85, g: 0.3, b: 1, a: 1}
+  _bulletCount: 3
+  _arcDegrees: 12
+  _damageMultiplier: 1.5
+  _bulletScale: 2.5

@@ -54,7 +54,7 @@ Material:
     - _ColorIntensity: 1
     - _Depth: 10
     - _Distance: 2
-    - _Frequency: 15.7
+    - _Frequency: 7
     - _FresnelPower: 7.89
     - _InnerOpacity: -0.5
     - _QueueControl: 0
