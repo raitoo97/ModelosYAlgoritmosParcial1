@@ -43,6 +43,10 @@ public class PlayerInputsManager : MonoBehaviour
     {
         return _playerMap.PlayerInputs.Aim.IsPressed();
     }
+    public bool CyclePowerUpAction()
+    {
+        return _playerMap.PlayerInputs.CyclePowerUp.triggered;
+    }
     public bool SaveAction()
     {
         return _playerMap.LoadAndSaveInputs.Save.triggered;

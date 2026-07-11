@@ -12,10 +12,11 @@ public enum PlayerEvent
     PreviousShootType,
     UsePowerUp,
     ShieldOn,
-    ShieldOff
+    ShieldOff,
+    CyclePowerUp
 }
 [RequireComponent(typeof(Rigidbody))]
-public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,IAimPointProvider, IShieldable
+public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,IAimPointProvider, IShieldable, ISpeedBoostable, IHealable
 {
     private PlayerModel _model;
     private ICharacterController _controller;
@@ -74,6 +75,18 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     public void DeactivateShield()
     {
         _model.SetInvulnerable(false);
+    }
+    public void ApplySpeedBoost(float multiplier)
+    {
+        _model.ApplySpeedBoost(multiplier);
+    }
+    public void RemoveSpeedBoost()
+    {
+        _model.RemoveSpeedBoost();
+    }
+    public void Heal(float amount)
+    {
+        _model.Heal(amount);
     }
     private void OnAnimatorIK(int layerIndex)
     {

@@ -17,6 +17,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private Dictionary<bool, IRotationStrategy> _rotationStrategies;
     private IRotationStrategy _currentRotation;
     private LayerMask _aimMask;
+    private float _speedMultiplier = 1f;
     public PlayerModel(Player user, Transform cameraReference, LayerMask aimMask)
     {
         _rb = user.GetComponent<Rigidbody>();
@@ -44,7 +45,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         {
             float targetRotation = GetTargetRotation(direction);
             Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
-            Vector3 moveVelocity = targetDirection * FlyWeightPointer.Player.speed;
+            Vector3 moveVelocity = targetDirection * (FlyWeightPointer.Player.speed * _speedMultiplier);
             _rb.MovePosition(_rb.position + moveVelocity * Time.fixedDeltaTime);
         }
         SetMoving(isMoving);
@@ -76,6 +77,10 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.NextShootType);
     }
+    public void CyclePowerUp()
+    {
+        NotifyObservers(PlayerEvent.CyclePowerUp);
+    }
     public void PreviousShootType()
     {
         NotifyObservers(PlayerEvent.PreviousShootType);
@@ -93,16 +98,6 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
             NotifyObservers(PlayerEvent.Death);
             EventManager.TriggerEvent(EventType.PlayerDeath);
         }
-    }
-    /// <summary>
-    /// Notifico a los observadores de los eventos ShieldOn y ShieldOff dependiendo si el usuario es invunerable o no
-    /// </summary>
-    /// <param name="value"></param>
-    public void SetInvulnerable(bool value)
-    {
-        if (value == _isInvulnerable) return;
-        _isInvulnerable = value;
-        NotifyObservers(value ? PlayerEvent.ShieldOn : PlayerEvent.ShieldOff);
     }
     public void NotifyObservers(PlayerEvent action) 
     { 
@@ -196,4 +191,34 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         return _cameraReference.position + _cameraReference.forward * aimDistance;
     }
     public bool GetAiming => _isAiming;
+    /// <summary>
+    /// Notifico a los observadores de los eventos ShieldOn y ShieldOff dependiendo si el usuario es invunerable o no
+    /// </summary>
+    /// <param name="value"></param>
+    #region PowerUps
+    public void SetInvulnerable(bool value)
+    {
+        if (value == _isInvulnerable) return;
+        _isInvulnerable = value;
+        NotifyObservers(value ? PlayerEvent.ShieldOn : PlayerEvent.ShieldOff);
+    }
+    public void ApplySpeedBoost(float multiplier)
+    {
+        _speedMultiplier = multiplier;
+    }
+    public void RemoveSpeedBoost()
+    {
+        _speedMultiplier = 1f;
+    }
+    //Cura clampeando al maximo de vida. Reuso el evento PlayerDamage:
+    //es el que actualiza la barra con la vida normalizada
+    //(el nombre quedo de cuando la vida solo podia bajar).
+    public void Heal(float amount)
+    {
+        if (_isDead) return;
+        _currentLife = Mathf.Min(_currentLife + amount, FlyWeightPointer.Player.maxLife);
+        float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
+        EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+    }
+    #endregion
 }

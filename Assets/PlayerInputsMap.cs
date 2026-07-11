@@ -145,6 +145,15 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CyclePowerUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""88dd8338-05ca-4d44-a4b1-ac6f5d19877f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -255,6 +264,17 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""UsePowerUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""232b00d0-60cf-4497-9768-a3b6c5a28522"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CyclePowerUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -375,6 +395,7 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         m_PlayerInputs_NextShootType = m_PlayerInputs.FindAction("NextShootType", throwIfNotFound: true);
         m_PlayerInputs_PreviousShootType = m_PlayerInputs.FindAction("PreviousShootType", throwIfNotFound: true);
         m_PlayerInputs_UsePowerUp = m_PlayerInputs.FindAction("UsePowerUp", throwIfNotFound: true);
+        m_PlayerInputs_CyclePowerUp = m_PlayerInputs.FindAction("CyclePowerUp", throwIfNotFound: true);
         // LoadAndSaveInputs
         m_LoadAndSaveInputs = asset.FindActionMap("LoadAndSaveInputs", throwIfNotFound: true);
         m_LoadAndSaveInputs_Save = m_LoadAndSaveInputs.FindAction("Save", throwIfNotFound: true);
@@ -474,6 +495,7 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerInputs_NextShootType;
     private readonly InputAction m_PlayerInputs_PreviousShootType;
     private readonly InputAction m_PlayerInputs_UsePowerUp;
+    private readonly InputAction m_PlayerInputs_CyclePowerUp;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerInputs".
     /// </summary>
@@ -509,6 +531,10 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerInputs/UsePowerUp".
         /// </summary>
         public InputAction @UsePowerUp => m_Wrapper.m_PlayerInputs_UsePowerUp;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerInputs/CyclePowerUp".
+        /// </summary>
+        public InputAction @CyclePowerUp => m_Wrapper.m_PlayerInputs_CyclePowerUp;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -553,6 +579,9 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
             @UsePowerUp.started += instance.OnUsePowerUp;
             @UsePowerUp.performed += instance.OnUsePowerUp;
             @UsePowerUp.canceled += instance.OnUsePowerUp;
+            @CyclePowerUp.started += instance.OnCyclePowerUp;
+            @CyclePowerUp.performed += instance.OnCyclePowerUp;
+            @CyclePowerUp.canceled += instance.OnCyclePowerUp;
         }
 
         /// <summary>
@@ -582,6 +611,9 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
             @UsePowerUp.started -= instance.OnUsePowerUp;
             @UsePowerUp.performed -= instance.OnUsePowerUp;
             @UsePowerUp.canceled -= instance.OnUsePowerUp;
+            @CyclePowerUp.started -= instance.OnCyclePowerUp;
+            @CyclePowerUp.performed -= instance.OnCyclePowerUp;
+            @CyclePowerUp.canceled -= instance.OnCyclePowerUp;
         }
 
         /// <summary>
@@ -963,6 +995,13 @@ public partial class @PlayerInputsMap: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUsePowerUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CyclePowerUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCyclePowerUp(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "LoadAndSaveInputs" which allows adding and removing callbacks.
