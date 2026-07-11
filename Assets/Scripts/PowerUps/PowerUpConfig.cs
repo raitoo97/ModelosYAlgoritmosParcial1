@@ -1,7 +1,8 @@
 using UnityEngine;
 // Dependencias que las estrategias de power up necesitan para construirse.
-// Mismo esquema que ShootStrategyDependencies: el runner arma el paquete
+// Mismo esquema que ShootStrategyDependencies: se arma el paquete
 // una sola vez y cada config usa solo lo que necesita.
+// mas adelante si necesito mas datos sigo completando la struct
 public struct PowerUpStrategyDependencies
 {
     public GameObject user;

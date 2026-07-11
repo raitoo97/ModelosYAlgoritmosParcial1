@@ -24,7 +24,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     [SerializeField] private Transform _cameraReference;
     [SerializeField] private LayerMask _aimMask;
     private PowerUpController _powerUp;
-    [SerializeField] private GameObject _shieldVisual;
+    [SerializeField] private GameObject _shieldVisual;//es un gameObject porque necesito desactivar la visual en view
     public Factions Faction => Factions.Player;
     private void Awake()
     {
@@ -38,10 +38,13 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
             _gun.Init(this);
             _model.Subscribe(_gun);
         }
-        _powerUp = GetComponentInChildren<PowerUpController>();
+        // busco el componente PowerUpController del player
+        // lo incializo pasandole de user al player mismo
+        //ademas suscribo al PowerUpController a los eventos de player a traves del model
+        _powerUp = GetComponent<PowerUpController>();
         if (_powerUp != null)
         {
-            _powerUp.Init(gameObject);
+            _powerUp.Init(this.gameObject);
             _model.Subscribe(_powerUp);
         }
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnDeath);
@@ -63,6 +66,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     {
         _model.TakeDamage(dmg);
     }
+    //metodo del IShieldable para activar y desactivar el escudo
     public void ActivateShield()
     {
         _model.SetInvulnerable(true);

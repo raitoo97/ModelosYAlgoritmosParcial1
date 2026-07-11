@@ -50,12 +50,6 @@ public class PlayerView : IObserver<PlayerEvent>
     }
     private void SetShieldVisible(bool visible)
     {
-        // Warning y no silencio: si falta la referencia, que se note en consola.
-        if (_shieldVisual == null)
-        {
-            Debug.LogWarning("PlayerView: falta asignar _shieldVisual (la burbuja) en el componente Player.");
-            return;
-        }
         _shieldVisual.SetActive(visible);
     }
     private void FillDictionary()

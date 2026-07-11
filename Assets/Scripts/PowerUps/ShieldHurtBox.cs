@@ -6,8 +6,6 @@ using UnityEngine;
 //   invulnerabilidad real se resuelve en PlayerModel.TakeDamage.
 // - IFactionMember: FactionRules hace que las balas PROPIAS atraviesen la
 //   burbuja (misma faccion = no hit) y las enemigas impacten.
-// El hitscan del sniper ignora triggers, por eso ademas existe el flag
-// de invulnerable en el modelo.
 public class ShieldHurtBox : MonoBehaviour, IDamageable, IFactionMember
 {
     [SerializeField] private Factions _faction = Factions.Player;

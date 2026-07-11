@@ -94,6 +94,10 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
             EventManager.TriggerEvent(EventType.PlayerDeath);
         }
     }
+    /// <summary>
+    /// Notifico a los observadores de los eventos ShieldOn y ShieldOff dependiendo si el usuario es invunerable o no
+    /// </summary>
+    /// <param name="value"></param>
     public void SetInvulnerable(bool value)
     {
         if (value == _isInvulnerable) return;

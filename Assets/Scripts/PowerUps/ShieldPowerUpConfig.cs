@@ -4,7 +4,7 @@ using UnityEngine;
 public class ShieldPowerUpConfig : PowerUpConfig
 {
     // El escudo no necesita datos extra: su efecto es prender y apagar
-    // el IShieldable del usuario. La duracion vive en la config base.
+    // el IShieldable del usuario.
     public override IPowerUpStrategy CreateStrategy(PowerUpStrategyDependencies deps)
     {
         return new ShieldPowerUpStrategy(deps.user.GetComponent<IShieldable>());

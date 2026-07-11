@@ -1,6 +1,11 @@
+
+/// <summary>
+/// creo la estrategia del esucudo que usa la interface IShieldable
+/// por eso puede usar ActivateShield y DeactivateShield
+/// implenenta los metodos Activate y Deactivate de IPowerUpStrategy
+/// </summary>
 public class ShieldPowerUpStrategy : IPowerUpStrategy
 {
-    //estrategia del PowerUp de escudo: activa y desactiva el IShieldable del usuario
     private IShieldable _shieldable;
     public ShieldPowerUpStrategy(IShieldable shieldable)
     {

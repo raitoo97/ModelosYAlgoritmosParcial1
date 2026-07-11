@@ -12,14 +12,10 @@ public class PowerUpPickup : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        // GetComponentInParent en vez de TryGetComponent: el collider que
-        // entra puede vivir en un GameObject distinto al del collector
-        // (colliders compuestos, hijos, etc). Busca en el propio y sube
-        // por la jerarquia.
-        IPowerUpCollector collector = other.GetComponentInChildren<IPowerUpCollector>();
-        if (collector == null) return;
-        // Si el collector no la acepta (tiene otro power up corriendo),
-        // el item queda en el mapa para despues.
+        //busca el componeente IPowerUpCollector si lo tiene llama a addCharge
+        //si Add Charge es true osea -> recogo otro PowerUpIdentico al que tengo equipado
+        //o es la primera vez que agarro el Power Up de este tipo se me suma a las cargas
+        if (!other.TryGetComponent<IPowerUpCollector>(out var collector)) return;
         if (!collector.AddCharge(_config)) return;
         gameObject.SetActive(false);
     }
