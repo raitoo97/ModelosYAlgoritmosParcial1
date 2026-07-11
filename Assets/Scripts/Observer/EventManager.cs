@@ -6,7 +6,8 @@ public enum EventType
     EnemyKilled,
     UpdateSaves,
     UpdateLoads,
-    WeaponChanged
+    WeaponChanged,
+    PowerUpChanged
 }
 public static class EventManager
 {
