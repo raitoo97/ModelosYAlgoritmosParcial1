@@ -39,7 +39,7 @@ public class SniperAttackState : BaseAttackState
         Vector3 origin = _gunSight.position;
         Vector3 aimDir = (_sniper.GetAimPoint() - origin).normalized;
         // La carga solo avanza si el rayo llega al player sin obstaculos en el medio
-        if (Physics.Raycast(origin, aimDir, out RaycastHit hit, _stats.maxDistance, _losMask, QueryTriggerInteraction.Ignore) && hit.collider.TryGetComponent<Player>(out _))
+        if (Physics.Raycast(origin, aimDir, out RaycastHit hit, _stats.maxDistance, _losMask) && hit.collider.TryGetComponent<Player>(out _))
         {
             _charge += Time.deltaTime;
             _sniper.UpdateLaser(origin, hit.point, _charge / _stats.coolDown);

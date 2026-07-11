@@ -14,7 +14,11 @@ public class PlayerController : ICharacterController
         {
             _model.Shoot();
         }
-        if(PlayerInputsManager.instance.NextShootTypeAction())
+        if (PlayerInputsManager.instance.UsePowerUpAction())
+        {
+            _model.UsePowerUp();
+        }
+        if (PlayerInputsManager.instance.NextShootTypeAction())
         {
             _model.NextShootType();
         }
