@@ -4,8 +4,8 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]private Image _lifebar;
-    [SerializeField]private Text _gameOver;
-    [SerializeField]private Text _score;
+    [SerializeField]private TextMeshProUGUI _gameOver;
+    [SerializeField]private TextMeshProUGUI _score;
     [SerializeField]private TextMeshProUGUI _saves;
     [SerializeField]private string _pauseScreen;
     private IController _controller;
