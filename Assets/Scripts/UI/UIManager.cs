@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI _gameOver;
     [SerializeField]private TextMeshProUGUI _score;
     [SerializeField]private TextMeshProUGUI _saves;
+    [SerializeField] private TextMeshProUGUI _loads;
     [SerializeField]private string _pauseScreen;
     private IController _controller;
     private int _currentScore;
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
         _gameOver.gameObject.SetActive(false);
         _currentScore = 0;
         _saves.color = Color.green;
+        _loads.color = Color.red;
         _controller = new UIController(_pauseScreen);
     }
     private void OnEnable()
@@ -23,6 +25,7 @@ public class UIManager : MonoBehaviour
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
         EventManager.SubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
         EventManager.SubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
+        EventManager.SubscribeToEvent(EventType.UpdateLoads, OnPlayerLoad);
     }
     private void Update()
     {
@@ -41,8 +44,13 @@ public class UIManager : MonoBehaviour
     {
         int savesUpdate = (int)parameters[0];
         _saves.text = savesUpdate.ToString();
-        if ((int)parameters[0] > 0) return;
-        _saves.color = Color.red;
+        _saves.color = savesUpdate > 0 ? Color.green : Color.red;
+    }
+    private void OnPlayerLoad(params object[] parameters)
+    {
+        int loadsUpdate = (int)parameters[0];
+        _loads.text = loadsUpdate.ToString();
+        _loads.color = loadsUpdate > 0 ? Color.green : Color.red;
     }
     private void OnEnemyKilled(params object[] parameters)
     {
@@ -60,5 +68,6 @@ public class UIManager : MonoBehaviour
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
         EventManager.UnsubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
         EventManager.UnsubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
+        EventManager.UnsubscribeToEvent(EventType.UpdateLoads, OnPlayerLoad);
     }
 }

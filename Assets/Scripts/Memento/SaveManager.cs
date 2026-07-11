@@ -30,11 +30,13 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
         savesCount--;
         loadCounts++;
         EventManager.TriggerEvent(EventType.UpdateSaves, savesCount);
+        EventManager.TriggerEvent(EventType.UpdateLoads, loadCounts);
         NotifyObservers(SaveEvent.Save);
     }
     public void Load()
     {
         loadCounts--;
+        EventManager.TriggerEvent(EventType.UpdateLoads, loadCounts);
         NotifyObservers(SaveEvent.Load);
     }
     public void Subscribe(IObserver<SaveEvent> observer)
