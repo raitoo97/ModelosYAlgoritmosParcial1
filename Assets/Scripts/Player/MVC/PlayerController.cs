@@ -26,6 +26,10 @@ public class PlayerController : ICharacterController
         {
             _model.PreviousShootType();
         }
+        if (PlayerInputsManager.instance.CyclePowerUpAction())
+        {
+            _model.CyclePowerUp();
+        }
         _model.SetAiming(PlayerInputsManager.instance.AimAction());
     }
     public void FixedUpdateInputs()

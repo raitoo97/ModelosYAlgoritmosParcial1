@@ -77,6 +77,10 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.NextShootType);
     }
+    public void CyclePowerUp()
+    {
+        NotifyObservers(PlayerEvent.CyclePowerUp);
+    }
     public void PreviousShootType()
     {
         NotifyObservers(PlayerEvent.PreviousShootType);

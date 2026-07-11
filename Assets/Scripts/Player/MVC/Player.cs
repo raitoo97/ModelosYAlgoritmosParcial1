@@ -12,7 +12,8 @@ public enum PlayerEvent
     PreviousShootType,
     UsePowerUp,
     ShieldOn,
-    ShieldOff
+    ShieldOff,
+    CyclePowerUp
 }
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,IAimPointProvider, IShieldable, ISpeedBoostable, IHealable
