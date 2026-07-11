@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6164732916443287887}
   - component: {fileID: 6847452313307017554}
   - component: {fileID: 5051960964994536158}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 8714087260168015207}
   - component: {fileID: 1881247856075958952}
   - component: {fileID: 2104097753207774293}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Misil
   m_TagString: Untagged
   m_Icon: {fileID: 0}

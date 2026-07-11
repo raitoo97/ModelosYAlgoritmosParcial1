@@ -367,7 +367,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &117220942
 Transform:
   m_ObjectHideFlags: 0
@@ -2225,8 +2225,8 @@ GameObject:
   - component: {fileID: 1381048908}
   - component: {fileID: 1381048907}
   - component: {fileID: 1381048906}
-  m_Layer: 0
-  m_Name: Sphere
+  m_Layer: 2
+  m_Name: ShieldPickUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2290,7 +2290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2b11df1be82fde941ad43b5f3fc015fd, type: 2}
+  - {fileID: 2100000, guid: 6c25044d60fbefc4d82d3c6012805542, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9691,6 +9691,10 @@ PrefabInstance:
       propertyPath: _cameraReference
       value: 
       objectReference: {fileID: 330585546}
+    - target: {fileID: 6219664154032980366, guid: 5c9224075ab2dd64aa19dbf6225ecfa8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

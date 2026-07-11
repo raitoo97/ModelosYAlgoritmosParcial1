@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d7e5ef00f8e994091ed2ec0a66c3c8, type: 3}
   m_Name: ShieldPowerUp
   m_EditorClassIdentifier: 
-  _duration: 20
+  _duration: 10
