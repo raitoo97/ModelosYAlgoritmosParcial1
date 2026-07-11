@@ -191,11 +191,12 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         return _cameraReference.position + _cameraReference.forward * aimDistance;
     }
     public bool GetAiming => _isAiming;
+    public bool IsDead => _isDead;
+    #region PowerUps
     /// <summary>
     /// Notifico a los observadores de los eventos ShieldOn y ShieldOff dependiendo si el usuario es invunerable o no
     /// </summary>
     /// <param name="value"></param>
-    #region PowerUps
     public void SetInvulnerable(bool value)
     {
         if (value == _isInvulnerable) return;

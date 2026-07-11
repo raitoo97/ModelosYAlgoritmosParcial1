@@ -126,8 +126,13 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     }
     public void Resume()
     {
-         enabled = true;
+        // Fisica y animator se restauran SIEMPRE: si la pausa agarro al
+        // player a mitad de la animacion de muerte, tiene que poder terminarla.
         _model.ResumePhysics();
         _view.GetAnimator.speed = 1;
+        // Pero el control solo vuelve si esta vivo. OnDeath apaga este
+        // componente
+        if (_model.IsDead) return;
+        enabled = true;
     }
 }
