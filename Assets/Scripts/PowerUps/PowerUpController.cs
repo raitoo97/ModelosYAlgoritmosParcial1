@@ -8,8 +8,11 @@ using UnityEngine;
 // El efecto termina por timer (Duration) o por corte forzado (evento Death).
 public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUpCollector, IPauseable
 {
-    // Un slot por TIPO de power up agarrado: la config, su estrategia ya
-    // fabricada y cuantas cargas tengo.
+    // Un slot por TIPO de power up agarrado:
+    // config: identifica el TIPO (el Find de AddCharge compara contra ella
+    //         para sumar cargas) y ademas me da la Duration del efecto.
+    // strategy: el efecto ya fabricado, sabe que prender y que apagar.
+    // charges: cuantas activaciones me quedan de este power up.
     private class PowerUpSlot
     {
         public PowerUpConfig config;
@@ -65,10 +68,13 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
         if (_slots.Count == 1) _selectedIndex = 0;
         return true;
     }
-    // Cambio el indice del tipo de PowerUp de forma circular.
-    // Ejemplo con 2 PowerUps (0 = speed, 1 = shield):
-    // (0 + 1 + 2) % 2 = 1 -> pasa a shield.
-    // (1 + 1 + 2) % 2 = 0 -> vuelve a speed.
+    // Cambio el indice del power up seleccionado de forma circular.
+    // Ejemplo con 2 slots (0 = speed, 1 = shield):
+    // (0 + 1) % 2 = 1 -> pasa a shield.
+    // (1 + 1) % 2 = 0 -> vuelve a speed.
+    // a diferencia del CycleShootType del Gun, aca NO hace falta
+    // sumar el Count antes del modulo: el Gun cicla en ambas direcciones
+    // (step -1 podria dar indice negativo), este solo avanza con +1.
     private void CycleSelected()
     {
         if (_slots.Count <= 1) return;
@@ -98,8 +104,8 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
         _activeStrategy.Activate();
         return true;
     }
-    // Timer acumulado en Update: cuando llega a la Duration configurada en el
-    // PowerUpConfig, el efecto termina solo
+    // Timer acumulado en Update: cuando llega a la Duration de la config
+    // corriendo, el efecto termina solo.
     private void Update()
     {
         if (!_isActive) return;
