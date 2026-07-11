@@ -1,5 +1,4 @@
 using UnityEngine;
-
 [CreateAssetMenu(menuName = "PowerUps/Heal PowerUp", fileName = "HealPowerUp")]
 public class HealPowerUpConfig : PowerUpConfig
 {
