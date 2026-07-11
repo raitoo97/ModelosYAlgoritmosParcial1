@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI _score;
     [SerializeField]private TextMeshProUGUI _saves;
     [SerializeField] private TextMeshProUGUI _loads;
+    [SerializeField] private Image _weaponIcon;
     [SerializeField]private string _pauseScreen;
     private IController _controller;
     private int _currentScore;
@@ -26,6 +27,7 @@ public class UIManager : MonoBehaviour
         EventManager.SubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
         EventManager.SubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
         EventManager.SubscribeToEvent(EventType.UpdateLoads, OnPlayerLoad);
+        EventManager.SubscribeToEvent(EventType.WeaponChanged, OnWeaponChanged);
     }
     private void Update()
     {
@@ -52,6 +54,12 @@ public class UIManager : MonoBehaviour
         _loads.text = loadsUpdate.ToString();
         _loads.color = loadsUpdate > 0 ? Color.green : Color.red;
     }
+    private void OnWeaponChanged(params object[] parameters)
+    {
+        Sprite icon = (Sprite)parameters[0];
+        if (icon == null) return;
+        _weaponIcon.sprite = icon;
+    }
     private void OnEnemyKilled(params object[] parameters)
     {
         int scoreToAdd = (int)parameters[0];
@@ -69,5 +77,6 @@ public class UIManager : MonoBehaviour
         EventManager.UnsubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
         EventManager.UnsubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
         EventManager.UnsubscribeToEvent(EventType.UpdateLoads, OnPlayerLoad);
+        EventManager.UnsubscribeToEvent(EventType.WeaponChanged, OnWeaponChanged);
     }
 }

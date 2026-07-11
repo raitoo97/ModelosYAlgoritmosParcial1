@@ -68,7 +68,8 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
                 strategy = weapon.CreateStrategy(deps),
                 indicator = weapon.Indicator,
                 coneArcDegrees = weapon.ConeArcDegrees,
-                color = weapon.WeaponColor
+                color = weapon.WeaponColor,
+                icon = weapon.Icon
             });
         }
         return shootTypes;
@@ -121,6 +122,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
         ShootType current = _shootTypes[_currentShootType];
         _model.SetShootStrategy(current.strategy, current.indicator, current.coneArcDegrees);
         _view.SetIndicatorColor(current.color);
+        EventManager.TriggerEvent(EventType.WeaponChanged, current.icon);
     }
     private void Shoot()
     {
@@ -138,5 +140,6 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
         public AimIndicatorType indicator;
         public float coneArcDegrees;
         public Color color;
+        public Sprite icon;
     }
 }

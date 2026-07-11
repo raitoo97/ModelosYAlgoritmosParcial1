@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _indicator: 2
   _weaponColor: {r: 0.9245283, g: 0.12646852, b: 0.13755111, a: 1}
+  _icon: {fileID: 21300000, guid: 723a73c560cff464fa15681b153896ba, type: 3}
   _bulletCount: 1
   _arcDegrees: 0
   _damageMultiplier: 1.5
