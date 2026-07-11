@@ -762,7 +762,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -788,8 +788,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.67817646, y: -0.16332595, z: 0.1585133, w: 0.69876677}
-  m_LocalPosition: {x: -0.95, y: 2.28, z: -15.41}
+  m_LocalRotation: {x: -0.004809027, y: -0.050510347, z: -0.00024321892, w: 0.99871194}
+  m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -901,6 +901,7 @@ GameObject:
   - component: {fileID: 362116814}
   - component: {fileID: 362116813}
   - component: {fileID: 362116812}
+  - component: {fileID: 362116816}
   m_Layer: 0
   m_Name: SpeedHealt
   m_TagString: Untagged
@@ -923,7 +924,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -997,6 +998,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &362116816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362116811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e78c53953f87f7499281a5f027c1c48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _config: {fileID: 11400000, guid: cc7c087481de00c49943f7d7e7896ad4, type: 2}
+  _rotationSpeed: 90
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0

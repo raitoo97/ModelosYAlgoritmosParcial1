@@ -127,7 +127,26 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
 //   el danio en TakeDamage y notifica ShieldOn/ShieldOff, y el view muestra
 //   u oculta la burbuja. El efecto termina por timer (Duration) o por muerte
 //   (evento Death -> ForceCancel).
-//
+
+//FLUJO DEL COMPOSITE (como llegan a llamarse sus metodos):
+//el controller NUNCA sabe que existe el composite; para el es un
+//IPowerUpStrategy mas.
+//1) Piso el pickup del combinado -> AddCharge recibe el CompositePowerUpConfig
+//2) AddCharge llama config.CreateStrategy(deps) como siempre, pero la version
+//   del composite recorre sus _parts y le pide a CADA parte que arme su estrategia
+//   (pasandole las MISMAS deps a todas, por eso todas apuntan al mismo user).
+//   Con esa lista arma UNA CompositePowerUpStrategy y devuelve esa.
+//3) Con Space, TryActivate llama _strategy.Activate() sin saber que es un
+//   composite. El Activate del CompositePowerUpStrategy hace foreach y llama el Activate
+//   de cada parte: HealPowerUpStrategy cura (instantaneo) y
+//   SpeedPowerUpStrategy aplica el multiplicador.
+//4) Cuando el timer llega a la Duration (LA DEL ASSET COMPOSITE, las de las
+//   partes se ignoran), Update llama _strategy.Deactivate() -> foreach ->
+//   Deactivate de cada parte: Speed vuelve el multiplicador a 1 y Heal no
+//   hace nada (su Deactivate esta vacio).
+//5) La muerte (Death -> ForceCancel) recorre el mismo camino que el punto 4.
+
+
 //NOTA (por que se activa el escudo del player y no el de otra entidad):
 //el escudo que se activa es el del player NO por ser el collector, sino
 //porque la estrategia se fabrica con el IShieldable del user que este
