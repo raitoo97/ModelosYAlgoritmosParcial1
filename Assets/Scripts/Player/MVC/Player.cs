@@ -13,7 +13,10 @@ public enum PlayerEvent
     UsePowerUp,
     ShieldOn,
     ShieldOff,
-    CyclePowerUp
+    CyclePowerUp,
+    SpeedOn,
+    SpeedOff,
+    HealOn
 }
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,IAimPointProvider, IShieldable, ISpeedBoostable, IHealable
@@ -26,12 +29,14 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     [SerializeField] private LayerMask _aimMask;
     private PowerUpController _powerUp;
     [SerializeField] private GameObject _shieldVisual;//es un gameObject porque necesito desactivar la visual en view
+    [SerializeField] private GameObject _speedVisual;
+    [SerializeField] private GameObject _healVisual;
     public Factions Faction => Factions.Player;
     private void Awake()
     {
         _model = new PlayerModel(this, _cameraReference, _aimMask);
         _controller = new PlayerController(_model);
-        _view = new PlayerView(this, _shieldVisual);
+        _view = new PlayerView(this, _shieldVisual, _speedVisual, _healVisual);
         _model.Subscribe(_view);
         _gun = GetComponentInChildren<Gun>();
         if (_gun != null)

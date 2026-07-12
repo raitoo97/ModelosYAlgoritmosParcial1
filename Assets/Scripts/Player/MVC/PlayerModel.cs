@@ -212,10 +212,12 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     public void ApplySpeedBoost(float multiplier)
     {
         _speedMultiplier = multiplier;
+        NotifyObservers(PlayerEvent.SpeedOn);
     }
     public void RemoveSpeedBoost()
     {
         _speedMultiplier = 1f;
+        NotifyObservers(PlayerEvent.SpeedOff);
     }
     //Cura clampeando al maximo de vida. Reuso el evento PlayerDamage:
     //es el que actualiza la barra con la vida normalizada
@@ -226,6 +228,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         _currentLife = Mathf.Min(_currentLife + amount, FlyWeightPointer.Player.maxLife);
         float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
         EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+        NotifyObservers(PlayerEvent.HealOn);
     }
     #endregion
 }
