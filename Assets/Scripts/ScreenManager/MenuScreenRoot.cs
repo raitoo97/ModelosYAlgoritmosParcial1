@@ -1,7 +1,7 @@
 using UnityEngine;
-// Base de la escena de menu: lo coloco en un manager
-//como root le paso el canvas que tiene el componente
-//ScreenMainMenu que es un ScreenBase
+// ScreenRoot de la escena del menu. Fabrica la pantalla principal del menu:
+// devuelve el ScreenMainMenu (un ScreenBase) que le asigno por inspector.
+// Como en el menu no hay nada que pausar, la base es directamente esa pantalla.
 public class MenuScreenRoot : ScreenRoot
 {
     [SerializeField] private ScreenBase _menuScreen;

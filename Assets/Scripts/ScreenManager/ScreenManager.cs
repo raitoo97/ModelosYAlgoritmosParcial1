@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
-//Apenas arranca, el ScreenManager le pide al ScreenRoot de la escena (asignado
-//en el inspector, campo _root) que CREE la pantalla base, y la pushea al stack como pantalla principal
-//El ScreenRoot NO se instancia aca: ya es un componente de la escena. que lo asigno por inspector
-//ScreenRoot es una clase abstracta que tiene un metodo abstracto que devuelve un IScreen
-//Push(_root.CreateRootScreen()); le paso de parametro lo que devuelve el ScreenRoot
-//En el caso del menu seria MenuScreenRoot que hereda de ScreenRoot y su metodo abstracto devuelve directamente  un screenBase que seria ScreenMainMenu en este caso.
-//En el caso del Nivel 1 seria el GameplayScreenRoot que le paso un Transform y  su metodo CreateRootScreen devuelve un  ScreenGameplay que pide por parametro el transform que le paso
-//El script GameplayScreenRoot lo puse directamente en el transform root de la escena.
-//La ventaja -> mas adelante este script no lo toco mas y de screenRoot cada escena puede tener el que quiera y configurado como quiera. la unica condicion es que tengo que devolver siempre un IScreen.
-//PD: el ScreenBase es un IScreen :D
+//RESUMEN: apenas arranca, el ScreenManager le pide al ScreenRoot de la escena
+//(campo _root, asignado por inspector) que FABRIQUE la pantalla principal y la
+//pushea como base del stack. El ScreenRoot no ES la pantalla: la crea en
+//CreateRootScreen() y devuelve un IScreen (ScreenMainMenu en el menu, ScreenGameplay en el nivel).
+//
+//DETALLE:
+//ScreenRoot es una clase abstracta con un metodo abstracto que devuelve un IScreen.
+//Push(_root.CreateRootScreen()) le pasa como parametro lo que devuelve el ScreenRoot.
+//- Menu: MenuScreenRoot devuelve directamente un ScreenBase (el ScreenMainMenu).
+//- Nivel: GameplayScreenRoot recibe un Transform y devuelve un ScreenGameplay armado con el.
+//El GameplayScreenRoot lo puse directamente en el objeto root de la escena.
+//La ventaja -> el ScreenManager no se toca mas; cada escena arma su ScreenRoot como quiera.
+//La unica condicion: devolver siempre un IScreen. (PD: ScreenBase es un IScreen :D)
 public class ScreenManager : MonoBehaviour
 {
     public static ScreenManager Instance { get; private set; }
