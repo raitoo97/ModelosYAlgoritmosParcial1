@@ -31,9 +31,6 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
     private PowerUpConfig _activeConfig;
     private float _timer;
     private bool _isActive;
-    // Para una futura UI: cargas y nombre del seleccionado.
-    public int Charges => _slots.Count > 0 ? _slots[_selectedIndex].charges : 0;
-    public string SelectedName => _slots.Count > 0 ? _slots[_selectedIndex].config.name : "";
     // user = el duenio de este controller.
     public void Init(GameObject user)
     {
@@ -46,6 +43,17 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
         _actions.Add(PlayerEvent.CyclePowerUp, CycleSelected);
         _actions.Add(PlayerEvent.Death, ForceCancel);
     }
+    private void NotifySelectionChanged()
+    {
+        if (_slots.Count == 0)
+        {
+            EventManager.TriggerEvent(EventType.PowerUpChanged, null, 0);
+            return;
+        }
+        PowerUpSlot selected = _slots[_selectedIndex];
+        EventManager.TriggerEvent(EventType.PowerUpChanged, selected.config.Icon, selected.charges);
+    }
+    //c
     //cuando un pickup aniade una carga: si ya hay slot de esa config le sumo
     //una carga; si es tipo nuevo, fabrico SU estrategia una sola vez y lo
     //agrego al final de la mochila.agarrar NO cambia la seleccion
@@ -57,6 +65,7 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
         if (slot != null)
         {
             slot.charges++;
+            NotifySelectionChanged();
             return true;
         }
         _slots.Add(new PowerUpSlot
@@ -66,6 +75,7 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
             charges = 1
         });
         if (_slots.Count == 1) _selectedIndex = 0;
+        NotifySelectionChanged();
         return true;
     }
     // Cambio el indice del power up seleccionado de forma circular.
@@ -79,7 +89,7 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
     {
         if (_slots.Count <= 1) return;
         _selectedIndex = (_selectedIndex + 1) % _slots.Count;
-        Debug.Log("Power up seleccionado: " + SelectedName + " x" + Charges);
+        NotifySelectionChanged();
     }
     // Consume una carga del slot SELECCIONADO y prende su efecto.
     // Devuelve bool para que un enemigo (o una UI) sepa si pudo.
@@ -97,6 +107,7 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
             _slots.RemoveAt(_selectedIndex);
             if (_selectedIndex >= _slots.Count) _selectedIndex = 0;
         }
+        NotifySelectionChanged();
         _activeStrategy = slot.strategy;
         _activeConfig = slot.config;
         _timer = 0;

@@ -7,15 +7,15 @@ public static class LenguageSplit
         var codex = new Dictionary<SystemLanguage, Dictionary<string, string>>();
         var langColumn = new Dictionary<int, SystemLanguage>();
         var idColumn = 0;
-        var lines = sheet.Split('\n');// se divide el texto en líneas
-        bool isFirstLine = true; // se utiliza para identificar la primera línea que contiene los nombres de las columnas
-        foreach (var line in lines) // se itera sobre cada línea del texto
+        var lines = sheet.Split('\n');// se divide el texto en lineas
+        bool isFirstLine = true; // se utiliza para identificar la primera linea que contiene los nombres de las columnas
+        foreach (var line in lines) // se itera sobre cada linea del texto
         {
-            var cells = line.Split(','); // se divide cada línea en celdas utilizando la coma como separador porque lo guarde como CSV la planilla
+            var cells = line.Split(','); // se divide cada linea en celdas utilizando la coma como separador porque lo guarde como CSV la planilla
             if (isFirstLine)//si es la primera linea en mi caso ID,Spanish,English
             {
 
-                isFirstLine = false; // se marca que ya se ha procesado la primera línea
+                isFirstLine = false; // se marca que ya se ha procesado la primera linea
                 for (int i = 0; i < cells.Length; i++)
                 {
                     if (!cells[i].Contains("ID")) //si no coniente la palabra ID se asume que es una columna de idioma y se intenta parsear el nombre del idioma a un valor de SystemLanguage
@@ -30,7 +30,7 @@ public static class LenguageSplit
                         {
                             continue;
                         }
-                        if (!codex.ContainsKey(langColumn[i]))//aca se comineza a llenar el codex con los idiomas encontrados en la primera linea, se crea una nueva entrada para cada idioma con un diccionario vacío para almacenar las traducciones
+                        if (!codex.ContainsKey(langColumn[i]))//aca se comineza a llenar el codex con los idiomas encontrados en la primera linea, se crea una nueva entrada para cada idioma con un diccionario vacio para almacenar las traducciones
                         {
                             codex[langColumn[i]] = new Dictionary<string, string>();
                             // codex =
@@ -42,21 +42,21 @@ public static class LenguageSplit
                     }
                     else
                     {
-                        idColumn = i; // se guarda el índice donde se encontró la columna ID (en mi CSV es 0)
+                        idColumn = i; // se guarda el indice donde se encontro la columna ID (en mi CSV es 0)
                     }
                 }
                 continue;
             }
             for (int i = 0; i < cells.Length; i++)
             {
-                // se saltea la columna ID porque contiene la clave de traducción
+                // se saltea la columna ID porque contiene la clave de traduccion
                 // y no un texto traducido
                 if (i == idColumn)
                 {
                     continue;
                 }
                 // verifica que esta columna corresponda a un idioma detectado
-                // en la primera línea del CSV
+                // en la primera linea del CSV
                 if (!langColumn.ContainsKey(i))
                 {
                     continue;

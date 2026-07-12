@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: ShieldPowerUp
   m_EditorClassIdentifier: 
   _duration: 10
+  _icon: {fileID: 21300000, guid: 386bfb1e77490914ba4aff0ce5ef8c78, type: 3}

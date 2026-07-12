@@ -50,6 +50,8 @@ public class LocalizationManager : MonoBehaviour
     {
         if (_lenguageCodex == null)
             return string.Empty;
+        if (string.IsNullOrEmpty(ID))
+            return string.Empty;
         if (!_lenguageCodex.ContainsKey(_currentLenguage))
             return "No Lenguage";
         if (!_lenguageCodex[_currentLenguage].ContainsKey(ID))

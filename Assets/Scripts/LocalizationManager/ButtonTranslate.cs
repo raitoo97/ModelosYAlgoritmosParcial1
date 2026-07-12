@@ -2,12 +2,15 @@ using TMPro;
 using UnityEngine;
 public class ButtonTranslate : MonoBehaviour
 {
-    [SerializeField] private string id;
+    private string id;
     [SerializeField] private TextMeshProUGUI _myText;
+    private void Awake()
+    {
+        id = gameObject.name;
+    }
     private void Start()
     {
         if (LocalizationManager.Instance == null) return;
-        if (id != gameObject.name) id = gameObject.name;
         LocalizationManager.Instance.onUpdate += UpdateText;
         if (LocalizationManager.Instance.IsReady)
             UpdateText();

@@ -13,6 +13,9 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private MementoState<PlayerMemento> _playerMemento;
     private Vector3 _pausedVelocity;
     private Transform _cameraReference;
+    private Camera _renderCamera;
+    private int _aimPointFrame = -1;
+    private Vector3 _cachedAimPoint;
     private bool _isAiming;
     private Dictionary<bool, IRotationStrategy> _rotationStrategies;
     private IRotationStrategy _currentRotation;
@@ -184,18 +187,22 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     //  - Player.OnAnimatorIK()   -> UpdateAimIK, el LookAt del torso/cabeza (rotacion via IK).
     public Vector3 GetAimPoint()
     {
+        // Un solo raycast por frame: todos los consumidores comparten el mismo punto.
+        if (_aimPointFrame == Time.frameCount) return _cachedAimPoint;
+        _aimPointFrame = Time.frameCount;
         float aimDistance = FlyWeightPointer.Player.maxDistance;
-        Ray ray = new Ray(_cameraReference.position, _cameraReference.forward);
-        if (Physics.Raycast(ray, out RaycastHit hit, aimDistance, _aimMask, QueryTriggerInteraction.Ignore))
-            return hit.point;
-        return _cameraReference.position + _cameraReference.forward * aimDistance;
+        if (_renderCamera == null) _renderCamera = Camera.main;
+        Ray ray = _renderCamera != null? _renderCamera.ScreenPointToRay(new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f)): new Ray(_cameraReference.position, _cameraReference.forward);
+        _cachedAimPoint = Physics.Raycast(ray, out RaycastHit hit, aimDistance, _aimMask, QueryTriggerInteraction.Ignore)? hit.point: ray.origin + ray.direction * aimDistance;
+        return _cachedAimPoint;
     }
     public bool GetAiming => _isAiming;
+    public bool IsDead => _isDead;
+    #region PowerUps
     /// <summary>
     /// Notifico a los observadores de los eventos ShieldOn y ShieldOff dependiendo si el usuario es invunerable o no
     /// </summary>
     /// <param name="value"></param>
-    #region PowerUps
     public void SetInvulnerable(bool value)
     {
         if (value == _isInvulnerable) return;
@@ -205,10 +212,12 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     public void ApplySpeedBoost(float multiplier)
     {
         _speedMultiplier = multiplier;
+        NotifyObservers(PlayerEvent.SpeedOn);
     }
     public void RemoveSpeedBoost()
     {
         _speedMultiplier = 1f;
+        NotifyObservers(PlayerEvent.SpeedOff);
     }
     //Cura clampeando al maximo de vida. Reuso el evento PlayerDamage:
     //es el que actualiza la barra con la vida normalizada
@@ -219,6 +228,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         _currentLife = Mathf.Min(_currentLife + amount, FlyWeightPointer.Player.maxLife);
         float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
         EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+        NotifyObservers(PlayerEvent.HealOn);
     }
     #endregion
 }

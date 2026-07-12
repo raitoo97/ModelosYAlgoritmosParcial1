@@ -14,5 +14,7 @@ public abstract class PowerUpConfig : ScriptableObject
     // Cuanto dura el efecto una vez activado.
     [SerializeField] private float _duration = 3f;
     public float Duration => _duration;
+    [SerializeField] private Sprite _icon;
+    public Sprite Icon => _icon;
     public abstract IPowerUpStrategy CreateStrategy(PowerUpStrategyDependencies deps);
 }

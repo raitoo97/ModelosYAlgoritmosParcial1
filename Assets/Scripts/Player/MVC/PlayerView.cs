@@ -8,9 +8,13 @@ public class PlayerView : IObserver<PlayerEvent>
     private float _currentAimWeight;
     private int _aimLayerIndex;
     private GameObject _shieldVisual;
-    public PlayerView(Player user, GameObject shieldVisual)
+    private GameObject _speedVisual;
+    private GameObject _healVisual;
+    public PlayerView(Player user, GameObject shieldVisual,GameObject speedVisual, GameObject healVisual)
     {
         _shieldVisual = shieldVisual;
+        _speedVisual = speedVisual;
+        _healVisual = healVisual;
         _animator = user.GetComponent<Animator>();
         _actions = new Dictionary<PlayerEvent, Action>();
         _aimLayerIndex = _animator.GetLayerIndex("Aim");
@@ -42,7 +46,7 @@ public class PlayerView : IObserver<PlayerEvent>
         // el torso, la cabeza, los ojos y la restriccion del giro.
         _animator.SetLookAtWeight(
             weight: _currentAimWeight,
-            bodyWeight: 0.6f,
+            bodyWeight: 1f,
             headWeight: 0.4f,
             eyesWeight: 0f,
             clampWeight: 0.5f
@@ -52,6 +56,14 @@ public class PlayerView : IObserver<PlayerEvent>
     {
         _shieldVisual.SetActive(visible);
     }
+    private void SetSpeedVisible(bool visible) 
+    { 
+        _speedVisual.SetActive(visible); 
+    }
+    private void SetHealVisible(bool visible) 
+    { 
+        _healVisual.SetActive(visible); 
+    }
     private void FillDictionary()
     {
         _actions.Add(PlayerEvent.Move, () => MoveAnimation(true));
@@ -59,6 +71,9 @@ public class PlayerView : IObserver<PlayerEvent>
         _actions.Add(PlayerEvent.Death, OnPlayerDeath);
         _actions.Add(PlayerEvent.ShieldOn, () => SetShieldVisible(true));
         _actions.Add(PlayerEvent.ShieldOff, () => SetShieldVisible(false));
+        _actions.Add(PlayerEvent.SpeedOn, () => SetSpeedVisible(true));
+        _actions.Add(PlayerEvent.SpeedOff, () => SetSpeedVisible(false));
+        _actions.Add(PlayerEvent.HealOn, () => SetHealVisible(true));
     }
     public void Notify(PlayerEvent actions)
     {
