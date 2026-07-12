@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: SpeedPowerUp
   m_EditorClassIdentifier: 
   _duration: 3
-  _multiplier: 8
+  _icon: {fileID: 0}
+  _multiplier: 3.5
