@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ScreenGameplay : IScreen
 {
-    [SerializeField]private Transform _root;
+    private Transform _root;
     private List<IPauseable> _pauseables;
     public ScreenGameplay(Transform root)
     {

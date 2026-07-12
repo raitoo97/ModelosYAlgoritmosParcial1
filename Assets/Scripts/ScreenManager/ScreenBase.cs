@@ -5,6 +5,10 @@ public class ScreenBase : MonoBehaviour , IScreen
     {
         ScreenManager.Instance.Pop();
     }
+    public virtual void BTN_Screen(string screenToPush)
+    {
+        ScreenManager.Instance.Push(screenToPush);
+    }
     public virtual void Activate()
     {
         gameObject.SetActive(true);
