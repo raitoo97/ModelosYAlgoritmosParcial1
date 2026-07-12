@@ -42,7 +42,7 @@ public class PlayerView : IObserver<PlayerEvent>
         // el torso, la cabeza, los ojos y la restriccion del giro.
         _animator.SetLookAtWeight(
             weight: _currentAimWeight,
-            bodyWeight: 0.6f,
+            bodyWeight: 1f,
             headWeight: 0.4f,
             eyesWeight: 0f,
             clampWeight: 0.5f
