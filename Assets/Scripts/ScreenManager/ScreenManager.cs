@@ -43,8 +43,8 @@ public class ScreenManager : MonoBehaviour
     }
     public void Push(string resource)
     {
-        var Screen = Instantiate(Resources.Load<ScreenBase>(resource));
-        Push(Screen);
+        var screen = Instantiate(Resources.Load<ScreenBase>(resource));
+        Push(screen);
     }
     public void Push(IScreen screen)
     {
