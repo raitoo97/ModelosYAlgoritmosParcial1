@@ -925,7 +925,7 @@ MonoBehaviour:
   _deathAnimationDuration: 2
   _losMask:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 705
 --- !u!136 &6656476001694322694
 CapsuleCollider:
   m_ObjectHideFlags: 0

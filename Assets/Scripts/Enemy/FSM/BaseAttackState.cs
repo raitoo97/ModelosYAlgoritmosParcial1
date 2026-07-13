@@ -32,7 +32,7 @@ public abstract class BaseAttackState : IState
     public void OnUpdate()
     {
         Vector3 dir = _playerTransform.position - _transform.position;
-        if (dir.magnitude > _stats.maxDistance)
+        if (dir.magnitude > _stats.maxDistance || !LineOfSight.IsOnSight(_transform.position, _playerTransform.position))
         {
             _fsm.ChangeState(FSM.StateID.Chase);
             return;
