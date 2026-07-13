@@ -9,7 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 404482}
-  m_Layer: 0
+  - component: {fileID: 7259307096548117587}
+  m_Layer: 9
   m_Name: Wall_Simple_04_Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,6 +44,33 @@ Transform:
   - {fileID: 473940}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7259307096548117587
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104482}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &121936
 GameObject:
   m_ObjectHideFlags: 0
@@ -53,7 +81,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421946}
   - component: {fileID: 10821946}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +178,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421936}
   - component: {fileID: 10821936}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Point light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -247,7 +275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421938}
   - component: {fileID: 10821938}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Point light_Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,7 +372,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421944}
   - component: {fileID: 10821944}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Point light_Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -441,7 +469,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421940}
   - component: {fileID: 10821940}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Point light_Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -538,7 +566,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421942}
   - component: {fileID: 10821942}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Point light_Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +663,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421952}
   - component: {fileID: 6521940}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -688,7 +716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421954}
   - component: {fileID: 6521942}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -741,7 +769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421950}
   - component: {fileID: 6521938}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -794,7 +822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421956}
   - component: {fileID: 6521944}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -847,7 +875,7 @@ GameObject:
   m_Component:
   - component: {fileID: 421948}
   - component: {fileID: 6521936}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Collider_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -899,7 +927,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 473940}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall_Simple_04_Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -934,7 +962,7 @@ GameObject:
   - component: {fileID: 473942}
   - component: {fileID: 3373942}
   - component: {fileID: 2373942}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1020,7 +1048,7 @@ GameObject:
   - component: {fileID: 473944}
   - component: {fileID: 3373944}
   - component: {fileID: 2373944}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Wall_Simple_04_Long
   m_TagString: Untagged
   m_Icon: {fileID: 0}
