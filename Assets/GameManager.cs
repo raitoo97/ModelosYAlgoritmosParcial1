@@ -1,4 +1,5 @@
 using UnityEngine;
+//Game Manager
 public class GameManager : MonoBehaviour
 {
     public Player player;
