@@ -1729,7 +1729,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.40709782, y: 0.533784, z: 0.32660383, w: 0.66533905}
+  m_LocalRotation: {x: 0.24219488, y: -0.72949845, z: 0.31849334, w: 0.55473936}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9289,7 +9289,7 @@ Transform:
   m_GameObject: {fileID: 1155634306}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.72, y: -1.3667935, z: 17.97}
+  m_LocalPosition: {x: 3.72, y: -1.3667935, z: 22.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18815,7 +18815,7 @@ MonoBehaviour:
   _spawnRate: 8
   _spawnRateDecrease: 1
   _minSpawnRate: 1
-  _radius: 4
+  _radius: 13.52
   _spawnHeight: 1.5
   _pelletCount: 5
   _spreadArcDegrees: 35
@@ -18829,7 +18829,7 @@ Transform:
   m_GameObject: {fileID: 2096098387}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.48, y: 0.4164015, z: 92.36}
+  m_LocalPosition: {x: 8.27, y: 0.4164015, z: 84.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
