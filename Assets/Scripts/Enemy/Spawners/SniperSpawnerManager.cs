@@ -13,10 +13,6 @@ public class SniperSpawnerManager : EnemySpawnerManager
         base.Start(); // la base crea el EnemyService y se suscribe al SaveManager
         _activeSnipers = new Enemy[_spawnPoints.Length];
         _respawnTimers = new float[_spawnPoints.Length];
-        for (int i = 0; i < _spawnPoints.Length; i++)
-        {
-            _activeSnipers[i] = _enemyService.Spawn(_spawnPoints[i].position);
-        }
     }
     protected override IShootStrategy CreateShootStrategy()
     {
@@ -30,8 +26,14 @@ public class SniperSpawnerManager : EnemySpawnerManager
     {
         _respawnTime = Mathf.Max(_minRespawnTime, _respawnTime - _respawnTimeDecrease);
     }
+    protected override void OnActivated()
+    {
+        for (int i = 0; i < _spawnPoints.Length; i++)
+            _activeSnipers[i] = _enemyService.Spawn(_spawnPoints[i].position);
+    }
     private void Update()
     {
+        if (!IsActive) return;
         SpawnSnipers();
     }
     private void SpawnSnipers()

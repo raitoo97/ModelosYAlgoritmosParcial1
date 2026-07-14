@@ -26,6 +26,7 @@ public class RangerSpawnerManager : EnemySpawnerManager
     }
     private void Update()
     {
+        if (!IsActive) return;
         _timer += Time.deltaTime;
         if (_timer >= _spawnRate)
         {
