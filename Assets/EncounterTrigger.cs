@@ -6,13 +6,20 @@ public class EncounterTrigger : MonoBehaviour, IPauseable
     [SerializeField] private float _disableDelay = 3f;
     private bool _triggered;
     private float _timer;
-    private Renderer _renderer;
-    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    private Material _material;
+    private int BaseColorId = Shader.PropertyToID("_BaseColor");
+    private int OffsetId = Shader.PropertyToID("_Offset");
+    [SerializeField] private Vector2 _playOffset = new Vector2(0f, 0.1f);
+    private void Awake()
+    {
+        // Cacheo el material aca (no en Start) porque Pause() podria llegar antes.
+        _material = GetComponent<Renderer>().material;
+    }
     private void Start()
     {
         _triggered = false;
-        _renderer = GetComponent<Renderer>();
-        _renderer.material.SetColor(BaseColorId, Color.blue);
+        _material.SetColor(BaseColorId, Color.blue);
+        _material.SetVector(OffsetId, _playOffset);
     }
     //se activa cuando agregas el componente por primera vez a un GameObject.
     //O sea: apenas pones el EncounterTrigger en un objeto, te tilda solo el Is Trigger del collider.
@@ -28,7 +35,7 @@ public class EncounterTrigger : MonoBehaviour, IPauseable
         _timer = 0f;
         foreach (EnemySpawnerManager spawner in _spawners)
             if (spawner != null) spawner.Activate();
-        _renderer.material.SetColor(BaseColorId, Color.red);
+        _material.SetColor(BaseColorId, Color.red);
     }
     private void Update()
     {
@@ -37,6 +44,14 @@ public class EncounterTrigger : MonoBehaviour, IPauseable
         if (_timer >= _disableDelay)
             gameObject.SetActive(false);
     }
-    public void Pause() { enabled = false; }
-    public void Resume() { enabled = true; }
+    public void Pause()
+    {
+        enabled = false;
+        _material.SetVector(OffsetId, Vector2.zero);//deja de panear
+    }
+    public void Resume()
+    {
+        enabled = true;
+        _material.SetVector(OffsetId, _playOffset);  // vuelve a panear
+    }
 }
