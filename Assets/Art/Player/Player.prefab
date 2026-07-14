@@ -5344,7 +5344,7 @@ MonoBehaviour:
   _cameraReference: {fileID: 0}
   _aimMask:
     serializedVersion: 2
-    m_Bits: 321
+    m_Bits: 833
   _shieldVisual: {fileID: 6219664154032980366}
   _speedVisual: {fileID: 3017591659298932065}
   _healVisual: {fileID: 1972911712564967191}
@@ -15846,7 +15846,7 @@ MonoBehaviour:
   _muzzleFlash: {fileID: 3528706564318035202}
   _hitMask:
     serializedVersion: 2
-    m_Bits: 321
+    m_Bits: 833
   _laser: {fileID: 2548988218624664917}
   _laserDot: {fileID: 2219501881101897245}
   _coneLeftLine: {fileID: 2548988218624664917}

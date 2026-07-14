@@ -29,7 +29,7 @@ public class ChaseState : IState
     {
         var dir = _playerTransform.position - _transform.position;
         var distance = dir.magnitude;
-        if (distance < _stats.maxDistance)
+        if (distance < _stats.maxDistance && LineOfSight.IsOnSight(_transform.position, _playerTransform.position))
         {
             _fsm.ChangeState(FSM.StateID.Attack);
             return;

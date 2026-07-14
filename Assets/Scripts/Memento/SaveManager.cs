@@ -8,10 +8,10 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
 {
     private ObserverList<SaveEvent> _saveObservers = new ObserverList<SaveEvent>();
     public static SaveManager instance;
-    private int savesCount = 3;
-    private int loadCounts = 0;
-    public bool CanSave => savesCount > 0;
-    public bool CanLoad => loadCounts > 0;
+    private int _savesCount = 3;
+    private int _loadCounts = 0;
+    public bool CanSave => _savesCount > 0;
+    public bool CanLoad => _loadCounts > 0;
     private IController _controller;
     private void Awake()
     {
@@ -27,16 +27,16 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
     }
     public void Save()
     {
-        savesCount--;
-        loadCounts++;
-        EventManager.TriggerEvent(EventType.UpdateSaves, savesCount);
-        EventManager.TriggerEvent(EventType.UpdateLoads, loadCounts);
+        _savesCount--;
+        _loadCounts++;
+        EventManager.TriggerEvent(EventType.UpdateSaves, _savesCount);
+        EventManager.TriggerEvent(EventType.UpdateLoads, _loadCounts);
         NotifyObservers(SaveEvent.Save);
     }
     public void Load()
     {
-        loadCounts--;
-        EventManager.TriggerEvent(EventType.UpdateLoads, loadCounts);
+        _loadCounts--;
+        EventManager.TriggerEvent(EventType.UpdateLoads, _loadCounts);
         NotifyObservers(SaveEvent.Load);
     }
     public void Subscribe(IObserver<SaveEvent> observer)

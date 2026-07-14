@@ -53,7 +53,6 @@ public class PowerUpController : MonoBehaviour, IObserver<PlayerEvent>, IPowerUp
         PowerUpSlot selected = _slots[_selectedIndex];
         EventManager.TriggerEvent(EventType.PowerUpChanged, selected.config.Icon, selected.charges);
     }
-    //c
     //cuando un pickup aniade una carga: si ya hay slot de esa config le sumo
     //una carga; si es tipo nuevo, fabrico SU estrategia una sola vez y lo
     //agrego al final de la mochila.agarrar NO cambia la seleccion

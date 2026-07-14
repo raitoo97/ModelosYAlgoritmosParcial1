@@ -34,7 +34,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Start()
     {
-        ImpactEffectService impactEffectService = _impactEffectPrefab != null ? new ImpactEffectService(_impactEffectPrefab, GameManager.instance._projectilesParent, _impactEffectPoolSize) : null;
+        ImpactEffectService impactEffectService = _impactEffectPrefab != null ? new ImpactEffectService(_impactEffectPrefab, GameManager.instance.projectilesParent, _impactEffectPoolSize) : null;
         _view = new GunView(_muzzleFlash, _laser, _laserDot, _coneLeftLine, _coneRightLine, impactEffectService);
         _shootTypes = CreateShootTypes();
         _currentShootType = 0;
@@ -45,7 +45,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     private List<ShootType> CreateShootTypes()
     {
         // Pool de balas propio del gun, compartido por todas sus armas de proyectil.
-        BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance._projectilesParent, _bulletPoolSize);
+        BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance.projectilesParent, _bulletPoolSize);
         ShootStrategyDependencies deps = new ShootStrategyDependencies
         {
             bulletService = bulletService,

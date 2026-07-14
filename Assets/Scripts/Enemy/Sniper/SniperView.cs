@@ -35,7 +35,7 @@ public class SniperView : EnemyView
         // 1) parto del pecho del sniper (chestPos)
         // 2) avanzo solo PullInDistance metros en la direccion horizontal al player (flat/dist normaliza y * PullInDistance estira a 3) -> para normalizar un vector divido sus componente por su magnitud (dist)
         //en conclusion, tengo un vector de largo 1 y lo multiplico * 3 para estirarlo
-        // 3)  y a ese punto le sumo la diferencia de altura real con el player (si está 4 abajo, toTarget.y es -4, así que el punto baja 4)
+        // 3)  y a ese punto le sumo la diferencia de altura real con el player (si esta 4 abajo, toTarget.y es -4, asi que el punto baja 4)
         return chestPos + flat / dist * PullInDistance + Vector3.up * toTarget.y;
     }
     public void ShowLaser(bool visible)
