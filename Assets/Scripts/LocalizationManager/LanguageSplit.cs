@@ -7,7 +7,8 @@ public static class LenguageSplit
         var codex = new Dictionary<SystemLanguage, Dictionary<string, string>>();
         var langColumn = new Dictionary<int, SystemLanguage>();
         var idColumn = 0;
-        var lines = sheet.Split('\n');// se divide el texto en lineas
+        // se divide el texto en lineas
+        var lines = sheet.Split(new[] { '\n' , '\r' },System.StringSplitOptions.RemoveEmptyEntries);
         bool isFirstLine = true; // se utiliza para identificar la primera linea que contiene los nombres de las columnas
         foreach (var line in lines) // se itera sobre cada linea del texto
         {
