@@ -13,11 +13,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]private TextMeshProUGUI _powerUpCharges;
     [SerializeField]private string _pauseScreen;
     private IController _controller;
-    private int _currentScore;
     private void Awake()
     {
         _gameOver.gameObject.SetActive(false);
-        _currentScore = 0;
         _saves.color = Color.green;
         _loads.color = Color.red;
         _powerUpIcon.enabled = false;
@@ -28,11 +26,11 @@ public class UIManager : MonoBehaviour
     {
         EventManager.SubscribeToEvent(EventType.PlayerDamage, OnPlayerDamage);
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
-        EventManager.SubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
         EventManager.SubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
         EventManager.SubscribeToEvent(EventType.UpdateLoads, OnPlayerLoad);
         EventManager.SubscribeToEvent(EventType.WeaponChanged, OnWeaponChanged);
         EventManager.SubscribeToEvent(EventType.PowerUpChanged, OnPowerUpChanged);
+        EventManager.SubscribeToEvent(EventType.ScoreChanged, OnScoreChanged);
     }
     private void Update()
     {
@@ -75,11 +73,10 @@ public class UIManager : MonoBehaviour
         if (hasPowerUp)
             _powerUpIcon.sprite = icon;
     }
-    private void OnEnemyKilled(params object[] parameters)
+    private void OnScoreChanged(params object[] parameters)
     {
-        int scoreToAdd = (int)parameters[0];
-        _currentScore += scoreToAdd;
-        _score.text = _currentScore.ToString();
+        int score = (int)parameters[0];
+        _score.text = score.ToString();
     }
     private void OnPlayerDeath(params object[] parameters)
     {
@@ -89,7 +86,7 @@ public class UIManager : MonoBehaviour
     {
         EventManager.UnsubscribeToEvent(EventType.PlayerDamage, OnPlayerDamage);
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
-        EventManager.UnsubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
+        EventManager.UnsubscribeToEvent(EventType.ScoreChanged, OnScoreChanged);
         EventManager.UnsubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
         EventManager.UnsubscribeToEvent(EventType.UpdateLoads, OnPlayerLoad);
         EventManager.UnsubscribeToEvent(EventType.WeaponChanged, OnWeaponChanged);

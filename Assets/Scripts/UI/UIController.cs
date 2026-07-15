@@ -7,6 +7,7 @@ public class UIController : IController
     }
     public void UpdateInputs()
     {
+        //primera vez que apreto PauseAction me instancia screenPause , luego va para atreas con el mismo boton 
         if (PlayerInputsManager.instance.PauseAction())
         {
             if (ScreenManager.Instance.StackContainsType<ScreenPause>())

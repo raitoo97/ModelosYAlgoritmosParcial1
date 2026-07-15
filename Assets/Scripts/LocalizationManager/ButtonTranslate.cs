@@ -33,6 +33,6 @@ public class ButtonTranslate : MonoBehaviour
     }
     private void UpdateText()
     {
-        _myText.text = LocalizationManager.Instance.GetTranslation(id);
+        _myText.text = LocalizationManager.Instance.GetTranslation(id).Replace("|", "\n"); ;
     }
 }

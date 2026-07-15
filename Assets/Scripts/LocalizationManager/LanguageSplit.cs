@@ -7,7 +7,8 @@ public static class LenguageSplit
         var codex = new Dictionary<SystemLanguage, Dictionary<string, string>>();
         var langColumn = new Dictionary<int, SystemLanguage>();
         var idColumn = 0;
-        var lines = sheet.Split('\n');// se divide el texto en lineas
+        // se divide el texto en lineas
+        var lines = sheet.Split(new[] { '\n' , '\r' },System.StringSplitOptions.RemoveEmptyEntries);
         bool isFirstLine = true; // se utiliza para identificar la primera linea que contiene los nombres de las columnas
         foreach (var line in lines) // se itera sobre cada linea del texto
         {
@@ -22,6 +23,7 @@ public static class LenguageSplit
                     {
                         try
                         {
+                            //Parse = convertir una cadena de texto (string) en otro tipo de datos especifico en este caso un SystemLanguage
                             langColumn[i] = (SystemLanguage)System.Enum.Parse(typeof(SystemLanguage), cells[i]);
                             //para ese indice de la iteracion de la celda se guarda el valor del idioma parseado en el diccionario langColumn
                             //en mi caso Spanish[1] = SystemLanguage.Spanish, English[2] = SystemLanguage.English
