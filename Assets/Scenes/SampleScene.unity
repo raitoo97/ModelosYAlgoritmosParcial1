@@ -1729,7 +1729,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.117719755, y: -0.78670686, z: 0.15832235, w: 0.58495176}
+  m_LocalRotation: {x: 0.063525215, y: -0.8005954, z: 0.0862657, w: 0.58955055}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3124,7 +3124,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 60.000004
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3150,8 +3150,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.67817646, y: -0.16332595, z: 0.1585133, w: 0.69876677}
-  m_LocalPosition: {x: -0.95, y: 2.28, z: -15.41}
+  m_LocalRotation: {x: 0.063525215, y: -0.8005954, z: 0.0862657, w: 0.58955055}
+  m_LocalPosition: {x: -1.0570704, y: 2.1815588, z: -15.985669}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11318,6 +11318,7 @@ GameObject:
   - component: {fileID: 1358309567}
   - component: {fileID: 1358309569}
   - component: {fileID: 1358309568}
+  - component: {fileID: 1358309570}
   m_Layer: 5
   m_Name: GameOver
   m_TagString: Untagged
@@ -11443,6 +11444,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1358309566}
   m_CullTransparentMesh: 1
+--- !u!114 &1358309570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358309566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be33f74279e7dbe49a4c1a677180f039, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myText: {fileID: 1358309568}
 --- !u!1001 &1359474765
 PrefabInstance:
   m_ObjectHideFlags: 0
