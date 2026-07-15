@@ -5345,6 +5345,9 @@ MonoBehaviour:
   _aimMask:
     serializedVersion: 2
     m_Bits: 833
+  _wallMask:
+    serializedVersion: 2
+    m_Bits: 512
   _shieldVisual: {fileID: 6219664154032980366}
   _speedVisual: {fileID: 3017591659298932065}
   _healVisual: {fileID: 1972911712564967191}
