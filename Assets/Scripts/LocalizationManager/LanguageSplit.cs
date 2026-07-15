@@ -23,6 +23,7 @@ public static class LenguageSplit
                     {
                         try
                         {
+                            //Parse = convertir una cadena de texto (string) en otro tipo de datos especifico en este caso un SystemLanguage
                             langColumn[i] = (SystemLanguage)System.Enum.Parse(typeof(SystemLanguage), cells[i]);
                             //para ese indice de la iteracion de la celda se guarda el valor del idioma parseado en el diccionario langColumn
                             //en mi caso Spanish[1] = SystemLanguage.Spanish, English[2] = SystemLanguage.English
