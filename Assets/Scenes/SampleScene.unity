@@ -1729,7 +1729,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.063525215, y: -0.8005954, z: 0.0862657, w: 0.58955055}
+  m_LocalRotation: {x: 0.06302101, y: -0.8006938, z: 0.08558875, w: 0.5895697}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3124,7 +3124,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60.000004
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -3150,8 +3150,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.063525215, y: -0.8005954, z: 0.0862657, w: 0.58955055}
-  m_LocalPosition: {x: -1.0570704, y: 2.1815588, z: -15.985669}
+  m_LocalRotation: {x: 0.67817646, y: -0.16332595, z: 0.1585133, w: 0.69876677}
+  m_LocalPosition: {x: -0.95, y: 2.28, z: -15.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9325,14 +9325,14 @@ MonoBehaviour:
   _killsPerDifficultyIncrease: 5
   _impactEffectPrefab: {fileID: 7974238921554058918, guid: 70419d053adc97c44b01ab7644001654, type: 3}
   _impactEffectPoolSize: 10
-  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
-  _bulletPoolSize: 50
   _poolSize: 20
   _spawnRate: 5
   _spawnRateDecrease: 1
   _minSpawnRate: 1
   _radius: 10
   _spawnHeight: 1.5
+  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
+  _bulletPoolSize: 50
 --- !u!4 &1157894235 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 497138, guid: 3e541691191f44de8b9db8a516d098f3, type: 3}
@@ -18865,14 +18865,14 @@ MonoBehaviour:
   _killsPerDifficultyIncrease: 5
   _impactEffectPrefab: {fileID: 7974238921554058918, guid: 70419d053adc97c44b01ab7644001654, type: 3}
   _impactEffectPoolSize: 10
-  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
-  _bulletPoolSize: 50
   _poolSize: 20
   _spawnRate: 8
   _spawnRateDecrease: 1
   _minSpawnRate: 1
   _radius: 13.52
   _spawnHeight: 1.5
+  _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
+  _bulletPoolSize: 50
   _pelletCount: 5
   _spreadArcDegrees: 35
   _pelletDamageMultiplier: 0.5
