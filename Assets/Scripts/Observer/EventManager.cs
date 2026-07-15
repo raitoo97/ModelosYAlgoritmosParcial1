@@ -7,7 +7,8 @@ public enum EventType
     UpdateSaves,
     UpdateLoads,
     WeaponChanged,
-    PowerUpChanged
+    PowerUpChanged,
+    ScoreChanged
 }
 public static class EventManager
 {
