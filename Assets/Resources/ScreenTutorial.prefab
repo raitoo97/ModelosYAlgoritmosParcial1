@@ -121,8 +121,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 848765329199543088}
-        m_TargetAssemblyTypeName: ScreenTutorial, Assembly-CSharp
+      - m_Target: {fileID: 2261640269036342840}
+        m_TargetAssemblyTypeName: ScreenBase, Assembly-CSharp
         m_MethodName: BTN_Back
         m_Mode: 1
         m_Arguments:
@@ -659,7 +659,7 @@ GameObject:
   - component: {fileID: 7201757933166324668}
   - component: {fileID: 5539039037338886672}
   - component: {fileID: 2648731467604481811}
-  - component: {fileID: 848765329199543088}
+  - component: {fileID: 2261640269036342840}
   m_Layer: 5
   m_Name: ScreenTutorial
   m_TagString: Untagged
@@ -752,7 +752,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &848765329199543088
+--- !u!114 &2261640269036342840
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -761,6 +761,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7768683642652947310}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a2ddcd136dda774f9da070f5839f78e, type: 3}
+  m_Script: {fileID: 11500000, guid: 58b6f8bf7eb270b4aa62b1711835117a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
