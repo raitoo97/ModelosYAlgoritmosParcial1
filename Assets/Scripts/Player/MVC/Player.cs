@@ -27,6 +27,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     private Gun _gun;
     [SerializeField] private Transform _cameraReference;
     [SerializeField] private LayerMask _aimMask;
+    [SerializeField] private LayerMask _wallMask;
     private PowerUpController _powerUp;
     [SerializeField] private GameObject _shieldVisual;//es un gameObject porque necesito desactivar la visual en view
     [SerializeField] private GameObject _speedVisual;
@@ -34,7 +35,7 @@ public class Player : MonoBehaviour , IDamageable ,IPauseable , IFactionMember,I
     public Factions Faction => Factions.Player;
     private void Awake()
     {
-        _model = new PlayerModel(this, _cameraReference, _aimMask);
+        _model = new PlayerModel(this, _cameraReference, _aimMask, _wallMask);
         _controller = new PlayerController(_model);
         _view = new PlayerView(this, _shieldVisual, _speedVisual, _healVisual);
         _model.Subscribe(_view);

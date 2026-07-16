@@ -20,14 +20,19 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private Dictionary<bool, IRotationStrategy> _rotationStrategies;
     private IRotationStrategy _currentRotation;
     private LayerMask _aimMask;
+    private LayerMask _wallMask;
     private float _speedMultiplier = 1f;
-    public PlayerModel(Player user, Transform cameraReference, LayerMask aimMask)
+    private CapsuleCollider _capsule;
+    private const float WallCheckSkin = 0.25f;
+    public PlayerModel(Player user, Transform cameraReference, LayerMask aimMask,LayerMask wallMask)
     {
         _rb = user.GetComponent<Rigidbody>();
         _isDead = false;
         _currentLife = FlyWeightPointer.Player.maxLife;
         _playerMemento = new MementoState<PlayerMemento>();
         _aimMask = aimMask;
+        _wallMask = wallMask;
+        _capsule = user.GetComponent<CapsuleCollider>();
         _cameraReference = cameraReference;
         FillRotationStrategies();
         FillDictionary();
@@ -47,11 +52,77 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         if (isMoving)
         {
             float targetRotation = GetTargetRotation(direction);
+            //Quaternion.Euler(0, targetRotation, 0)-> Arma una rotacion de targetRotation grados alrededor del eje Y
+            // Al multiplicarlo por Vector3.forward -> obtenes el vector unitario del mundo que apunta hacia ese angulo
             Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
             Vector3 moveVelocity = targetDirection * (FlyWeightPointer.Player.speed * _speedMultiplier);
+            moveVelocity = ApplyWallCollision(moveVelocity);
             _rb.MovePosition(_rb.position + moveVelocity * Time.fixedDeltaTime);
         }
         SetMoving(isMoving);
+    }
+    //metodo que decide que hacer cuando hay pared recibe por parametro una velocidad (direccion + magnitud , y la magnitud se usa para la distancia dinamica del cast).
+    //if (IsWallInDirection(moveVelocity, out RaycastHit hit)) -> Hay una pared delante ? -> Intenta deslizarte por ella.
+    //moveVelocity.y = 0f; -> No subas por la pared.
+    //El movimiento ya proyectado sigue chocando con otra pared -> EJ PJ en una esquina? si es asi cancela el movimiento
+    private Vector3 ApplyWallCollision(Vector3 moveVelocity)
+    {
+        if (IsWallInDirection(moveVelocity, out RaycastHit hit))
+        {
+            //ProjectOnPlane(Vector que quiero proyectar, normal del plano) ->proyecta un vector sobre una superficie plana
+            //es decir le paso la direccion hacia donde me muevo y le paso la normal de la pared con la que choque. hit.normal -> apunta hacia afuera de la pared
+            //EJ moveVelocity = (1,0,1) , hit.normal = (0,0,-1)
+            //moveVelocity = (1,0,0) -> se elimino la componente Z (la que iba contra la pared)
+            //y queda solo la X, que es la paralela a la pared: por eso me deslizo
+            //Matematicamente: Calcula cuanto del vector apunta en la direccion de la normal.
+            //Se lo resta.
+            //resultado = v - Dot(v, n) * n
+            //Dot((1,0,1), (0,0,-1)) = 1*0 + 0*0 + 1*(-1) = -1   -> cuanto voy contra la normal
+            //-1 * (0,0,-1) = (0,0,1)                             -> el vector que va contra la pared
+            //(1,0,1) - (0,0,1) = (1,0,0)                         -> me queda solo la parte paralela
+            //Lo que queda es completamente paralelo al plano.
+            //OJO: no modifica el vector original, DEVUELVE uno nuevo -> por eso la reasignacion moveVelocity =
+            //Conclusion : Vector3.ProjectOnPlane(Vector que quiero proyectar, normal del plano)Elimina la parte del vector que va en la direccion de la normal del plano, dejando solo la componente paralela al plano. :D
+            moveVelocity = Vector3.ProjectOnPlane(moveVelocity, hit.normal);
+            //si la pared esta inclinada, ProjectOnPlane puede devolver componente en Y
+            //y el PJ treparia la pared. Mi movimiento es siempre horizontal (XZ), anulo la Y
+            moveVelocity.y = 0f;
+            //segundo chequeo en la direccion YA deslizada: caso esquina (dos paredes).
+            //si tambien esta bloqueada no intento otro slide, cancelo el movimiento
+            //(encadenar proyecciones genera movimientos raros)
+            if (IsWallInDirection(moveVelocity, out _)) moveVelocity = Vector3.zero;
+        }
+        //devuelve la velocity que le paso por parametro ya se modificada o no modificada
+        return moveVelocity;
+    }
+    //devuelve true or false dependiendo si hay pared
+    private bool IsWallInDirection(Vector3 moveVelocity, out RaycastHit hit)
+    {
+        //C# obliga a asignar los parametros out en todos los caminos:
+        //lo inicializo por si salgo temprano en el return de abajo sin castear
+        hit = default;
+        //si practicamente no me estoy moviendo devolve false
+        if (moveVelocity.sqrMagnitude < 0.0001f) return false;
+        //normalizame la direccion
+        Vector3 dir = moveVelocity.normalized;
+        //calculo la distancia  
+        //moveVelocity.magnitude -> largo del vector
+        //moveVelocity.magnitude * Time.fixedDeltaTime ->cuantos metros avanzo en este tick de fisica
+        //WallCheckSkin -> margen para no quedar dentro de la pared
+        float distance = moveVelocity.magnitude * Time.fixedDeltaTime + WallCheckSkin;
+        //calculo origen
+        //si mi collider es != null va a ser el centro de la capsula TransformPoint-> paso de local a mundo
+        //sino la posicion del rigidbody mas un vector3.up
+        Vector3 origin = _capsule != null ? _capsule.transform.TransformPoint(_capsule.center) : _rb.position + Vector3.up;
+        //radio
+        //si la capsula != null usa _capsule.radius sino 0.3 y al resultado queda al 90%
+        float radius = (_capsule != null ? _capsule.radius : 0.3f) * 0.9f;
+        //ahora si tiro la sphereCast
+        bool blocked = Physics.SphereCast(origin, radius, dir, out hit, distance, _wallMask, QueryTriggerInteraction.Ignore);
+        //Debug
+        Debug.DrawRay(origin, dir * (distance + radius), blocked ? Color.red : Color.green);
+        //retorno true si toco una pared false si no toco nada
+        return blocked;
     }
     private void SetMoving(bool isMoving)
     {
