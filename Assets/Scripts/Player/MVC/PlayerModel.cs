@@ -23,7 +23,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     private LayerMask _wallMask;
     private float _speedMultiplier = 1f;
     private CapsuleCollider _capsule;
-    private float WallCheckSkin = 0.25f;
+    private const float WallCheckSkin = 0.25f;
     public PlayerModel(Player user, Transform cameraReference, LayerMask aimMask,LayerMask wallMask)
     {
         _rb = user.GetComponent<Rigidbody>();
@@ -53,7 +53,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         {
             float targetRotation = GetTargetRotation(direction);
             //Quaternion.Euler(0, targetRotation, 0)-> Arma una rotacion de targetRotation grados alrededor del eje Y
-            // Al multiplicarlo por Vector3.forward -> obtenés el vector unitario del mundo que apunta hacia ese angulo
+            // Al multiplicarlo por Vector3.forward -> obtenes el vector unitario del mundo que apunta hacia ese angulo
             Vector3 targetDirection = Quaternion.Euler(0, targetRotation, 0) * Vector3.forward;
             Vector3 moveVelocity = targetDirection * (FlyWeightPointer.Player.speed * _speedMultiplier);
             moveVelocity = ApplyWallCollision(moveVelocity);
@@ -61,7 +61,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         }
         SetMoving(isMoving);
     }
-    //metodo que decide que hacer cuando hay pared recibe por parametro una velocidad (dirección + magnitud , y la magnitud se usa para la distancia dinamica del cast).
+    //metodo que decide que hacer cuando hay pared recibe por parametro una velocidad (direccion + magnitud , y la magnitud se usa para la distancia dinamica del cast).
     //if (IsWallInDirection(moveVelocity, out RaycastHit hit)) -> Hay una pared delante ? -> Intenta deslizarte por ella.
     //moveVelocity.y = 0f; -> No subas por la pared.
     //El movimiento ya proyectado sigue chocando con otra pared -> EJ PJ en una esquina? si es asi cancela el movimiento
