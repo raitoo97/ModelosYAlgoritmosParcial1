@@ -69,7 +69,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         if (IsWallInDirection(moveVelocity, out RaycastHit hit))
         {
-            //ProjectOnPlane(Vector que quiero proyectar, normal del plano)
+            //ProjectOnPlane(Vector que quiero proyectar, normal del plano) ->proyecta un vector sobre una superficie plana
             //es decir le paso la direccion hacia donde me muevo y le paso la normal de la pared con la que choque. hit.normal -> apunta hacia afuera de la pared
             //EJ moveVelocity = (1,0,1) , hit.normal = (0,0,-1)
             //moveVelocity = (1,0,0) -> se elimino la componente Z (la que iba contra la pared)
