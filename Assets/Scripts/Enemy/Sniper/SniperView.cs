@@ -57,7 +57,11 @@ public class SniperView : EnemyView
     }
     public void PlayShootEffects(ShotResult result)
     {
-        if (!result.didHit || _impactEffect == null) return;
+        if (!result.didHit) return;
+        // el sonido va ANTES del chequeo del particle: suena aunque
+        // el prefab no tenga el sistema de particulas de impacto
+        SoundManager.Instance.Play(SoundId.Impact, 0.4f);
+        if (_impactEffect == null) return;
         _impactEffect.transform.SetPositionAndRotation(result.hitPoint, Quaternion.LookRotation(result.hitNormal));
         _impactEffect.Play();
     }
