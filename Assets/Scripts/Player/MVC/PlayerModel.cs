@@ -74,8 +74,12 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
             //EJ moveVelocity = (1,0,1) , hit.normal = (0,0,-1)
             //moveVelocity = (1,0,0) -> se elimino la componente Z (la que iba contra la pared)
             //y queda solo la X, que es la paralela a la pared: por eso me deslizo
-            //Matematicamente: Calcula cuanto del vector apunta en la dirección de la normal.
+            //Matematicamente: Calcula cuanto del vector apunta en la direccion de la normal.
             //Se lo resta.
+            //resultado = v - Dot(v, n) * n
+            //Dot((1,0,1), (0,0,-1)) = 1*0 + 0*0 + 1*(-1) = -1   -> cuanto voy contra la normal
+            //-1 * (0,0,-1) = (0,0,1)                             -> el vector que va contra la pared
+            //(1,0,1) - (0,0,1) = (1,0,0)                         -> me queda solo la parte paralela
             //Lo que queda es completamente paralelo al plano.
             //OJO: no modifica el vector original, DEVUELVE uno nuevo -> por eso la reasignacion moveVelocity =
             //Conclusion : Vector3.ProjectOnPlane(Vector que quiero proyectar, normal del plano)Elimina la parte del vector que va en la direccion de la normal del plano, dejando solo la componente paralela al plano. :D
