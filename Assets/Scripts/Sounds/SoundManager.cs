@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum SoundId
 {
-    Shoot,
-    PlayerDeath,
-    EnemyDeath,
-    PowerUp,
-    Heal,
-    Music
+    Shoot,       
+    PlayerDeath, 
+    EnemyDeath,  
+    PowerUp,     
+    Heal,        
+    Music,       
+    Impact,      
+    Footsteps,
+    EnemyShoot
 }
 //Encargado de Gestionar todo los SoundEmitter de la escena a traves de SoundService
 public class SoundManager : MonoBehaviour, ISoundPlayer

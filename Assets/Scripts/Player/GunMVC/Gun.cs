@@ -34,7 +34,7 @@ public class Gun : MonoBehaviour ,IObserver<PlayerEvent>
     }
     private void Start()
     {
-        ImpactEffectService impactEffectService = _impactEffectPrefab != null ? new ImpactEffectService(_impactEffectPrefab, GameManager.instance.projectilesParent, _impactEffectPoolSize) : null;
+        ImpactEffectService impactEffectService = _impactEffectPrefab != null ? new ImpactEffectService(_impactEffectPrefab, GameManager.instance.projectilesParent, _impactEffectPoolSize, SoundManager.Instance) : null;
         _view = new GunView(_muzzleFlash, _laser, _laserDot, _coneLeftLine, _coneRightLine, impactEffectService);
         _shootTypes = CreateShootTypes();
         _currentShootType = 0;

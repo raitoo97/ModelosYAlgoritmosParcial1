@@ -1730,7 +1730,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.16628449, y: 0.5084714, z: 0.10079546, w: 0.83883643}
+  m_LocalRotation: {x: -0.19487277, y: 0.5033365, z: 0.11767119, w: 0.83356494}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4424,6 +4424,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 42e0d7ae4f4128942b85e2e63f93a548, type: 3}
   - id: 0
     clip: {fileID: 8300000, guid: 8ef79c0d7577dff43aae942a01e55ce4, type: 3}
+  - id: 6
+    clip: {fileID: 8300000, guid: d36dd8fc55d61754db3cfeb99d506b6d, type: 3}
+  - id: 7
+    clip: {fileID: 8300000, guid: cf83b583c5d57ec46a5463c70d01d231, type: 3}
   _emitterPrefab: {fileID: 6637341784116669964, guid: 26ee54e65d9df7243a3bd1354fdae97e, type: 3}
   _poolSize: 8
 --- !u!1 &489630628

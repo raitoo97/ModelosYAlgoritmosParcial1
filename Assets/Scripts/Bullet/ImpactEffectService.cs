@@ -3,10 +3,12 @@ public class ImpactEffectService
 {
     private Pool<ImpactEffect> _pool;
     private ParticlesFactory _factory;
-    public ImpactEffectService(ImpactEffect prefab, Transform parent, int size)
+    private ISoundPlayer _soundPlayer;
+    public ImpactEffectService(ImpactEffect prefab, Transform parent, int size, ISoundPlayer soundPlayer)
     {
         _factory = new ParticlesFactory(prefab, parent);
         _pool = new Pool<ImpactEffect>(CreateEffect, TurnOn, TurnOff, size);
+        _soundPlayer = soundPlayer;
     }
     private ImpactEffect CreateEffect()
     {
@@ -20,6 +22,7 @@ public class ImpactEffectService
     {
         ImpactEffect effect = _pool.GetObject();
         effect.PlayAt(point, normal);
+        _soundPlayer?.Play(SoundId.Impact, 0.4f);
     }
     private void TurnOn(ImpactEffect effect)
     {

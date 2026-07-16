@@ -27,7 +27,7 @@ public class SoundService
         SoundEmitter emitter = _pool.GetObject();
         emitter.Play(clip, volume, loop);
     }
-    //para detener un emiter primero paso un clip
+    //para detener un emiter (corta y resetea) primero paso un clip
     // y los emmiters internamente se fijan
     // estoy activado, estoy reproduciendo el clip que me pasaste por parametro y ademas estoy reproduciendo ese audio
     //entonces me devuelvo al pool
