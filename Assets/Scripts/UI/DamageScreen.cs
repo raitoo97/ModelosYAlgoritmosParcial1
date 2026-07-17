@@ -52,4 +52,8 @@ public class DamageScreen : MonoBehaviour
         _currentTime = 0;
         _damageCoroutine = null;
     }
+    private void OnDestroy()
+    {
+        EventManager.UnsubscribeToEvent(EventType.PlayerDamage, OnScreenDamage);
+    }
 }
