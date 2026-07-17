@@ -1730,7 +1730,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.23196065, y: 0.49578634, z: 0.13936232, w: 0.82520807}
+  m_LocalRotation: {x: -0.24377763, y: 0.49316713, z: 0.14622514, w: 0.8221782}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4439,6 +4439,12 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 6cc3d17fa8765d046b7da4174645b2bd, type: 3}
   - id: 2
     clip: {fileID: 8300000, guid: 3b0651ee3ce58d140b842d2e5d81275f, type: 3}
+  - id: 11
+    clip: {fileID: 8300000, guid: 709461b9d31961942a05d25db28bc6cb, type: 3}
+  - id: 10
+    clip: {fileID: 8300000, guid: 93918165b2600734296d104fb69cdb4a, type: 3}
+  - id: 1
+    clip: {fileID: 8300000, guid: 93918165b2600734296d104fb69cdb4a, type: 3}
   _emitterPrefab: {fileID: 6637341784116669964, guid: 26ee54e65d9df7243a3bd1354fdae97e, type: 3}
   _poolSize: 12
 --- !u!114 &488249733

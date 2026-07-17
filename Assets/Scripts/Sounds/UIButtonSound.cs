@@ -17,8 +17,7 @@ public class UIButtonSound : MonoBehaviour, IPointerClickHandler, IPointerEnterH
     {
         _selectable = GetComponent<Selectable>();
     }
-    // un boton deshabilitado (interactable = false) no debe sonar
-    private bool IsInteractable => _selectable == null || _selectable.interactable;
+    private bool IsInteractable => _selectable.interactable;
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!IsInteractable) return;
