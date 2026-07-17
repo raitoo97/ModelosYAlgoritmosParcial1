@@ -1730,7 +1730,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.24377763, y: 0.49316713, z: 0.14622514, w: 0.8221782}
+  m_LocalRotation: {x: -0.24606608, y: 0.4926479, z: 0.14755145, w: 0.8215706}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4422,7 +4422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sounds:
   - id: 5
-    clip: {fileID: 8300000, guid: 42e0d7ae4f4128942b85e2e63f93a548, type: 3}
+    clip: {fileID: 8300000, guid: 2bab289e7b074854e984f104f8c5095c, type: 3}
   - id: 0
     clip: {fileID: 8300000, guid: 8ef79c0d7577dff43aae942a01e55ce4, type: 3}
   - id: 6
@@ -4444,7 +4444,7 @@ MonoBehaviour:
   - id: 10
     clip: {fileID: 8300000, guid: 93918165b2600734296d104fb69cdb4a, type: 3}
   - id: 1
-    clip: {fileID: 8300000, guid: 93918165b2600734296d104fb69cdb4a, type: 3}
+    clip: {fileID: 8300000, guid: 8147da3538ac9794ea6d4c9c153c4dae, type: 3}
   _emitterPrefab: {fileID: 6637341784116669964, guid: 26ee54e65d9df7243a3bd1354fdae97e, type: 3}
   _poolSize: 12
 --- !u!114 &488249733
