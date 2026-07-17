@@ -10,8 +10,9 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
     public static SaveManager instance;
     private int _savesCount = 3;
     private int _loadCounts = 0;
-    public bool CanSave => _savesCount > 0;
-    public bool CanLoad => _loadCounts > 0;
+    private bool _playerIsDead = false;
+    public bool CanSave => _savesCount > 0 && !_playerIsDead;
+    public bool CanLoad => _loadCounts > 0 && !_playerIsDead;
     private IController _controller;
     private void Awake()
     {
@@ -20,6 +21,11 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
         else
             Destroy(gameObject);
         _controller = new SaveController();
+        EventManager.SubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
+    }
+    private void OnPlayerDeath(params object[] parameters)
+    {
+        _playerIsDead = true;
     }
     private void Update()
     {
@@ -58,5 +64,9 @@ public class SaveManager : MonoBehaviour , IObservable<SaveEvent>,IPauseable
     public void Resume()
     {
         enabled = true;
+    }
+    private void OnDestroy()
+    {
+        EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
     }
 }
