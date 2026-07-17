@@ -17,6 +17,7 @@ public class PowerUpPickup : MonoBehaviour
         //o es la primera vez que agarro el Power Up de este tipo se me suma a las cargas
         if (!other.TryGetComponent<IPowerUpCollector>(out var collector)) return;
         if (!collector.AddCharge(_config)) return;
+        SoundManager.Instance.Play(SoundId.PickUpItem);
         gameObject.SetActive(false);
     }
 }

@@ -35,6 +35,7 @@ public class EncounterTrigger : MonoBehaviour, IPauseable
         _timer = 0f;
         foreach (EnemySpawnerManager spawner in _spawners)
             if (spawner != null) spawner.Activate();
+        SoundManager.Instance.Play(SoundId.InitBattle);
         _material.SetColor(BaseColorId, Color.red);
     }
     private void Update()

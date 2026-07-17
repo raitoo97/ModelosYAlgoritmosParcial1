@@ -12,12 +12,12 @@ public class UIButtonSound : MonoBehaviour, IPointerClickHandler, IPointerEnterH
     [Range(0f, 1f)][SerializeField] private float _clickVolume = 0.6f;
     [Range(0f, 1f)][SerializeField] private float _hoverVolume = 0.3f;
     //clase madre de todos los controles interactivos de la UI de Unity
-    private Selectable _selectable;
+    private Button _button;
     private void Awake()
     {
-        _selectable = GetComponent<Selectable>();
+        _button = GetComponent<Button>();
     }
-    private bool IsInteractable => _selectable.interactable;
+    private bool IsInteractable => _button.interactable;
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!IsInteractable) return;

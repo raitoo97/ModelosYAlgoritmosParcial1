@@ -1,18 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
-// Spawner simple de pickups. Anti-bugs por disenio:
-// - Los puntos de spawn son los HIJOS de este GameObject, puestos a mano:
-//   sin posiciones aleatorias no hay items adentro de estructuras.
-// - Cada punto se "apoya" en el piso con un raycast hacia abajo: aunque el
+// - Los puntos de spawn son los HIJOS de este GameObject, puestos a mano
+// - Cada punto se apoya en el piso con un raycast hacia abajo: aunque el
 //   punto quede flotando o medio hundido, el item aparece sobre el suelo.
 // - El pickup ya se desactiva solo al consumirse (OnTriggerEnter): aca solo
-//   se lo reactiva pasado el cooldown. Mini-pool de 1 instancia por punto.
+//   se lo reactiva pasado el cooldown.
 public class PowerUpSpawner : MonoBehaviour, IPauseable
 {
-    // Un slot por punto de spawn: el pickup instanciado y SU timer de
-    // respawn, juntos (mismo esquema que PowerUpSlot en el controller).
-    // Es clase y no struct a proposito: la lista guarda la referencia y
-    // el timer se puede modificar en el lugar.
     private class SpawnSlot
     {
         public PowerUpPickup pickup;
@@ -79,7 +73,7 @@ public class PowerUpSpawner : MonoBehaviour, IPauseable
     {
         enabled = true;
     }
-    // En la Scene view muestra DONDE va a caer cada item de verdad:
+    // En la Scene view muestra DONDE va a caer cada item:
     // esfera cyan = posicion final apoyada en el piso, linea = la caida
     // desde el punto. Asi se detecta a ojo un punto mal ubicado antes de Play.
     private void OnDrawGizmos()
