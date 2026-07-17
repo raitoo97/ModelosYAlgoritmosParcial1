@@ -1737,7 +1737,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.43908826, y: 0.43386042, z: 0.2560871, w: 0.7438992}
+  m_LocalRotation: {x: -0.45044947, y: 0.4293928, z: 0.26225626, w: 0.73752207}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6638,6 +6638,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 61485a9a68e6845828d6e61f3d353298, type: 3}
   m_PrefabInstance: {fileID: 1755573674}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &737627034
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 737627035}
+  m_Layer: 0
+  m_Name: EntregaFinal
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &737627035
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737627034}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 13.9306345, y: 14.337875, z: 40.08414}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &750468259
 GameObject:
   m_ObjectHideFlags: 0
@@ -10297,7 +10328,6 @@ MonoBehaviour:
   _spawnHeight: 1.5
   _bulletPrefab: {fileID: 1881247856075958952, guid: c9b5932e1a625724ea3527a4664e81ff, type: 3}
   _bulletPoolSize: 50
-  _damageMultiplier: 0.3
 --- !u!4 &1157894235 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 497138, guid: 3e541691191f44de8b9db8a516d098f3, type: 3}
@@ -21035,7 +21065,6 @@ MonoBehaviour:
   _bulletPoolSize: 50
   _pelletCount: 5
   _spreadArcDegrees: 35
-  _pelletDamageMultiplier: 0.3
 --- !u!4 &2096098389
 Transform:
   m_ObjectHideFlags: 0
@@ -86268,3 +86297,4 @@ SceneRoots:
   - {fileID: 1291160756}
   - {fileID: 832575519}
   - {fileID: 164945402}
+  - {fileID: 737627035}

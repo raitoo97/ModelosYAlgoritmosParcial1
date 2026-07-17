@@ -14,7 +14,7 @@ public class PowerUpSpawner : MonoBehaviour, IPauseable
     }
     // Prefabs posibles; en cada punto aparece uno al azar (sorteo unico en Start).
     [SerializeField] private List<PowerUpPickup> _pickupPrefabs;
-    [SerializeField] private float _respawnSeconds = 30f;
+    [SerializeField] private float _respawnSeconds = 75f;
     // Layers que cuentan como piso para apoyar el item.
     [SerializeField] private LayerMask _groundMask;
     // Altura del item sobre el piso.
