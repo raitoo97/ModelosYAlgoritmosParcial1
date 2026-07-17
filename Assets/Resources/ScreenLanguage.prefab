@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8413841203240783156}
   - component: {fileID: 4390515606758458249}
   - component: {fileID: 6535547987696601035}
+  - component: {fileID: 6760069458299560729}
   m_Layer: 5
   m_Name: BTN_Exit
   m_TagString: Untagged
@@ -133,6 +134,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &6760069458299560729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 400753290465437204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53d42d8ce6bbf443af71949fc9570c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSound: 10
+  _hoverSound: 11
+  _clickVolume: 0.6
+  _hoverVolume: 0.3
 --- !u!1 &2912401302599304954
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +226,7 @@ GameObject:
   - component: {fileID: 4338159867475052916}
   - component: {fileID: 3870724536945203350}
   - component: {fileID: 1001192320442772569}
+  - component: {fileID: 5856277546259655996}
   m_Layer: 5
   m_Name: BTN_English
   m_TagString: Untagged
@@ -356,6 +374,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myText: {fileID: 9186671718726109990}
+--- !u!114 &5856277546259655996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5293369210543231490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53d42d8ce6bbf443af71949fc9570c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSound: 10
+  _hoverSound: 11
+  _clickVolume: 0.6
+  _hoverVolume: 0.3
 --- !u!1 &5389558120142276035
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,6 +1080,7 @@ GameObject:
   - component: {fileID: 4777047179252113794}
   - component: {fileID: 1529931152164873477}
   - component: {fileID: 1587768917079899717}
+  - component: {fileID: 2059121902990297452}
   m_Layer: 5
   m_Name: BTN_Spanish
   m_TagString: Untagged
@@ -1193,3 +1228,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myText: {fileID: 1536421977285647395}
+--- !u!114 &2059121902990297452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9139595976673358927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53d42d8ce6bbf443af71949fc9570c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _clickSound: 10
+  _hoverSound: 11
+  _clickVolume: 0.6
+  _hoverVolume: 0.3

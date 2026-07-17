@@ -10,6 +10,7 @@ public class UIController : IController
         //primera vez que apreto PauseAction me instancia screenPause , luego va para atreas con el mismo boton 
         if (PlayerInputsManager.instance.PauseAction())
         {
+            SoundManager.Instance.Play(SoundId.UIClick);
             if (ScreenManager.Instance.StackContainsType<ScreenPause>())
             {
                 ScreenManager.Instance.Pop();
