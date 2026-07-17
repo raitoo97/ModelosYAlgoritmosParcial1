@@ -8,7 +8,7 @@ public static class FlyWeightPointer
     ///// <summary>
     ///// Ranger values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
     ///// </summary>
-    public static readonly FlyWeight Ranger = new FlyWeight(6, 100, 260, 25, 1f, 25);
+    public static readonly FlyWeight Ranger = new FlyWeight(6, 100, 260, 25, 1f, 4);
     /// <summary>
     /// Projectile values : speed,maxLife,rotateSpeed,maxDistance,coolDown,damage
     /// </summary>
@@ -16,9 +16,9 @@ public static class FlyWeightPointer
     /// <summary>
     /// Sniper values : speed, maxLife, rotateSpeed, maxDistance, coolDown, damage
     /// </summary>
-    public static readonly FlyWeight Sniper = new FlyWeight(3, 60, 200, 45, 3f, 60);
+    public static readonly FlyWeight Sniper = new FlyWeight(3, 60, 200, 45, 3f, 25);
     /// <summary>
     /// Shotgunner values : speed, maxLife, rotateSpeed, maxDistance, coolDown, damage
     /// </summary>
-    public static readonly FlyWeight Shotgunner = new FlyWeight(8, 80, 300, 10, 1.5f, 25);
+    public static readonly FlyWeight Shotgunner = new FlyWeight(8, 80, 300, 10, 1.5f, 4);
 }

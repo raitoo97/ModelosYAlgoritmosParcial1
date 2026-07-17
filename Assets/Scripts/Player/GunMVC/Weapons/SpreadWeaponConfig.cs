@@ -12,6 +12,6 @@ public class SpreadWeaponConfig : WeaponConfig
     public override float ConeArcDegrees => _spreadArcDegrees;
     public override IShootStrategy CreateStrategy(ShootStrategyDependencies deps)
     {
-        return new SpreadShootStrategy(deps.bulletService, deps.owner, WeaponColor, _pelletCount, _spreadArcDegrees, _pelletDamageMultiplier, deps.onImpact, _pelletScale);
+        return new SpreadShootStrategy(deps.bulletService, deps.owner, WeaponColor, _pelletCount, _spreadArcDegrees, FlyWeightPointer.Player.damage * _pelletDamageMultiplier, deps.onImpact, _pelletScale);
     }
 }

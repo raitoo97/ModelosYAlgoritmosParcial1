@@ -13,6 +13,6 @@ public class PiercingWeaponConfig : WeaponConfig
     public override float ConeArcDegrees => _arcDegrees;
     public override IShootStrategy CreateStrategy(ShootStrategyDependencies deps)
     {
-        return new PiercingShootStrategy(deps.bulletService, deps.owner, WeaponColor, _bulletCount, _arcDegrees, _damageMultiplier, _bulletScale, deps.onImpact);
+        return new PiercingShootStrategy(deps.bulletService, deps.owner, WeaponColor, _bulletCount, _arcDegrees, FlyWeightPointer.Player.damage * _damageMultiplier, _bulletScale, deps.onImpact);
     }
 }

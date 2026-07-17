@@ -7,17 +7,17 @@ public class PiercingShootStrategy : IShootStrategy
     private Color _bulletColor;
     private int _bulletCount;
     private float _arcDegrees;
-    private float _damageMultiplier;
+    private float _bulletDamage;
     private float _bulletScale;
     private Action<Vector3, Vector3> _onImpact;
-    public PiercingShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int bulletCount, float arcDegrees, float damageMultiplier, float bulletScale, Action<Vector3, Vector3> onImpact = null)
+    public PiercingShootStrategy(BulletService bulletService, Factions owner, Color bulletColor, int bulletCount, float arcDegrees, float bulletDamage, float bulletScale, Action<Vector3, Vector3> onImpact = null)
     {
         _bulletService = bulletService;
         _owner = owner;
         _bulletColor = bulletColor;
         _bulletCount = bulletCount;
         _arcDegrees = arcDegrees;
-        _damageMultiplier = damageMultiplier;
+        _bulletDamage = bulletDamage;
         _bulletScale = bulletScale;
         _onImpact = onImpact;
     }
@@ -59,7 +59,7 @@ public class PiercingShootStrategy : IShootStrategy
             new BulletBuilder(bullet)
                 .SetColorMaterial(_bulletColor)
                 .SetOwnerBullet(_owner)
-                .SetDamageMultiplierBullet(_damageMultiplier)
+                .SetDamageBullet(_bulletDamage)
                 .SetScaleBullet(_bulletScale)
                 .SetPiercingBullet(true)
                 .SetOnImpactBullet(_onImpact)

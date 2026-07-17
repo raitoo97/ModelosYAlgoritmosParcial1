@@ -8,9 +8,9 @@ public enum Factions
 public class Bullet : MonoBehaviour
 {
     private float _currentDistance;
-    private float _damageMultiplier = 1f;
     private Renderer _renderer;
     private Action<Bullet> _returnToPoolCallBack;
+    private float _damage = FlyWeightPointer.Projectile.damage;
     private Factions _owner;
     private bool _isActive;
     private Action<Vector3, Vector3> _onImpact;
@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour
         {
             //si el objeto que colisiona es del mismo bando,no hace nada
             if (!FactionRules.ShouldHit(other, _owner)) return;
-            entity.TakeDamage(FlyWeightPointer.Projectile.damage * _damageMultiplier);
+            entity.TakeDamage(_damage);
             // La perforante dania, muestra el chispazo y sigue de largo:
             // no vuelve al pool al atravesar enemigos.
             if (_isPiercing)
@@ -74,16 +74,16 @@ public class Bullet : MonoBehaviour
     }
     public void ResetBullet()
     {
-        _damageMultiplier = 1f;
+        _damage = FlyWeightPointer.Projectile.damage;
         _currentDistance = 0;
         _isActive = true;
         _onImpact = null;
         transform.localScale = _initialScale;
         _isPiercing = false;
     }
-    public void SetDamageMultiplier(float damage)
+    public void SetDamage(float damage)
     {
-        _damageMultiplier = damage;
+        _damage = damage;
     }
     public void SetOwner(Factions owner)
     {

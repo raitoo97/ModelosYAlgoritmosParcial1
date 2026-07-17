@@ -7,6 +7,6 @@ public class RangerSpawnerManager : AreaSpawnerManager
     protected override IShootStrategy CreateShootStrategy()
     {
         BulletService bulletService = new BulletService(_bulletPrefab, GameManager.instance.projectilesParent, _bulletPoolSize);
-        return new ProjectileShootStrategy(bulletService, Factions.Enemy, Color.red, BulletImpactCallback);
+        return new ProjectileShootStrategy(bulletService, Factions.Enemy, Color.red, FlyWeightPointer.Ranger.damage, BulletImpactCallback);
     }
 }

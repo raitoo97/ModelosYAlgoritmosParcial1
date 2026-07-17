@@ -7,9 +7,9 @@ public class BulletBuilder
     {
         _bullet = bullet;
     }
-    public BulletBuilder SetDamageMultiplierBullet(float multiplier)
+    public BulletBuilder SetDamageBullet(float damage)
     {
-        _bullet.SetDamageMultiplier(multiplier);
+        _bullet.SetDamage(damage);
         return this;
     }
     public BulletBuilder SetColorMaterial(Color color)
