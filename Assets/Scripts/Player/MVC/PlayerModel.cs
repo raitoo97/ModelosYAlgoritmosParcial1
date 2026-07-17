@@ -159,12 +159,16 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         NotifyObservers(PlayerEvent.PreviousShootType);
     }
+    private void NotifyLifeChanged()
+    {
+        EventManager.TriggerEvent(EventType.PlayerLifeChanged, _currentLife / FlyWeightPointer.Player.maxLife);
+    }
     public void TakeDamage(float dmg)
     {
         if (_isDead || _isInvulnerable) return;
         _currentLife -= dmg;
-        float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
-        EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+        NotifyLifeChanged();
+        EventManager.TriggerEvent(EventType.PlayerDamage);
         if (_currentLife <= 0)
         {
             _currentLife = 0;
@@ -214,8 +218,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
         _rb.rotation = memory.rotation;
         _currentLife = memory.life;
         _isDead = memory.isDead;
-        float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
-        EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+        NotifyLifeChanged();
         _isMoving = false;
         NotifyObservers(_isDead ? PlayerEvent.Death : PlayerEvent.Idle);
     }
@@ -297,8 +300,7 @@ public class PlayerModel : IObservable<PlayerEvent> , IObserver<SaveEvent> , IMe
     {
         if (_isDead) return;
         _currentLife = Mathf.Min(_currentLife + amount, FlyWeightPointer.Player.maxLife);
-        float normalizedLife = _currentLife / FlyWeightPointer.Player.maxLife;
-        EventManager.TriggerEvent(EventType.PlayerDamage, normalizedLife);
+        NotifyLifeChanged();
         NotifyObservers(PlayerEvent.HealOn);
     }
     #endregion

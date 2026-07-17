@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
     }
     private void OnEnable()
     {
-        EventManager.SubscribeToEvent(EventType.PlayerDamage, OnPlayerDamage);
+        EventManager.SubscribeToEvent(EventType.PlayerLifeChanged, OnPlayerLifeChanged);
         EventManager.SubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
         EventManager.SubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);
         EventManager.SubscribeToEvent(EventType.UpdateLoads, OnPlayerLoad);
@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     {
         _lifebar.fillAmount = amount;
     }
-    private void OnPlayerDamage(params object[] parameters)
+    private void OnPlayerLifeChanged(params object[] parameters)
     {
         float life = (float)parameters[0];
         UpdateLifeBar(life);
@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour
     }
     private void OnDisable()
     {
-        EventManager.UnsubscribeToEvent(EventType.PlayerDamage, OnPlayerDamage);
+        EventManager.UnsubscribeToEvent(EventType.PlayerLifeChanged, OnPlayerLifeChanged);
         EventManager.UnsubscribeToEvent(EventType.PlayerDeath, OnPlayerDeath);
         EventManager.UnsubscribeToEvent(EventType.ScoreChanged, OnScoreChanged);
         EventManager.UnsubscribeToEvent(EventType.UpdateSaves, OnPlayerSave);

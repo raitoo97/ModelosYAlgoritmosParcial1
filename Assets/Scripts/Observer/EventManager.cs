@@ -3,6 +3,7 @@ public enum EventType
 {
     PlayerDeath,
     PlayerDamage,
+    PlayerLifeChanged,
     EnemyKilled,
     UpdateSaves,
     UpdateLoads,
