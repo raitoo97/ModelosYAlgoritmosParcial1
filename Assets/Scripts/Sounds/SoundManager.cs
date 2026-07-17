@@ -5,12 +5,13 @@ public enum SoundId
     Shoot,       
     PlayerDeath, 
     EnemyDeath,  
-    PowerUp,     
+    Speed,     
     Heal,        
     Music,       
     Impact,      
     Footsteps,
-    EnemyShoot
+    EnemyShoot,
+    Shield
 }
 //Encargado de Gestionar todo los SoundEmitter de la escena a traves de SoundService
 public class SoundManager : MonoBehaviour, ISoundPlayer
