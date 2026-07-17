@@ -21,7 +21,7 @@ public abstract class EnemySpawnerManager : MonoBehaviour, IObserver<EnemyEvent>
         // CreateShootStrategy() (que corre adentro de esa linea) lo necesita.
         if (_impactEffectPrefab != null)
         {
-            ImpactEffectService impactEffectService = new ImpactEffectService(_impactEffectPrefab, GameManager.instance.projectilesParent, _impactEffectPoolSize);
+            ImpactEffectService impactEffectService = new ImpactEffectService(_impactEffectPrefab, GameManager.instance.projectilesParent, _impactEffectPoolSize, SoundManager.Instance);
             BulletImpactCallback = impactEffectService.PlayAt;
         }
         _enemyService = new EnemyService(_enemyPrefab, transform, GetPoolSize(), this, CreateShootStrategy(), GameManager.instance.player.transform);

@@ -2,8 +2,6 @@ using UnityEngine;
 //yo no quiero ni que player conozca a PlayerSoundView ni que PlayerSoundView conozca a player
 //pero necesito que PlayerSoundView se suscriba al model del player para reaccionar a sus eventos
 //este script los relaciona sin que se conozcan, hace de intermediario.
-//Usa Start y no Awake: todos los Awake corren antes que cualquier Start,
-//asi que SoundManager.Instance ya esta inicializado seguro
 [RequireComponent(typeof(Player))]
 public class PlayerSoundBinder : MonoBehaviour
 {

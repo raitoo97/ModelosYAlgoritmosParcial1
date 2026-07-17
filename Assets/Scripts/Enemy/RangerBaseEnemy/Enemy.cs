@@ -85,6 +85,11 @@ public class Enemy : MonoBehaviour , IDamageable , IPauseable , IFactionMember
     public virtual void Shoot()  
     {
         _model.Shoot(_gunSight.position);
+        PlayShootSound();
+    }
+    protected void PlayShootSound()
+    {
+        SoundManager.Instance.Play(SoundId.EnemyShoot, 0.6f);
     }
     //Lo usa solo SniperAttackState para obtener el punto de mira del player
     //se usa para el OnAnimatorIK del Enemyview

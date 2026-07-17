@@ -1730,7 +1730,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 145314491}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.16628449, y: 0.5084714, z: 0.10079546, w: 0.83883643}
+  m_LocalRotation: {x: -0.2636176, y: 0.4885352, z: 0.1576945, w: 0.81668335}
   m_LocalPosition: {x: -1.04, y: 2.127, z: -16.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4385,6 +4385,8 @@ GameObject:
   m_Component:
   - component: {fileID: 488249731}
   - component: {fileID: 488249732}
+  - component: {fileID: 488249733}
+  - component: {fileID: 488249734}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -4421,11 +4423,62 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sounds:
   - id: 5
-    clip: {fileID: 8300000, guid: 42e0d7ae4f4128942b85e2e63f93a548, type: 3}
+    clip: {fileID: 8300000, guid: 2bab289e7b074854e984f104f8c5095c, type: 3}
   - id: 0
     clip: {fileID: 8300000, guid: 8ef79c0d7577dff43aae942a01e55ce4, type: 3}
+  - id: 6
+    clip: {fileID: 8300000, guid: d36dd8fc55d61754db3cfeb99d506b6d, type: 3}
+  - id: 8
+    clip: {fileID: 8300000, guid: 8ef79c0d7577dff43aae942a01e55ce4, type: 3}
+  - id: 4
+    clip: {fileID: 8300000, guid: 4b2af62cfcd060941bbdaea06cfb1aa2, type: 3}
+  - id: 7
+    clip: {fileID: 8300000, guid: cf83b583c5d57ec46a5463c70d01d231, type: 3}
+  - id: 9
+    clip: {fileID: 8300000, guid: af4a4ebe1d7c9904b8135e68e654f2c1, type: 3}
+  - id: 3
+    clip: {fileID: 8300000, guid: 6cc3d17fa8765d046b7da4174645b2bd, type: 3}
+  - id: 2
+    clip: {fileID: 8300000, guid: 3b0651ee3ce58d140b842d2e5d81275f, type: 3}
+  - id: 11
+    clip: {fileID: 8300000, guid: 709461b9d31961942a05d25db28bc6cb, type: 3}
+  - id: 10
+    clip: {fileID: 8300000, guid: 93918165b2600734296d104fb69cdb4a, type: 3}
+  - id: 1
+    clip: {fileID: 8300000, guid: 8147da3538ac9794ea6d4c9c153c4dae, type: 3}
+  - id: 12
+    clip: {fileID: 8300000, guid: 07bb0726bd31e8843bc9cb77d970fbfa, type: 3}
+  - id: 13
+    clip: {fileID: 8300000, guid: 00d62878d70a0aa4f80470b9120e5052, type: 3}
   _emitterPrefab: {fileID: 6637341784116669964, guid: 26ee54e65d9df7243a3bd1354fdae97e, type: 3}
-  _poolSize: 8
+  _poolSize: 12
+--- !u!114 &488249733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488249730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c132f630f27f9c249a7e9f1ddbb4d70c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &488249734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 488249730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb575446ab234f43aed1fefa543da9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _music: 5
+  _volume: 0.2
+  _pausedVolume: 0.05
 --- !u!1 &489630628
 GameObject:
   m_ObjectHideFlags: 0
@@ -14383,7 +14436,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!65 &1514466248
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19247,7 +19300,6 @@ GameObject:
   - component: {fileID: 1920595096}
   - component: {fileID: 1920595097}
   - component: {fileID: 1920595099}
-  - component: {fileID: 1920595100}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -19365,21 +19417,6 @@ MonoBehaviour:
   _aimCamera: {fileID: 429438021}
   _mainCameraOffset: {x: 0.8, y: -0.4, z: -3}
   _aimCameraOffset: {x: 1.5, y: -0.5, z: -1.8}
---- !u!114 &1920595100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1920595091}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfb575446ab234f43aed1fefa543da9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _music: 5
-  _volume: 0.4
-  _pausedVolume: 0.1
 --- !u!4 &1932691984 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400002, guid: 43cae7f98873e473d96789cc6276b26f, type: 3}

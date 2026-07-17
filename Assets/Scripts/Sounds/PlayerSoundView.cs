@@ -14,9 +14,17 @@ public class PlayerSoundView : IObserver<PlayerEvent>
     private void FillDictionary()
     {
         _actions.Add(PlayerEvent.Shoot, () => _soundPlayer.Play(SoundId.Shoot));
-        _actions.Add(PlayerEvent.Death, () => _soundPlayer.Play(SoundId.PlayerDeath));
-        _actions.Add(PlayerEvent.UsePowerUp, () => _soundPlayer.Play(SoundId.PowerUp));
+        _actions.Add(PlayerEvent.Move, () => _soundPlayer.Play(SoundId.Footsteps, 0.5f, loop: true));
+        _actions.Add(PlayerEvent.Idle, () => _soundPlayer.Stop(SoundId.Footsteps));
+        _actions.Add(PlayerEvent.SpeedOn, () => _soundPlayer.Play(SoundId.Speed));
         _actions.Add(PlayerEvent.HealOn, () => _soundPlayer.Play(SoundId.Heal));
+        _actions.Add(PlayerEvent.ShieldOn, () => _soundPlayer.Play(SoundId.Shield));
+        _actions.Add(PlayerEvent.Death, () =>
+        {
+            _soundPlayer.Stop(SoundId.Music);
+            _soundPlayer.Stop(SoundId.Footsteps);
+            _soundPlayer.Play(SoundId.PlayerDeath);
+        });
     }
     public void Notify(PlayerEvent action)
     {
