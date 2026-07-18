@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         //Se active cuando muere un enemigo en EnemySpawnerManager
         EventManager.SubscribeToEvent(EventType.EnemyKilled, OnEnemyKilled);
+        Cursor.visible = false;
     }
     private void Start()
     {
