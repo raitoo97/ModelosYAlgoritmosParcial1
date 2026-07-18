@@ -1,6 +1,11 @@
+using UnityEngine;
 public class ScreenPause : ScreenBase
 {
-    //Lo dejo vacio por si mas adelante lo quiero extender.
-    //igualmente profe si ve este script no es que lo hice porque si sino que tambien lo usa UIController para consultar si ya hay un ScreenPause
-    //sino podria instanciar muchas pausas :(
+    //Ademas de ser el marcador que usa UIController para no instanciar muchas pausas,
+    //ahora se encarga de mostrar el cursor cuando se activa.
+    public override void Activate()
+    {
+        base.Activate();
+        Cursor.visible = true;
+    }
 }
